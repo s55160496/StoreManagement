@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+    <script src="~/js/_MP_Back.js"></script>
+    <link href="~/css/_MP_Back.css" rel="stylesheet" />
+
+    <link href="~/lib/fontawesome-5.0.13/css/fontawesome-all.css" rel="stylesheet" />
+
+    <script src="~/lib/linqjs-v2.2.0.2/linq.js"></script>
+    <script src="~/lib/linqjs-v2.2.0.2/jquery.linq.js"></script>
+
+    <script src="~/lib/jquery-pagination/jquery.paging.js"></script>
+    <script src="~/lib/jquery-pagination/paging-custom-format.js"></script>
+
+    <link href="~/Fonts/ThaiSansNeue/css/fontface.css" rel="stylesheet" />
+    <link href="~/css/Customs.css" rel="stylesheet" />
+
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div id="SITE_NAVSIDE">
+        <button id="MENU_TRIGGER" type="button">
+            <div class="menu-icon"><i class="fas fa-bars"></i></div>
+            <div class="menu-label">
+                I.SEE
+            </div>
+        </button>
+        <ul id="MENU_LIST" clientidmode="static">
+            @*<li class="treeview">
+                    <a class="treeview-a active">
+                        <div class='menu-icon'><i class="fas fa-list-alt"></i></div>
+                        <div class='menu-label'>Master Data </i></div>
+                    </a>
+                </li>
+                <li class="treeview">
+                    <a class="treeview-a">
+                        <div class='menu-icon'><i class="fas fa-cogs"></i></div>
+                        <div class='menu-label'>Organization Registration </i></div>
+                    </a>
+                </li>
+                <li class="treeview">
+                    <a class="treeview-a">
+                        <div class='menu-icon'><i class="fas fa-users-cog"></i></div>
+                        <div class='menu-label'>User Permission  </i></div>
+                    </a>
+                </li>*@
+            <li class="">
+                <a href="#" class="active">
+                    <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
+                    <div class="menu-label">Stock</div>
+                </a>
+            </li>
+            <li class="">
+                <a href="#" class=" ">
+                    <div class="menu-icon"><i class="fa fa-car"></i></div>
+                    <div class="menu-label">Vehicle</div>
+                </a>
+            </li>
+            <li class="">
+                <a href="#" class=" ">
+                    <div class="menu-icon"><i class="fa fa-users"></i></div>
+                    <div class="menu-label">Customer</div>
+                </a>
+            </li>
+            <li class="">
+                <a href="#" class=" ">
+                    <div class="menu-icon"><i class="fa fa-users"></i></div>
+                    <div class="menu-label">Employee</div>
+                </a>
+            </li>
+            <li class="">
+                <a href="#" class=" ">
+                    <div class="menu-icon"><i class="fa fa-list-alt"></i></div>
+                    <div class="menu-label">Job</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div id="SITE_CONTENT">
+        <div id="HEAD">
+            <div class="container">
+                <div class="head-content">
+                    <div class="head-content-upper">
+                        <div class="logo-img">
+                            <a href="f_index.aspx" class="weblogo" style="display: flex;">
+                                <div class="logo-img">
+                                    <img src="~/Images/logo/I_SEE.jpg" width="100px" />
+                                </div>
+                                <div class="logo-title">
+                                    <div class="logo-title-main">I.SEE Equipment and Engineering</div>
+                                    <div class="logo-title-sub">SYSTEM</div>
+                                </div>
+                            </a>
+                            <div class="userinfo">
+                                <div class="user-detail">
+                                    <div class="name">
+                                        Phongsawat.pip
+                                    </div>
+                                    <div class="position">
+                                        Test
+                                    </div>
+                                </div>
+                                <div class="user-tools">
+                                    <button id="btnLogOut" type="button" class="ibtn ibtn-action cursor-pointer"><i class="fa fa-sign-out-alt"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="BODY">
+                <div class="page-body">
+                    <div class="container">
+                        <div class="card">
+                            <div id="divPageTitle" class="card-header bg-secondary text-white">
+                                Test
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    @RenderBody()
+                                </div>
+                            </div>
+                            <div class="card-footer bg-light">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-footer">
+                    HMC Polymers is an associate of PTTGC & LyondellBasell
+                    © 2019 HMC Polymers Thailand - All rights reserved
+                </div>
+            </div>
+        </div>
+        <div id="SITE_OVERLAY"></div>
+</body>
+</html>

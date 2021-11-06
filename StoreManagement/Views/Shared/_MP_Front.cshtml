@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+
+
+
+<style type="text/css">
+    .isDisabled {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+    }
+</style>
+<html>
+<head>
+    <!-- ICONS -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Images/ico/icon-114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/Images/ico/icon-114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Images/ico/icon-72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="~/Images/ico/icon-57.png" />
+    <link rel="shortcut icon" href="~/Images/ico/icon-fav.png" />
+
+    <link href="~/lib/fontawesome-5.0.13/css/fontawesome-all.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+    <link href="~/css/_MP_Front.css" rel="stylesheet" />
+    <link href="~/css/_MP_Front-form.css" rel="stylesheet" />
+    <script src="~/js/_MP_Front.js"></script>
+
+
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div id="SITE_NAVBAR">
+        <div class="navbar-info">
+            <div class="info">
+                <div class="info-icon">
+                    <i class="far fa-user"></i>
+                </div>
+                <div class="info-label">
+                    <div class="info-welcome">Welcome</div>
+                    <div class="info-title">
+                        phongsawat.pip
+                    </div>
+                    <div class="info-desc">
+                        Tester
+                    </div>
+                </div>
+                <div class="user-tools">
+                    <button id="btnLogOut2" type="button" class="ibtn ibtn-action cursor-pointer" onclick="Logout()"><i class="fa fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </div>
+        <div id="MENU_SIDE">
+            <ul id="cphBody_menuSide" class="menu" style="transform: translateX(0%);">
+                @*<li><a href="#" class="active ">Home</a></li>
+        <li><a href="#" class="">Tracking Input Form</a></li>
+        <li><a href="#" class="">Search</a></li>*@
+                <li class="has-children">
+                    <a class="">
+                        Report
+                        <div class="link-caret">
+                            <i class="fa fa-chevron-right"></i>
+                        </div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li>
+                            <a class="link-back"><i class="fa fa-chevron-left"></i> Back</a>
+                        </li>
+                        <li><a href="#" class=""> <i class="fa fa-list-ul" aria-hidden="true"></i> Report 1</a></li>
+                        <li><a href="#" class=""><i class="fa fa-car" aria-hidden="true"></i>Report 2</a></li>
+                    </ul>
+                </li>
+                @*<li class="has-children">
+            <a class="">
+                Administrator
+                <div class="link-caret">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </a>
+            <ul class="menu-sub">
+                <li>
+                    <a class="link-back"><i class="fa fa-chevron-left"></i> Back</a>
+                </li>
+                <li><a href="#" class=""> <i class="fa fa-list-ul" aria-hidden="true"></i> Stock</a></li>
+                <li><a href="#" class=""><i class="fa fa-car" aria-hidden="true"></i>Vehicle</a></li>
+                <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Customer</a></li>
+                <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Employee</a></li>
+                <li><a href="#" class=""><i class="fa fa-list-alt" aria-hidden="true"></i>Job</a></li>
+            </ul>
+        </li>*@
+                <li><a href="#" class=""><i class="fa fa-cogs"></i> Administrator</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="SITE_CONTENT">
+        <div id="CONTENT_OVERLAY">
+            <a id="MENU_CLOSE"><i class="fa fa-exchange-alt"></i></a>
+        </div>
+        <div id="HEAD">
+            <div class="container">
+                <div class="header">
+                    <a class="header-logo">
+                        <img src="~/Images/logo/I_SEE.jpg" />
+                    </a>
+                    <div class="header-area">
+                        <div class="header-top">
+                            <a class="header-title">
+                                <span class="title-main">I.SEE Equipment and Engineering</span>
+                                <span class="title-sub">SYSTEM</span>
+                            </a>
+                        </div>
+                        <div class="header-menu">
+                            <ul id="cphBody_menuTop" class="menu">
+
+                                @*<li><a href="#" class="active ">Home</a></li>
+                                    <li><a href="#" class="">Tracking Input Form</a></li>
+                                    <li><a href="#" class="">Search</a></li>*@
+                                @*<li class="has-children">
+                                        <a class="">Administrator</a><ul class="menu-sub">
+                                            <li><a href="#" class=""> <i class="fa fa-list-ul" aria-hidden="true"></i> Stock</a></li>
+                                            <li><a href="#" class=""><i class="fa fa-car" aria-hidden="true"></i>Vehicle</a></li>
+                                            <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Customer</a></li>
+                                            <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Employee</a></li>
+                                            <li><a href="#" class=""><i class="fa fa-list-alt" aria-hidden="true"></i>Job</a></li>
+                                        </ul>
+                                    </li>*@
+                                <li class="has-children">
+                                    <a class="">Report</a><ul class="menu-sub">
+                                        <li><a href="#" class=""> <i class="fa fa-list-ul" aria-hidden="true"></i> Report 1</a></li>
+                                        <li><a href="#" class=""><i class="fa fa-car" aria-hidden="true"></i>Report 2</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#"  class=""><i class="fa fa-cogs"></i> Administrator</a></li>
+                            </ul>
+                        </div>
+                        <div class="header-tools">
+                            <a id="MENU_TRIGGER" role="button"><i class="fa fa-bars"></i></a>
+                        </div>
+                    </div>
+                    <div class="header-info">
+                        <div class="info">
+                            <div class="info-icon">
+                                <i class="far fa-user"></i>
+                            </div>
+                            <div class="info-label">
+                                <div class="info-welcome">Welcome</div>
+                                <div class="info-title">
+                                    phongsawat.pip
+                                </div>
+                                <div class="info-desc">
+                                    Tester
+                                </div>
+                            </div>
+                            <div class="user-tools">
+                                <button id="btnLogOut" type="button" class="ibtn ibtn-action cursor-pointer" onclick="Logout()"><i class="fa fa-sign-out-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="BODY">
+            <div class="container">
+                <div>
+                    @RenderBody()
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div id="FOOT">
+            <div class="container position-relative">
+                <div class="footer-area">
+                    <div class="footer-label-1">HMC Polymers is an associate of PTTGC & LyondellBasell</div>
+                    <div class="footer-label-2">© 2019 HMC Polymers Thailand - All rights reserved</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

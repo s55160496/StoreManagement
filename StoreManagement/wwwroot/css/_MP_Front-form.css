@@ -1,0 +1,26 @@
+﻿.btn-top {
+    color: #ffffff;
+    background-color: #f92295;
+    border-color: #f92295;
+}
+
+    .btn-top:hover {
+        color: #ffffff;
+        background-color: #e0067a;
+        border-color: #e0067a;
+    }
+
+    .btn-top:focus {
+        background-color: #e0067a;
+        border-color: #e0067a;
+        box-shadow: 0 0 0 0.2rem rgba(249, 34, 149, 0.5);
+    }
+
+    .btn-top:active {
+        background-color: #ae045f;
+        border-color: #ae045f;
+    }
+
+.border-thaioil {
+    border-color: #f92295 !important;
+}

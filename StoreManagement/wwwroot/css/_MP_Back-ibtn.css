@@ -1,0 +1,41 @@
+﻿.ibtn {
+    border-style: solid;
+    border-color: #f44336;
+    outline: none !important;
+}
+
+    .ibtn.ibtn-action {
+        color: #ffffff;
+        background-color: #f44336;
+    }
+
+        .ibtn.ibtn-action:hover, .ibtn.ibtn-action:focus {
+            background-color: #d83428;
+        }
+
+    .ibtn.ibtn-proceed {
+        color: #ffffff;
+        background-color: #8dc63f;
+    }
+
+        .ibtn.ibtn-proceed:hover, .ibtn.ibtn-proceed:focus {
+            background-color: #7cb42d;
+        }
+
+    .ibtn.ibtn-dismiss {
+        color: #ffffff;
+        background-color: #898989;
+    }
+
+        .ibtn.ibtn-dismiss:hover, .ibtn.ibtn-dismiss:focus {
+            background-color: #6d6d6d;
+        }
+
+    .ibtn.ibtn-action-invert {
+        color: #f44336;
+        background-color: #ffffff;
+    }
+
+    .ibtn.ibtn-action-invert:hover, .ibtn.ibtn-action-invert:focus {
+        background-color: #eeeeee;
+    }

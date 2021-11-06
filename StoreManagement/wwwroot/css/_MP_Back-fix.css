@@ -1,0 +1,16 @@
+﻿th, .form-label, b, .label {
+    font-weight: bold;
+}
+
+.checkbox label, .radio label {
+    /*font-weight: 300;*/
+}
+
+
+@media(max-width:579px) {
+    #BODY > .page-body, #BODY > .page-body > .container {
+        padding: 0;
+    }
+}
+
+

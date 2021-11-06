@@ -1,8 +1,207 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_MP_Front";
+    //Layout = "_MP_Back";
 }
+<style type="text/css">
+    #accordCard .collap[aria-expanded=false] span:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        float: right;
+        transition: all .5s;
+    }
 
+    #accordCard .collap[aria-expanded=true] span:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        float: right;
+        transition: all .5s;
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+
+    .box-stat {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+        .box-stat > .box-item {
+            /*display: flex;*/
+            /*display: inline-grid;*/
+        }
+
+            .box-stat > .box-item + .box-item {
+                border-top: 1px solid #7092b7;
+            }
+
+            .box-stat > .box-item > .box-title {
+                min-width: 120px;
+                padding: 0 10px;
+                line-height: 1;
+                text-align: center;
+                margin: 20px 0;
+            }
+
+                .box-stat > .box-item > .box-title > .title-tag {
+                    /*padding: 15px 10px;
+                        text-align: left;
+                        color: #ffffff;
+                        background-color: #bd2130;*/
+                }
+
+                    .box-stat > .box-item > .box-title > .title-tag > .tag-label-name {
+                        font-weight: 500;
+                        /*font-size: 1.7em;*/
+                    }
+
+                    .box-stat > .box-item > .box-title > .title-tag > .tag-label-amount {
+                        margin-top: 2px;
+                        font-size: 1em;
+                        font-weight: bold;
+                    }
+
+                    .box-stat > .box-item > .box-title > .title-tag > .tag-label-unit {
+                        margin-top: 5px;
+                        font-size: 0.8em;
+                    }
+
+                .box-stat > .box-item > .box-title > .title-label {
+                    display: inline-block;
+                    text-align: left;
+                    color: #516979;
+                    margin: 20px 0;
+                }
+
+                    .box-stat > .box-item > .box-title > .title-label > .label-name {
+                        font-size: 1em;
+                    }
+
+                    .box-stat > .box-item > .box-title > .title-label > .label-date {
+                        font-size: 0.8em;
+                    }
+
+            .box-stat > .box-item > .box-body {
+                /*flex-basis: 100%;
+                    border-left: 1px solid #7092b7;*/
+                flex-basis: 100%;
+                /* border-left: 1px solid #7092b7; */
+                display: block;
+                padding: 10px;
+                text-align: center;
+                background-color: rgba(255,255,255,0.5);
+                border-radius: 15px;
+            }
+
+                .box-stat > .box-item > .box-body > .box-chart {
+                    display: block;
+                    width: 100%;
+                    height: 350px;
+                    font-size: 0.8em;
+                }
+</style>
+
+<style type="text/css">
+    .stat-icon {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: #666666;
+    }
+
+        .stat-icon.stat-warning {
+            background-color: #fffb2e;
+        }
+
+        .stat-icon.stat-success {
+            background-color: #087c05;
+        }
+
+        .stat-icon.stat-danger {
+            background-color: #f90723;
+        }
+
+    #tbData > tBody > tr > td > .stat-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+
+    ul.list-stat {
+        display: block;
+        margin: 0;
+        padding: 10px 0;
+        list-style-type: none;
+        line-height: 1;
+    }
+
+        ul.list-stat > li {
+            display: inline-flex;
+            height: 15px;
+            margin-right: 8px;
+        }
+
+            ul.list-stat > li > .stat-icon {
+                margin-right: 5px;
+            }
+
+            ul.list-stat > li > .stat-name {
+                line-height: 15px;
+            }
+
+    .titleGraph {
+        text-align: center !important;
+    }
+</style>
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div id="boxCover" class="">
+        <div id="boxWelcome"></div>
+        <div id="boxChart" class="">
+            <div class="row justify-content-center">
+                <div class="col-xl-4 col-lg-4 cGraph1">
+                    <div class="box-stat">
+                        <div class="box-item">
+                            <div class="box-title">
+                                <div class="title-tag">
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div id="chartOEM" class="box-chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 cGraph2">
+                    <div class="box-stat">
+                        <div class="box-item">
+                            <div class="box-title">
+                                <div class="title-tag">
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div id="chartService" class="box-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 cGraph3">
+                    <div class="box-stat">
+                        <div class="box-item">
+                            <div class="box-title">
+                                <div class="title-tag">
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div id="chartService" class="box-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
