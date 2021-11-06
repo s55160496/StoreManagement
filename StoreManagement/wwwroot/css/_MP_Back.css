@@ -236,7 +236,7 @@
             transition: opacity .3s;
         }
 
-    #HEAD .weblogo {
+    /*    #HEAD .weblogo {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -244,7 +244,15 @@
 
         #HEAD .weblogo > img {
             max-height: 100%;
-        }
+        }*/
+    #HEAD .weblogo {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        white-space: nowrap;
+        display: flex;
+        /*width: auto;*/
+    }
 
         #HEAD .weblogo:link:hover {
             text-decoration: none;
@@ -262,12 +270,20 @@
         #HEAD .weblogo > .logo-title {
             display: block;
             margin-left: 20px;
-            color: #064a8d;
-            font-size: 1.4em;
+            color: rgba(0,0,0,0.75);
+            font-size: 1.5em;
             letter-spacing: 0.25em;
             line-height: 1.2;
             text-transform: uppercase;
         }
+
+            #HEAD .weblogo > .logo-title > .logo-title-main {
+                font-weight: 500;
+            }
+
+            #HEAD .weblogo > .logo-title > .logo-title-sub {
+            }
+
 
     #HEAD .userinfo {
         position: absolute;
@@ -311,7 +327,7 @@
     position: relative;
     display: block;
     min-height: 100vh;
-    /*padding-top: 70px;*/
+    padding-top: 70px;
     padding-bottom: 40px;
     transition: padding-top .3s;
     background-color: #eeeeee;
@@ -571,6 +587,16 @@
             #HEAD .head-content > .head-content-lower {
                 bottom: -5px;
             }
+
+        #HEAD .weblogo > .logo-img {
+            height: 25px;
+        }
+
+        #HEAD .weblogo > .logo-title {
+            margin-left: 10px;
+            font-size: 1em;
+            line-height: 1;
+        }
 
         #HEAD .userinfo {
             top: 0;

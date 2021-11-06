@@ -2,34 +2,99 @@
 
 <html>
 <head>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-
-    <script src="~/js/_MP_Back.js"></script>
-    <link href="~/css/_MP_Back.css" rel="stylesheet" />
-
+    @* fontawesome-5 *@
     <link href="~/lib/fontawesome-5.0.13/css/fontawesome-all.css" rel="stylesheet" />
 
-    <script src="~/lib/linqjs-v2.2.0.2/linq.js"></script>
-    <script src="~/lib/linqjs-v2.2.0.2/jquery.linq.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 
-    <script src="~/lib/jquery-pagination/jquery.paging.js"></script>
-    <script src="~/lib/jquery-pagination/paging-custom-format.js"></script>
+    <script src="~/js/jquery.reDefaultTools.js"></script>
 
+
+    @* Bootstrap *@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/css/icon.css" rel="stylesheet" />
+
+    @* linqjs *@
+    <script src="~/lib/linqjs-v2.2.0.2/linq.min.js"></script>
+    <script src="~/lib/linqjs-v2.2.0.2/jquery.linq.min.js"></script>
+
+    @* sweetalert2 *@
+    <script src="~/lib/sweetalert2/promise-polyfill.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2-common.js"></script>
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+
+    @*  tooltipster *@
+    <script src="~/lib/tooltipster/tooltipster.bundle.min.js"></script>
+    <link href="~/lib/tooltipster/tooltipster.bundle.css" rel="stylesheet" />
+    <link href="~/lib/tooltipster/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" rel="stylesheet" />
+
+    @* ThaiSansNeue *@
     <link href="~/Fonts/ThaiSansNeue/css/fontface.css" rel="stylesheet" />
+
+    @* BlockUI *@
+    <link href="~/css/BlockUI-Loading.css" rel="stylesheet" />
+    <script src="~/js/jquery.blockUI.js"></script>
+
+    @* fancybox3  *@
+    <link href="~/lib/fancybox3/dist/jquery.fancybox.css" rel="stylesheet" />
+    <script src="~/lib/fancybox3/dist/jquery.fancybox.js"></script>
+
+    @* DataTables *@
+    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+
+    @* System *@
     <link href="~/css/Customs.css" rel="stylesheet" />
+    <link href="~/css/easy.css" rel="stylesheet" />
+    <script src="~/js/System/sysFunction.js"></script>
+    <script src="~/js/CommonScript.js"></script>
+
+    <link href="~/css/_MP_Back.css" rel="stylesheet" />
+    <script src="~/js/_MP_Back.js"></script>
 
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+
+    <style>
+        #SITE_NAVSIDE a {
+            color: #ffffff;
+            text-decoration: none;
+            background-color: transparent;
+        }
+
+            #SITE_NAVSIDE a:hover {
+                color: #ffffff;
+                text-decoration: none;
+                background-color: transparent;
+            }
+
+        #headTitle a {
+            color: #ffffff;
+            text-decoration: none;
+            background-color: transparent;
+        }
+
+        #headTitle {
+            font-size: 14px !important;
+        }
+
+            #headTitle a:hover {
+                color: #ffffff;
+                text-decoration: none;
+                background-color: transparent;
+            }
+    </style>
 </head>
 <body>
     <div id="SITE_NAVSIDE">
         <button id="MENU_TRIGGER" type="button">
             <div class="menu-icon"><i class="fas fa-bars"></i></div>
             <div class="menu-label">
-                I.SEE
+                MENU
             </div>
         </button>
         <ul id="MENU_LIST" clientidmode="static">
@@ -52,31 +117,31 @@
                     </a>
                 </li>*@
             <li class="">
-                <a href="#" class="active">
+                <a href="@Url.Action("Index","Stock")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Stock" ? "active" : "")">
                     <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
                     <div class="menu-label">Stock</div>
                 </a>
             </li>
             <li class="">
-                <a href="#" class=" ">
+                <a href="@Url.Action("Index","Vehicle")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Vehicle" ? "active" : "")">
                     <div class="menu-icon"><i class="fa fa-car"></i></div>
                     <div class="menu-label">Vehicle</div>
                 </a>
             </li>
             <li class="">
-                <a href="#" class=" ">
+                <a href="@Url.Action("Index","Customer")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Customer" ? "active" : "")">
                     <div class="menu-icon"><i class="fa fa-users"></i></div>
                     <div class="menu-label">Customer</div>
                 </a>
             </li>
             <li class="">
-                <a href="#" class=" ">
+                <a href="@Url.Action("Index","Employee")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Employee" ? "active" : "")">
                     <div class="menu-icon"><i class="fa fa-users"></i></div>
                     <div class="menu-label">Employee</div>
                 </a>
             </li>
             <li class="">
-                <a href="#" class=" ">
+                <a href="@Url.Action("Index","Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Job" ? "active" : "")">
                     <div class="menu-icon"><i class="fa fa-list-alt"></i></div>
                     <div class="menu-label">Job</div>
                 </a>
@@ -88,56 +153,65 @@
             <div class="container">
                 <div class="head-content">
                     <div class="head-content-upper">
-                        <div class="logo-img">
-                            <a href="f_index.aspx" class="weblogo" style="display: flex;">
+                        @*<a href="@Url.Action("Index","Home")" class="weblogo" style="display: flex;">
                                 <div class="logo-img">
-                                    <img src="~/Images/logo/I_SEE.jpg" width="100px" />
+                                    <img src="~/Images/logo/I_SEE.png" width="100px" />
                                 </div>
                                 <div class="logo-title">
-                                    <div class="logo-title-main">I.SEE Equipment and Engineering</div>
-                                    <div class="logo-title-sub">SYSTEM</div>
-                                </div>
-                            </a>
-                            <div class="userinfo">
-                                <div class="user-detail">
-                                    <div class="name">
-                                        Phongsawat.pip
+                                        <div class="logo-title-main">I.SEE Equipment and Engineering</div>
+                                        <div class="logo-title-sub">SYSTEM</div>
                                     </div>
-                                    <div class="position">
-                                        Test
-                                    </div>
+                            </a>*@
+                        <a href="@Url.Action("Index","Home")" class="weblogo" style="display: flex;">
+                            <div class="logo-img">
+                                <img src="~/Images/logo/I_SEE.png" width="100px" />
+                            </div>
+                            <div class="logo-title">
+                                <div class="logo-title-main">I.SEE Equipment</div>
+                                <div class="logo-title-sub">Engineering</div>
+                            </div>
+                        </a>
+                        <div class="userinfo">
+                            <div class="user-detail">
+                                <div class="name">
+                                    Phongsawat.pip
                                 </div>
-                                <div class="user-tools">
-                                    <button id="btnLogOut" type="button" class="ibtn ibtn-action cursor-pointer"><i class="fa fa-sign-out-alt"></i></button>
+                                <div class="position">
+                                    Test
                                 </div>
+                            </div>
+                            <div class="user-tools">
+                                <button id="btnLogOut" type="button" class="ibtn ibtn-action cursor-pointer"><i class="fa fa-sign-out-alt"></i></button>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div id="BODY">
-                <div class="page-body">
-                    <div class="container">
-                        <div class="card">
-                            <div id="divPageTitle" class="card-header bg-secondary text-white">
-                                Test
-                            </div>
-                            <div class="card-body">
-                                <div>
-                                    @RenderBody()
-                                </div>
-                            </div>
-                            <div class="card-footer bg-light">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-footer">
-                    HMC Polymers is an associate of PTTGC & LyondellBasell
-                    © 2019 HMC Polymers Thailand - All rights reserved
                 </div>
             </div>
         </div>
-        <div id="SITE_OVERLAY"></div>
+        <div id="BODY">
+            <div class="page-body">
+                <div class="container">
+                    <div class="card">
+                        <div id="divPageTitle" class="card-header bg-secondary text-white" style="font-weight: bold;font-size: 19px;line-height: 19px;">
+                            @ViewContext.RouteData.Values["Controller"].ToString()
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                @RenderBody()
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="card-footer bg-light">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-footer">
+                HMC Polymers is an associate of PTTGC & LyondellBasell
+                © 2019 HMC Polymers Thailand - All rights reserved
+            </div>
+        </div>
+    </div>
+    <div id="SITE_OVERLAY"></div>
 </body>
 </html>

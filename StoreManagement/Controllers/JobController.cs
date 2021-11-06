@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StoreManagement.Controllers
 {
-    public class UserController : Controller
+    public class JobController : Controller
     {
         public IActionResult Index()
         {

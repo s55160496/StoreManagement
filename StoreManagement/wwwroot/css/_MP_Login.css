@@ -1,0 +1,20 @@
+﻿.login-bg {
+    /*position: relative;*/
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .login-bg:before {
+        content: "";
+        background-image: url(../Images/bg-car-park.jpg);
+        background-size: cover;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        opacity: 0.75;
+    }
