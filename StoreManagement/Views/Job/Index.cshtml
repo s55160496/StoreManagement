@@ -1,39 +1,23 @@
-﻿
+﻿@using StoreManagement.Models;
+@using StoreManagement.Controllers;
+@{
+    bool SessionUserInfoIsExpired = Context.Session.GetObjectFromJson<TM_User>("UserAccount") == null;
+    var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
+}
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 }
 
+
+
 <div id="divForm">
     <div class="container">
-        @*<div>
-            <div class="form-inline form-group float-left">
-                <div class="form-group">
-                    <a id="btnAdd" class="btn btn-success" href="b_shop_edit.aspx" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
-                </div>
-            </div>
-        </div>*@
+
+        <div class="form-group">
+            <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateJob","Job")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
+        </div>
         <div id="divSearch">
-            @*<div class="form-group float-right text-right mb-0">
-            <div class="form-group form-control-inline">
-                <input ID="txtSearch" runat="server" CssClass="form-control" placeholder="Name" Width="200px"></input>
-            </div>
-            <div class="form-group form-control-inline">
-                <label for="exampleFormControlSelect1">Example select</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <div id="divbtnSearch" class="form-group form-control-inline">
-                <button id="btnSearch" type="button" class="btn btn-info" title="Search" data-toggle="tooltip">
-                    <i class="fa fa-search"></i>&nbsp;Search
-                </button>
-            </div>
-        </div>*@
             <form>
                 <div class="form-group">
                     <label for="inputAddress">Job</label>
@@ -66,7 +50,7 @@
                         <th style="width: 11%"></th>
                         <th class="text-center" style="width: 30%">Name</th>
                         <th class="text-center" style="width: 30%">Position</th>
-                        <th class="text-center">Status</th>
+                        <th class="text-center">modify</th>
                     </tr>
                 </thead>
                 <tbody>

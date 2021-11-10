@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using StoreManagement.Models;
+@using StoreManagement.Controllers;
+@{
+    bool SessionUserInfoIsExpired = Context.Session.GetObjectFromJson<TM_User>("UserAccount") == null;
+    var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
+}
+
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -174,10 +181,16 @@
                         <div class="userinfo">
                             <div class="user-detail">
                                 <div class="name">
-                                    Phongsawat.pip
+                                    @if (SessionUserInfoIsExpired == false)
+                                    {
+                                        @SessionUserInfo.FullName
+                                    }
                                 </div>
                                 <div class="position">
-                                    Test
+                                    @if (SessionUserInfoIsExpired == false)
+                                    {
+                                        @SessionUserInfo.Position
+                                    }
                                 </div>
                             </div>
                             <div class="user-tools">
@@ -213,5 +226,13 @@
         </div>
     </div>
     <div id="SITE_OVERLAY"></div>
+
 </body>
 </html>
+
+@if (SessionUserInfoIsExpired)
+{
+    <script type="text/javascript">
+            @Html.Raw(string.Format("PopupSessionTimeOut('{0}');", Url.Action("Index", "Login")));
+    </script>
+}

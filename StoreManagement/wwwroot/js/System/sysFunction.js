@@ -40,10 +40,9 @@ function PopupQuestionaire(sPathRedirect) {
     SwAlert.Error(AlertTitle.Warning, AlertMsg.NoPermission, function () { window.location.href = ((sPathRedirect) ? sPathRedirect : "f_questionaire.aspx"); });
 }
 
-function PopupSessionTimeOut() {
+function PopupSessionTimeOut(url) {
     SwAlert.Error(AlertTitle.Warning, AlertMsg.SessionTimeOut, function () {
-        //window.location.href = "AD/index.aspx";
-        window.location.href = "login.aspx";
+        window.location.href = url;
     });
 }
 

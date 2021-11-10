@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using StoreManagement.Models;
+@using StoreManagement.Controllers;
+@{
+    bool SessionUserInfoIsExpired = Context.Session.GetObjectFromJson<TM_User>("UserAccount") == null;
+    var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
+}
+
+<!DOCTYPE html>
 <style type="text/css">
     .isDisabled {
         color: currentColor;
@@ -40,10 +47,16 @@
                 <div class="info-label">
                     <div class="info-welcome">Welcome</div>
                     <div class="info-title">
-                        phongsawat.pip
+                        @if (SessionUserInfoIsExpired == false)
+                        {
+                            @SessionUserInfo.FullName
+                        }
                     </div>
                     <div class="info-desc">
-                        Tester
+                        @if (SessionUserInfoIsExpired == false)
+                        {
+                            @SessionUserInfo.Position
+                        }
                     </div>
                 </div>
                 <div class="user-tools">
@@ -54,8 +67,8 @@
         <div id="MENU_SIDE">
             <ul id="cphBody_menuSide" class="menu" style="transform: translateX(0%);">
                 @*<li><a href="#" class="active ">Home</a></li>
-        <li><a href="#" class="">Tracking Input Form</a></li>
-        <li><a href="#" class="">Search</a></li>*@
+                    <li><a href="#" class="">Tracking Input Form</a></li>
+                    <li><a href="#" class="">Search</a></li>*@
                 <li class="has-children">
                     <a class="">
                         Report
@@ -72,23 +85,23 @@
                     </ul>
                 </li>
                 @*<li class="has-children">
-            <a class="">
-                Administrator
-                <div class="link-caret">
-                    <i class="fa fa-chevron-right"></i>
-                </div>
-            </a>
-            <ul class="menu-sub">
-                <li>
-                    <a class="link-back"><i class="fa fa-chevron-left"></i> Back</a>
-                </li>
-                <li><a href="#" class=""> <i class="fa fa-list-ul" aria-hidden="true"></i> Stock</a></li>
-                <li><a href="#" class=""><i class="fa fa-car" aria-hidden="true"></i>Vehicle</a></li>
-                <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Customer</a></li>
-                <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Employee</a></li>
-                <li><a href="#" class=""><i class="fa fa-list-alt" aria-hidden="true"></i>Job</a></li>
-            </ul>
-        </li>*@
+                        <a class="">
+                            Administrator
+                            <div class="link-caret">
+                                <i class="fa fa-chevron-right"></i>
+                            </div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li>
+                                <a class="link-back"><i class="fa fa-chevron-left"></i> Back</a>
+                            </li>
+                            <li><a href="#" class=""> <i class="fa fa-list-ul" aria-hidden="true"></i> Stock</a></li>
+                            <li><a href="#" class=""><i class="fa fa-car" aria-hidden="true"></i>Vehicle</a></li>
+                            <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Customer</a></li>
+                            <li><a href="#" class=""><i class="fa fa-users" aria-hidden="true"></i> Employee</a></li>
+                            <li><a href="#" class=""><i class="fa fa-list-alt" aria-hidden="true"></i>Job</a></li>
+                        </ul>
+                    </li>*@
                 <li><a href="@Url.Action("Index", "Stock")" class=""><i class="fa fa-cogs"></i> Administrator</a></li>
             </ul>
         </div>
@@ -131,7 +144,7 @@
                                         <li><a href="#" class=""><i class="fa fa-car" aria-hidden="true"></i>Report 2</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="@Url.Action("Index", "Stock")"  class=""><i class="fa fa-cogs"></i> Administrator</a></li>
+                                <li><a href="@Url.Action("Index", "Stock")" class=""><i class="fa fa-cogs"></i> Administrator</a></li>
                             </ul>
                         </div>
                         <div class="header-tools">
@@ -146,10 +159,16 @@
                             <div class="info-label">
                                 <div class="info-welcome">Welcome</div>
                                 <div class="info-title">
-                                    phongsawat.pip
+                                    @if (SessionUserInfoIsExpired == false)
+                                    {
+                                        @SessionUserInfo.FullName
+                                    }
                                 </div>
                                 <div class="info-desc">
-                                    Tester
+                                    @if (SessionUserInfoIsExpired == false)
+                                    {
+                                        @SessionUserInfo.Position
+                                    }
                                 </div>
                             </div>
                             <div class="user-tools">
