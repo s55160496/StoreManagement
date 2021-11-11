@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "CreateVehicle";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+}
+
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtUsername">License_no</label>
+                            <input type="text" class="form-control" id="txtLicense_no" placeholder="license_no">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtBrand_no">Brand_no</label>
+                            <input type="text" class="form-control" id="txtBrand_no" placeholder="Brand_no">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtModel_no">Model_no</label>
+                            <input type="text" class="form-control" id="txtModel_no" placeholder="Model_no">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtChassis_no">Chassis_no</label>
+                            <input type="text" class="form-control" id="txtChassis_no" placeholder="Chassis_no">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtColor">Color</label>
+                            <input type="text" class="form-control" id="txtColor" placeholder="Color">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtEffective_Date">Effective Date</label>
+                            <div class="input-group mb-3">
+                                <input ID="txtEffective_Date" name="txtEffective_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtEffective_Date">Expire Date</label>
+                            <div class="input-group mb-3">
+                                <input ID="txtExpire_Date" name="txtExpire_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtService_Price">Service Price</label>
+                            <input type="text" class="form-control" id="txtService_Price" placeholder="Service Price">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtService_No">Service No</label>
+                            <input type="text" class="form-control" id="txtService_No" placeholder="Service No">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtContract_No">Contract No</label>
+                            <input type="text" class="form-control" id="txtContract_No" placeholder="Contract No">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ddlCustomer_ID">Customer ID</label>
+                            <select id="ddlCustomer_ID" class="form-control">
+                                <option selected>Choose...</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+    <div class="col-sm-12 text-center">
+        <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Submit</button>
+        <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
+    </div>
+</div>
+

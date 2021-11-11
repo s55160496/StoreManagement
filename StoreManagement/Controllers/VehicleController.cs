@@ -17,5 +17,10 @@ namespace StoreManagement.Controllers
         {
             return View();
         }
+
+        public IActionResult CreateVehicle()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "CreateEmployee";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+}
+
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtUsername">Username</label>
+                            <input type="text" class="form-control" id="txtUsername" placeholder="Username">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtPassword">Password</label>
+                            <input type="password" class="form-control" id="txtPassword" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtFirstname">Firstname</label>
+                            <input type="text" class="form-control" id="txtFirstname" placeholder="Firstname">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtPassword">Lastname</label>
+                            <input type="text" class="form-control" id="txtLastname" placeholder="Lastname">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtIDCard">ID Card</label>
+                            <input type="text" class="form-control" id="txtIDCard" placeholder="">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputState">Position</label>
+                            <select id="ddlPosition" class="form-control">
+                                <option selected>Choose...</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                    </div>
+                    @*<button type="submit" class="btn btn-primary">Sign in</button>*@
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+    <div class="col-sm-12 text-center">
+        <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Submit</button>
+        <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
+    </div>
+</div>
+
+
+
