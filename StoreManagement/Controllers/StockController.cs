@@ -16,6 +16,7 @@ namespace StoreManagement.Controllers
         }
         public IActionResult Index()
         {
+            var a = GET_PROVINCE();
             VerifyUserLogin(new TM_User() { Username = "admin", Password = "1234" });
 
             return View();
