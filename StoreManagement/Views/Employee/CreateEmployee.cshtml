@@ -57,6 +57,46 @@
         <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
     </div>
 </div>
+<input type="hidden" id="hddID" value="" />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#btnSubmit').on('click', function () {
+            DialogConfirmSubmit(function () {
+                swal.disableButtons();
+                BlockUI();
+                var obj = {
+                    'USER_ID': GetValTextBox('hddID'),
+                    'USER_NAME': GetValTextBox('txtUsername'),
+                    'PASSWORD': GetValTextBox('txtPassword'),
+                    'FULLNAME': GetValTextBox('txtFirstname'),
+                    'LASTNAME': GetValTextBox('txtLastname'),
+                    'IDCARD': GetValTextBox('txtIDCard'),
+                    'POSITION': GetValDropdown('ddlPosition'),
+                    //'STATUS': GetValTextBox('txtLastname'),
+                    //'CREATE_DATE': GetValTextBox('txtLastname'),
+                    //'CREATE_BY': GetValTextBox('txtLastname'),
+                    //'UPDATE_DATE': GetValTextBox('txtLastname'),
+                    //'UPDATE_BY': GetValTextBox('txtLastname'),
+                }
+                AjaxWebMethod('@Url.Action("SaveData", "Employee")', { 'req': obj }, function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut();
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.SaveFail) {
+                        DialogSaveFail(response.Msg);
+                    } else {
+                        DialogSucessRedirect('@Url.Action("Index","Employee")');
+                    }
+                }, UnblockUI());
+            });
+        });
+    });
+</script>
+
 
 
 

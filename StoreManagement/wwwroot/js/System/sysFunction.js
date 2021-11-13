@@ -616,7 +616,7 @@ function AjaxWebMethod(sWebMetodName, objJSON, fnSuccess, fnComplete, fnError, s
         var sLocationPath = location.pathname;
         $.ajax({
             type: 'POST',
-            url: sLocationPath + '/' + sWebMetodName, //fileName.aspx/FunctionName
+            url: sWebMetodName, //sLocationPath + '/' + sWebMetodName //fileName.aspx/FunctionName
             data: JSON.stringify(objJSON), //Variable in function
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',

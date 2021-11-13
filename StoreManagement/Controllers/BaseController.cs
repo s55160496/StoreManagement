@@ -13,6 +13,15 @@ namespace StoreManagement.Controllers
     public class BaseController : Controller
     {
         private IConfiguration _configuration;
+
+        public static string process_SessionExpired = "SSEXP";
+        public static string process_Success = "Success";
+        public static string process_Failed = "Failed";
+        public static string process_FileOversize = "OverSize";
+        public static string process_FileInvalidType = "InvalidType";
+        public static string process_Duplicate = "DUP";
+        public static string process_SaveFail = "SaveFail";
+
         protected readonly string UserAccount = "UserAccount";
         protected readonly string URL_API = null;
         public BaseController(IConfiguration _configuration)

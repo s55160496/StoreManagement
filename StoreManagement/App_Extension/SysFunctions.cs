@@ -6,7 +6,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace PTTEPMailingService.App_Extension
+namespace StoreManagement.App_Extension
 {
     public class SysFunctions
     {
@@ -14,12 +14,14 @@ namespace PTTEPMailingService.App_Extension
         public static string process_Success { get { return "Success"; } }
         public static string process_Failed { get { return "Failed"; } }
         public static string process_Duplicate { get { return "DUP"; } }
-        public class CResutlWebMethod
+        public static string process_SaveFail { get { return "SaveFail"; } }
+
+        public  class CResutlWebMethod
         {
-            public int nID { get; set; }
-            public string sStatus { get; set; }
-            public string sMsg { get; set; }
-            public string sContent { get; set; }
+            public int ID { get; set; }
+            public string Status { get; set; }
+            public string Msg { get; set; }
+            public string Content { get; set; }
         }
 
         public static int? GetIntNull(string sVal)
