@@ -26,6 +26,9 @@ namespace StoreManagement
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+            services.AddControllers().AddJsonOptions(options =>
+           options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
             services.AddSession();
 
             services.AddDistributedMemoryCache();

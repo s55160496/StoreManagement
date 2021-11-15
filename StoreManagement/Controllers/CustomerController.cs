@@ -20,6 +20,10 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateCustomer()
         {
+            var PROVINCE = GET_PROVINCE();
+            ViewData["PROVINCE"] = PROVINCE.ToArray();
+
+
             return View();
         }
     }

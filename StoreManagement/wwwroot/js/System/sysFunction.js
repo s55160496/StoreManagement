@@ -618,7 +618,7 @@ function AjaxWebMethod(sWebMetodName, objJSON, fnSuccess, fnComplete, fnError, s
             type: 'POST',
             url: sWebMetodName, //sLocationPath + '/' + sWebMetodName //fileName.aspx/FunctionName
             data: JSON.stringify(objJSON), //Variable in function
-            contentType: 'application/json; charset=utf-8',
+            contentType: 'application/json',//application/json;charset=utf-8
             dataType: 'json',
             success: fnSuccess != undefined ? fnSuccess : function () { },
             error: function (xhr, status, err) {

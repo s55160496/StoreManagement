@@ -106,5 +106,7 @@ namespace StoreManagement.Controllers
             return client.Execute<List<JOBTYPE>>(request).Data;
         }
 
+
+
     }
 }

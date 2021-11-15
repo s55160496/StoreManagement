@@ -1,9 +1,10 @@
-﻿
+﻿@using StoreManagement.Models
 @{
     ViewData["Title"] = "CreateEmployee";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
-}
 
+    var POSITION = (EMPLOYEE_POSITION[])ViewData["POSITION"];
+}
 <div class="card-body">
     <div>
         <div id="divForm">
@@ -12,7 +13,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtUsername">Username</label>
-                            <input type="text" class="form-control" id="txtUsername" placeholder="Username">
+                            <input type="text" class="form-control" id="txtUsername" placeholder="Username" value="">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtPassword">Password</label>
@@ -40,11 +41,18 @@
                             <label for="inputState">Position</label>
                             <select id="ddlPosition" class="form-control">
                                 <option selected>Choose...</option>
-                                <option>...</option>
+                                @{
+                                    if (POSITION != null && POSITION.Any())
+                                    {
+                                        foreach (var item in POSITION)
+                                        {
+                                            <option value="@item.POSITION_CODE">@item.POSITION_DESCRIPTION</option>
+                                        }
+                                    }
+                                }
                             </select>
                         </div>
                     </div>
-                    @*<button type="submit" class="btn btn-primary">Sign in</button>*@
                 </form>
             </div>
         </div>
@@ -66,32 +74,44 @@
             DialogConfirmSubmit(function () {
                 swal.disableButtons();
                 BlockUI();
+
                 var obj = {
-                    'USER_ID': GetValTextBox('hddID'),
-                    'USER_NAME': GetValTextBox('txtUsername'),
-                    'PASSWORD': GetValTextBox('txtPassword'),
-                    'FULLNAME': GetValTextBox('txtFirstname'),
-                    'LASTNAME': GetValTextBox('txtLastname'),
-                    'IDCARD': GetValTextBox('txtIDCard'),
-                    'POSITION': GetValDropdown('ddlPosition'),
-                    //'STATUS': GetValTextBox('txtLastname'),
-                    //'CREATE_DATE': GetValTextBox('txtLastname'),
-                    //'CREATE_BY': GetValTextBox('txtLastname'),
-                    //'UPDATE_DATE': GetValTextBox('txtLastname'),
-                    //'UPDATE_BY': GetValTextBox('txtLastname'),
+                    'USER_ID': "",//GetValTextBox('hddID'),
+                    'USER_NAME': "345345",// GetValTextBox('txtUsername'),
+                    'PASSWORD': "345345345",//GetValTextBox('txtPassword'),
+                    'FULLNAME': "345345345",// GetValTextBox('txtFirstname'),
+                    'LASTNAME': "gfdgdfg",//GetValTextBox('txtLastname'),
+                    'IDCARD': "dfgdfg",//GetValTextBox('txtIDCard'),
+                    'POSITION': "dfgdfg",//GetValDropdown('ddlPosition')
+                    'CREATE_BY':"dfg"
                 }
-                AjaxWebMethod('@Url.Action("SaveData", "Employee")', { 'req': obj }, function (response) {
+                $.ajax({
+                    url: '@Url.Action("SaveData", "Employee")',
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: { 'USER_NAME': 'dsfsdf'},
+                    success: function (data) {
+                        alert(data.success);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+
+                @*AjaxWebMethod('@Url.Action("SaveData", "Employee")', {'data': obj}, function (response) {
                     UnblockUI();
                     if (response.Status == SysProcess.SessionExpired) {
                         PopupSessionTimeOut();
                     } else if (response.Status == SysProcess.Duplicate) {
                         DialogDuplicate();
-                    } else if (response.Status == SysProcess.SaveFail) {
-                        DialogSaveFail(response.Msg);
+                    } else if (response.Status == SysProcess.Failed) {
+                        //DialogSaveFail(response.Msg);
+                        DialogWarning(response.Msg);
                     } else {
                         DialogSucessRedirect('@Url.Action("Index","Employee")');
                     }
-                }, UnblockUI());
+                }, UnblockUI());*@
             });
         });
     });

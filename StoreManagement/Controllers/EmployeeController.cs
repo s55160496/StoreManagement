@@ -27,20 +27,26 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateEmployee(string user_id)
         {
-            var a = GET_EMPLOYEE_POSITION();
-            return View();
+            TBM_EMPLOYEE model = new TBM_EMPLOYEE();
+
+            var POSITION = GET_EMPLOYEE_POSITION();
+            ViewData["POSITION"] = POSITION.ToArray();
+
+            return View(model);
         }
 
         [HttpPost]
-        public JsonResult SaveData(TBM_EMPLOYEE req)
+        public IActionResult SaveData(string USER_NAME)//[FromBody]TBM_EMPLOYEE data
         {
             CResutlWebMethod result = new CResutlWebMethod();
             try
-            {
+                {
+                //data.CREATE_BY = "000000";
+
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBM_EMPLOYEE", Method.POST);
 
-                request.AddJsonBody(req);
+                //request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
                 if (response.IsSuccessful)
@@ -50,21 +56,14 @@ namespace StoreManagement.Controllers
                 }
                 else
                 {
-                    throw new Exception(response.ErrorMessage);
+                    throw new Exception(response.Content);
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_SaveFail;
+                result.Status = SysFunctions.process_Failed;
             }
-
-            //var json = JsonConvert.SerializeObject(result,
-            //new JsonSerializerSettings
-            //{
-            //    ContractResolver = new CamelCasePropertyNamesContractResolver()
-            //});
-            //result  = JsonConvert.DeserializeObject<CResutlWebMethod>(response.Content.ReadAsStringAsync().Result);
 
             return Json(result);
         }
