@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 }
@@ -11,34 +10,22 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbData" class="table tableData">
+                    <table id="tbSearchData" class="table tableData">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
+                                <th>#</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">LastName</th>
+                                <th class="text-center">ID Card</th>
+                                <th class="text-center">Position</th>
+                                <th class="text-center">Create Date</th>
+                                <th class="text-center">Create By</th>
+                                <th class="text-center">Update Date</th>
+                                <th class="text-center">Update By</th>
                                 <th style="width: 11%"></th>
-                                <th class="text-center" style="width: 30%">Name</th>
-                                <th class="text-center" style="width: 30%">Position</th>
-                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>mdo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>fat</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>twitter</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -51,8 +38,58 @@
 </div>
 
 <script>
+var urlSearchData = "@Url.Action("GetData", "Employee")";
+
     $(document).ready(function () {
-        $('#tbData').DataTable();
+        SearchData();
     });
+
+    function SearchData() {
+        var obj = {
+            'USER_ID': "",//GetValTextBox('hddID'),
+            'USER_NAME': GetValTextBox('txtUsername'),
+            'PASSWORD': GetValTextBox('txtPassword'),
+            'FULLNAME': GetValTextBox('txtFirstname'),
+            'LASTNAME': GetValTextBox('txtLastname'),
+            'IDCARD': GetValTextBox('txtIDCard'),
+            'POSITION': GetValDropdown('ddlPosition')
+        }
+
+        BlockUI();
+        $.ajax({
+            url: '@Url.Action("GetData", "Employee")',
+            type: 'POST',
+            //contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                BindDataTable(response);
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        $("#tbSearchData tbody").html("");
+            let html = '';
+            $.each(arrData_, function (i, el) {
+                let td = '';
+                td = '<td>' + (i + 1 )+ '</td>';
+                td += '<td>' + (el.FULLNAME || '') + '</td>';
+                td += '<td>' + (el.LASTNAME || '') + '</td>';
+                td += '<td>' + (el.IDCARD || '') + '</td>';
+                td += '<td>' + (el.POSITION || '') + '</td>';
+                td += '<td>' + (el.CREATE_DATE || '') + '</td>';
+                td += '<td>' + (el.CREATE_BY || '') + '</td>';
+                td += '<td>' + (el.UPDATE_DATE || '') + '</td>';
+                td += '<td>' + (el.UPDATE_BY || '') + '</td>';
+                td += '<td>' + '<a href="@Url.Action("CreateEmployee", "Employee")' + '?str=' + el.USER_ID_ENCRYPT + '" class="btn btn-sm btn-warning">View Detail</a>' + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+            $("table[id$=tbSearchData] tbody").html(html);
+        $('#tbSearchData').DataTable();
+    }
 </script>
 

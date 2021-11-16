@@ -77,25 +77,34 @@
 
                 var obj = {
                     'USER_ID': "",//GetValTextBox('hddID'),
-                    'USER_NAME': "345345",// GetValTextBox('txtUsername'),
-                    'PASSWORD': "345345345",//GetValTextBox('txtPassword'),
-                    'FULLNAME': "345345345",// GetValTextBox('txtFirstname'),
-                    'LASTNAME': "gfdgdfg",//GetValTextBox('txtLastname'),
-                    'IDCARD': "dfgdfg",//GetValTextBox('txtIDCard'),
-                    'POSITION': "dfgdfg",//GetValDropdown('ddlPosition')
-                    'CREATE_BY':"dfg"
+                    'USER_NAME': GetValTextBox('txtUsername'),
+                    'PASSWORD': GetValTextBox('txtPassword'),
+                    'FULLNAME':  GetValTextBox('txtFirstname'),
+                    'LASTNAME': GetValTextBox('txtLastname'),
+                    'IDCARD': GetValTextBox('txtIDCard'),
+                    'POSITION': GetValDropdown('ddlPosition')
                 }
+                BlockUI();
                 $.ajax({
                     url: '@Url.Action("SaveData", "Employee")',
                     type: 'POST',
-                    contentType: 'application/json; charset=utf-8',
+                    //contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
-                    data: { 'USER_NAME': 'dsfsdf'},
-                    success: function (data) {
-                        alert(data.success);
+                    data: { 'data': obj},
+                    success: function (response) {
+                        UnblockUI();
+                        if (response.Status == SysProcess.SessionExpired) {
+                            PopupSessionTimeOut();
+                        } else if (response.Status == SysProcess.Duplicate) {
+                            DialogDuplicate();
+                        } else if (response.Status == SysProcess.Failed) {
+                            //DialogSaveFail(response.Msg);
+                            DialogWarning(response.Msg);
+                        } else {
+                            DialogSucessRedirect('@Url.Action("Index","Employee")');
+                        }
                     },
                     error: function () {
-                        alert("error");
                     }
                 });
 

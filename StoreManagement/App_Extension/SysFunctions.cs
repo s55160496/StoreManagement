@@ -143,5 +143,25 @@ namespace StoreManagement.App_Extension
             return dResult;
         }
 
+        public static string Encrypt_UrlEncrypt(string sValue)
+        {
+            string result = "";
+            if (!string.IsNullOrEmpty(sValue))
+            {
+                result = HttpUtility.UrlEncode(sValue);
+            }
+            return result;
+        }
+
+        public static string Decrypt_UrlDecode(string sValue)
+        {
+            string result = "";
+            if (!string.IsNullOrEmpty(sValue))
+            {
+                result = HttpUtility.UrlDecode(sValue);
+                //result = STCrypt.Decrypt(HttpUtility.UrlDecode(sValue));
+            }
+            return result;
+        }
     }
 }

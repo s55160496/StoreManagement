@@ -22,10 +22,11 @@ namespace StoreManagement.Controllers
         }
         public IActionResult Index()
         {
+
             return View();
         }
 
-        public IActionResult CreateEmployee(string user_id)
+        public IActionResult CreateEmployee(string str)
         {
             TBM_EMPLOYEE model = new TBM_EMPLOYEE();
 
@@ -36,22 +37,22 @@ namespace StoreManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveData(string USER_NAME)//[FromBody]TBM_EMPLOYEE data
+        public IActionResult SaveData(TBM_EMPLOYEE data)
         {
             CResutlWebMethod result = new CResutlWebMethod();
             try
-                {
-                //data.CREATE_BY = "000000";
+            {
+                data.CREATE_BY = "000000";
 
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBM_EMPLOYEE", Method.POST);
 
-                //request.AddJsonBody(data);
+                request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
                 if (response.IsSuccessful)
                 {
-                    var content = response.Content; // {"message":" created."}
+                    var content = response.Content;
 
                 }
                 else
@@ -67,5 +68,28 @@ namespace StoreManagement.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public IActionResult GetData(TBM_EMPLOYEE data)
+        {
+            try
+            {
+                var lstData = GET_EMPLOYEE(new TBM_EMPLOYEE() { });
+                if (lstData.Any())
+                {
+                    foreach (var item in lstData)
+                    {
+                        item.USER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.USER_ID);
+                    }
+                }
+                return Json(lstData);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
     }
 }

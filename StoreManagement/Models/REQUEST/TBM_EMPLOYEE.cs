@@ -16,5 +16,10 @@ namespace StoreManagement.Models
         public string POSITION { get; set; }
         public string STATUS { get; set; }
         public string CREATE_BY { get; set; }
+        public string CREATE_DATE { get; set; }
+        public string UPDATE_DATE { get; set; }
+        public string UPDATE_BY { get; set; }
+
+        public string USER_ID_ENCRYPT { get; set; }
     }
 }

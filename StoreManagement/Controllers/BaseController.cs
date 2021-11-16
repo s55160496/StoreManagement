@@ -107,6 +107,14 @@ namespace StoreManagement.Controllers
         }
 
 
+        public List<TBM_EMPLOYEE> GET_EMPLOYEE(TBM_EMPLOYEE req)
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_TBM_EMPLOYEE", Method.POST);
+            request.AddJsonBody(req);
+            return client.Execute<List<TBM_EMPLOYEE>>(request).Data;
+        }
+
 
     }
 }
