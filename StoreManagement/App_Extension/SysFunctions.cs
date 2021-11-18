@@ -148,7 +148,7 @@ namespace StoreManagement.App_Extension
             string result = "";
             if (!string.IsNullOrEmpty(sValue))
             {
-                result = HttpUtility.UrlEncode(sValue);
+                result = HttpUtility.UrlEncode(STCrypt.Encrypt(sValue));
             }
             return result;
         }
@@ -158,8 +158,7 @@ namespace StoreManagement.App_Extension
             string result = "";
             if (!string.IsNullOrEmpty(sValue))
             {
-                result = HttpUtility.UrlDecode(sValue);
-                //result = STCrypt.Decrypt(HttpUtility.UrlDecode(sValue));
+                result = STCrypt.Decrypt(HttpUtility.UrlDecode(sValue));
             }
             return result;
         }

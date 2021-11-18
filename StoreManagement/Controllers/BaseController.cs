@@ -114,6 +114,21 @@ namespace StoreManagement.Controllers
             request.AddJsonBody(req);
             return client.Execute<List<TBM_EMPLOYEE>>(request).Data;
         }
+        public List<TBM_VEHICLE> GET_VEHICLE(TBM_VEHICLE req)
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_TBM_VEHICLE", Method.POST);
+            request.AddJsonBody(req);
+            return client.Execute<List<TBM_VEHICLE>>(request).Data;
+        }
+
+        public List<TBM_CUSTOMER> GET_CUSTOMER(TBM_CUSTOMER req)
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_TBM_CUSTOMER", Method.POST);
+            request.AddJsonBody(req);
+            return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+        }
 
 
     }

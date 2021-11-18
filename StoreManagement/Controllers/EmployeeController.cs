@@ -20,6 +20,7 @@ namespace StoreManagement.Controllers
         {
 
         }
+
         public IActionResult Index()
         {
 
@@ -28,7 +29,20 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateEmployee(string str)
         {
+            string sUser_ID = string.Empty;
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                sUser_ID = STCrypt.Decrypt(str);
+            }
+
             TBM_EMPLOYEE model = new TBM_EMPLOYEE();
+
+            var lstData = GET_EMPLOYEE(new TBM_EMPLOYEE() { });
+
+            if (lstData != null && !string.IsNullOrEmpty(sUser_ID))
+            {
+                model = lstData.Where(w => w.USER_ID == sUser_ID).FirstOrDefault();
+            }
 
             var POSITION = GET_EMPLOYEE_POSITION();
             ViewData["POSITION"] = POSITION.ToArray();

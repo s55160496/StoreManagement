@@ -20,4 +20,10 @@
     <PackageReference Include="RestSharp" Version="106.13.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="STCrypt">
+      <HintPath>..\..\..\..\Project\Outsource_PTTEP_MailingService_New-master\PTTEPMailingService\STCrypt.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

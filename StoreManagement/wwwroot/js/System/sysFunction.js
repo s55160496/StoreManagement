@@ -617,7 +617,7 @@ function AjaxWebMethod(sWebMetodName, objJSON, fnSuccess, fnComplete, fnError, s
         $.ajax({
             type: 'POST',
             url: sWebMetodName, //sLocationPath + '/' + sWebMetodName //fileName.aspx/FunctionName
-            data: JSON.stringify(objJSON), //Variable in function
+            data: JSON.stringify(objJSON), //Variable in function //JSON.stringify(objJSON)
             //contentType: 'application/json',//application/json;charset=utf-8
             dataType: 'json',
             success: fnSuccess != undefined ? fnSuccess : function () { },
@@ -1587,6 +1587,23 @@ function checkPhoneNum(str) {
         }
     }
     return true;
+}
+
+function cardFormat() {
+    if ($(this).val().length > 4 && $(this).val().indexOf('-') === -1) {
+        var format_card = $(this).val().replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+        $(this).attr('maxlength', 13);
+        $(this).val(format_card);
+        if ($(this).val() == '' ||
+            $(this).val().match(format_card) ||
+            $(this).val().length == 0) {
+            console.log("invalid");
+        } else {
+            console.log("valid");
+        }
+    } else {
+        $(this).attr('maxlength', 17);
+    }
 }
 
 /************Get Data *************/
