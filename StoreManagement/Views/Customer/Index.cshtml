@@ -12,34 +12,25 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbData" class="table tableData">
+                    <table id="tbSearchData" class="table tableData">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th style="width: 11%"></th>
-                                <th class="text-center" style="width: 30%">Name</th>
-                                <th class="text-center" style="width: 30%">Position</th>
-                                <th class="text-center">Status</th>
+                                <th class="text-center">FNAME</th>
+                                <th class="text-center">LNAME</th>
+                                <th class="text-center">ADDRESS</th>
+
+                                <th class="text-center">SUB_DISTRICT_NAME_THA</th>
+                                <th class="text-center">DISTRICT_NAME_THA</th>
+                                <th class="text-center">PROVINCE_NAME_THA</th>
+
+                                <th class="text-center">ZIP_CODE</th>
+                                <th class="text-center">PHONE_NO</th>
+                                <th class="text-center">EMAIL</th>
+                                <th class="text-center"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>mdo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>fat</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>twitter</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -52,9 +43,66 @@
     </div>
 
 
-<script>
+    <script>
+var urlSearchData = "@Url.Action("GetData", "Customer")";
+
     $(document).ready(function () {
-        $('#tbData').DataTable();
+        SearchData();
     });
-</script>
+
+        function SearchData() {
+        var obj = {
+            'LICENSE_NO': "",
+            'CUSTOMER_ID': "",
+            'ID_CARD': "",
+            'CUST_TYPE': "",
+            'FNAME': "",
+            'LNAME': "",
+            'ADDRESS': "",
+            'SUB_DISTRICT_NO': "",
+            'DISTRICT_CODE': "",
+            'PROVINCE_CODE': "",
+            'ZIP_CODE': "",
+            'PHONE_NO': "",
+            'EMAIL': ""
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlSearchData,
+            type: 'POST',
+            //contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                BindDataTable(response);
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        $("#tbSearchData tbody").html("");
+            let html = '';
+            $.each(arrData_, function (i, el) {
+                let td = '';
+                td = '<td class="text-center">' + (i + 1 )+ '</td>';
+                td += '<td>' + (el.FNAME || '') + '</td>';
+                td += '<td>' + (el.LNAME || '') + '</td>';
+                td += '<td>' + (el.ADDRESS || '') + '</td>';
+                td += '<td>' + (el.SUB_DISTRICT_NAME_THA || '') + '</td>';
+                td += '<td>' + (el.DISTRICT_NAME_THA || '') + '</td>';
+                td += '<td>' + (el.PROVINCE_NAME_THA || '') + '</td>';
+                td += '<td>' + (el.ZIP_CODE || '') + '</td>';
+                td += '<td>' + (el.PHONE_NO || '') + '</td>';
+                td += '<td>' + (el.EMAIL || '') + '</td>';
+                td += '<td class="text-center">' + '<a href="@Url.Action("CreateCustomer", "Customer")' + '?str=' + el.CUSTOMER_ID_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+            $("table[id$=tbSearchData] tbody").html(html);
+        $('#tbSearchData').DataTable();
+    }
+    </script>
 

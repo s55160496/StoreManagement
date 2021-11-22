@@ -17,6 +17,7 @@ namespace StoreManagement.Controllers
         {
 
         }
+
         public IActionResult Index()
         {
             return View();
@@ -66,12 +67,12 @@ namespace StoreManagement.Controllers
         {
             try
             {
-                var lstData = GET_CUSTOMER(new TBM_CUSTOMER() { });
+                var lstData = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
                 if (lstData.Any())
                 {
                     foreach (var item in lstData)
                     {
-                        //item.USER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.USER_ID);
+                        item.CUSTOMER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.CUSTOMER_ID);
                     }
                 }
                 return Json(lstData);

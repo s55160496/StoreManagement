@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+}
+
+
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+
+                <div class="form-group">
+                    <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateLocationStore","LocationStore")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
+                </div>
+                <div id="divSearch">
+                    <form>
+                        <div class="form-group">
+                            <label for="inputAddress">Job</label>
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress2">Mechanic</label>
+                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress2">Status</label>
+                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                        </div>
+                        <div id="divbtnSearch" class="form-group form-control-inline">
+                            <button id="btnSearch" type="button" class="btn btn-info" title="Search" data-toggle="tooltip">
+                                <i class="fa fa-search"></i>&nbsp;Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div id="divData" class="col-sm-12">
+                <div class="table-responsive">
+                    <table id="tbSearchData" class="table tableData">
+                        <thead class="thead-HMCPO darkCustom">
+                            <tr>
+                                <th style="width: 11%"></th>
+                                <th class="text-center" style="width: 30%">location_id</th>
+                                <th class="text-center" style="width: 30%">location_name</th>
+                                <th class="text-center">owner_name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+</div>
+
+
+<script>
+var urlSearchData = "@Url.Action("GetData", "LocationStore")";
+
+    $(document).ready(function () {
+        SearchData();
+    });
+
+    function SearchData() {
+
+        var obj = {
+            "LOCATION_ID": "",
+            "LOCATION_NAME": "",
+            "OWNER_ID": "",
+            "OWNER_NAME": "",
+            "CREATE_BY": "",
+            "CREATE_DATE": "",
+            "UPDATE_BY": "",
+            "UPDATE_DATE": "",
+            "STATUS": ""
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlSearchData,
+            type: 'POST',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                BindDataTable(response);
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        $("#tbSearchData tbody").html("");
+            let html = '';
+            $.each(arrData_, function (i, el) {
+                let td = '';
+                td = '<td class="text-center">' + (i + 1 )+ '</td>';
+                td += '<td>' + (el.LOCATION_ID || '') + '</td>';
+                td += '<td>' + (el.LOCATION_NAME || '') + '</td>';
+                td += '<td>' + (el.OWNER_NAME || '') + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+            $("table[id$=tbSearchData] tbody").html(html);
+        $('#tbSearchData').DataTable();
+    }
+</script>

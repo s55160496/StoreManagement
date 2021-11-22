@@ -106,15 +106,22 @@ namespace StoreManagement.Controllers
             return client.Execute<List<JOBTYPE>>(request).Data;
         }
 
+        public List<UNIT> GET_UNIT()
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_UNIT", Method.GET);
+            return client.Execute<List<UNIT>>(request).Data;
+        }
 
-        public List<TBM_EMPLOYEE> GET_EMPLOYEE(TBM_EMPLOYEE req)
+
+        public List<TBM_EMPLOYEE> GET_TBM_EMPLOYEE(TBM_EMPLOYEE req)
         {
             var client = new RestClient(URL_API);
             var request = new RestRequest("GET_TBM_EMPLOYEE", Method.POST);
             request.AddJsonBody(req);
             return client.Execute<List<TBM_EMPLOYEE>>(request).Data;
         }
-        public List<TBM_VEHICLE> GET_VEHICLE(TBM_VEHICLE req)
+        public List<TBM_VEHICLE> GET_TBM_VEHICLE(TBM_VEHICLE req)
         {
             var client = new RestClient(URL_API);
             var request = new RestRequest("GET_TBM_VEHICLE", Method.POST);
@@ -122,12 +129,43 @@ namespace StoreManagement.Controllers
             return client.Execute<List<TBM_VEHICLE>>(request).Data;
         }
 
-        public List<TBM_CUSTOMER> GET_CUSTOMER(TBM_CUSTOMER req)
+        public List<TBM_CUSTOMER> GET_TBM_CUSTOMER(TBM_CUSTOMER req)
         {
             var client = new RestClient(URL_API);
             var request = new RestRequest("GET_TBM_CUSTOMER", Method.POST);
             request.AddJsonBody(req);
             return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+        }
+
+        public List<TBM_CUSTOMER> GET_CUSTOMER_BY_JOB(string license_no)
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_CUSTOMER_BY_JOB?license_no=" + license_no, Method.POST);
+            return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+        }
+
+        public List<TBM_LOCATION_STORE> GET_TBM_LOCATION_STORE(TBM_LOCATION_STORE req)
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_TBM_LOCATION_STORE", Method.POST);
+            request.AddJsonBody(req);
+            return client.Execute<List<TBM_LOCATION_STORE>>(request).Data;
+        }
+        
+        public List<TBM_SERVICES> GET_TBM_SERVICES(TBM_SERVICES req)
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_TBM_SERVICES", Method.POST);
+            request.AddJsonBody(req);
+            return client.Execute<List<TBM_SERVICES>>(request).Data;
+        }
+
+        public List<TBM_SPAREPART> GET_TBM_SPAREPART(TBM_SPAREPART req)
+        {
+            var client = new RestClient(URL_API);
+            var request = new RestRequest("GET_TBM_SPAREPART", Method.POST);
+            request.AddJsonBody(req);
+            return client.Execute<List<TBM_SPAREPART>>(request).Data;
         }
 
 

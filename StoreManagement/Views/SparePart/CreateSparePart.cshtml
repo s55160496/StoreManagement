@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewData["Title"] = "CreateSparePart";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+
+    var LOCATION = (TBM_LOCATION_STORE[])ViewData["LOCATION"];
+    var UNIT = (UNIT[])ViewData["UNIT"];
+}
+
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtPart_No">Part No</label>
+                            <input type="text" class="form-control" id="txtPart_No" name="txtPart_No" placeholder="Part No" maxlength="50" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtPart_Name">Part Name</label>
+                            <input type="text" class="form-control" id="txtPart_Name" name="txtPart_Name" placeholder="Part Name" maxlength="100" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="ddlPart_Type">Part Type</label>
+                            <select id="ddlPart_Type" name="ddlPart_Type" class="form-control">
+                                <option selected>Choose...</option>
+                                <option value="00">Normal Part</option>
+                                <option value="01">Dummy Part</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtPart_Desc">Part Desc</label>
+                            <textarea type="text" rows="3" class="form-control" id="txtPart_Desc" name="txtPart_Desc" placeholder="Part Desc" ></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="txtCost_Price">Cost Price</label>
+                            <input type="text" class="form-control" id="txtCost_Price" name="txtCost_Price" placeholder="Cost Price" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtSale_Price">Sale Price</label>
+                            <input type="text" class="form-control" id="txtSale_Price" name="txtSale_Price" placeholder="Sale Price" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="ddlUnit_Code">Unit Code</label>
+                            <select id="ddlUnit_Code" name="ddlUnit_Code" class="form-control">
+                                <option selected>Choose...</option>
+                                @{
+                                    if (UNIT != null && UNIT.Any())
+                                    {
+                                        foreach (var item in UNIT)
+                                        {
+                                            <option value="@item.UNIT_CODE">@item.UNIT_NAME</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtPart_Value">Part Value</label>
+                            <input type="text" class="form-control" id="txtPart_Value" name="txtPart_Value" placeholder="Part Value" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtMinimum_Value">Minimum Value</label>
+                            <input type="text" class="form-control" id="txtMinimum_Value" name="txtMinimum_Value" placeholder="Minimum Value" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtMaximum_Value">Maximum Value</label>
+                            <input type="text" class="form-control" id="txtMaximum_Value" name="txtMaximum_Value" placeholder="Maximum Value" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="ddlLocation_ID">Location ID</label>
+                            <select id="ddlLocation_ID" name="ddlLocation_ID" class="form-control">
+                                <option selected>Choose...</option>
+                                @{
+                                    if (LOCATION != null && LOCATION.Any())
+                                    {
+                                        foreach (var item in LOCATION)
+                                        {
+                                            <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+    <div class="col-sm-12 text-center">
+        <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Submit</button>
+        <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#btnSubmit').on('click', function () {
+            DialogConfirmSubmit(function () {
+                swal.disableButtons();
+                BlockUI();
+
+                var obj = {
+                    "PART_ID": "",
+                    "PART_NO": GetValTextBox('txtPart_No'),
+                    "PART_NAME": GetValTextBox('txtPart_Name'),
+                    "PART_DESC": GetValTextArea('txtPart_Desc'),
+                    "PART_TYPE": GetValDropdown('ddlPart_Type'),
+                    "PART_TYPE_DESC": "",
+                    "COST_PRICE": GetValTextBox('txtCost_Price'),
+                    "SALE_PRICE": GetValTextBox('txtSale_Price'),
+                    "UNIT_CODE": GetValDropdown('ddlUnit_Code'),
+                    "UNIT_NAME": "",
+                    "PART_VALUE": GetValTextBox('txtPart_Value'),
+                    "MINIMUM_VALUE": GetValTextBox('txtMinimum_Value'),
+                    "MAXIMUM_VALUE": GetValTextBox('txtMaximum_Value'),
+                    "LOCATION_ID": GetValDropdown('ddlLocation_ID'),
+                }
+                BlockUI();
+                $.ajax({
+                    url: '@Url.Action("SaveData", "SparePart")',
+                    type: 'POST',
+                    //contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: { 'data': obj},
+                    success: function (response) {
+                        UnblockUI();
+                        if (response.Status == SysProcess.SessionExpired) {
+                            PopupSessionTimeOut();
+                        } else if (response.Status == SysProcess.Duplicate) {
+                            DialogDuplicate();
+                        } else if (response.Status == SysProcess.Failed) {
+                            //DialogSaveFail(response.Msg);
+                            DialogWarning(response.Msg);
+                        } else {
+                            DialogSucessRedirect('@Url.Action("Index", "SparePart")');
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            });
+        });
+
+        $('#btnBack').on('click', function () {
+            window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
+        });
+    });
+</script>
+

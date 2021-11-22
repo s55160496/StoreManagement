@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewData["Title"] = "CreateServices";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+}
+
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtServicesNo">Services No</label>
+                            <input type="text" class="form-control" id="txtServicesNo" name="txtServicesNo" placeholder="Services No" maxlength="4" />
+                        </div>                        
+                        <div class="form-group col-md-6">
+                            <label for="txtServicesName">Services Name</label>
+                            <input type="text" class="form-control" id="txtServicesName" name="txtServicesName" placeholder="Services Name" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtPeriodYear">Period Year</label>
+                            <input type="text" class="form-control" id="txtPeriodYear" name="txtPeriodYear" placeholder="Period Year" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+    <div class="col-sm-12 text-center">
+        <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Submit</button>
+        <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#btnSubmit').on('click', function () {
+           // if (CheckValidate("divForm")) {
+                DialogConfirmSubmit(function () {
+                    swal.disableButtons();
+
+                var obj = {
+                    'SERVICES_NO': GetValTextBox('txtServicesNo'),
+                    'SERVICES_NAME': GetValTextBox('txtServicesName'),
+                    'PERIOD_YEAR': GetValTextBox('txtPeriodYear'),
+                    }
+
+                BlockUI();
+                $.ajax({
+                    url: '@Url.Action("SaveData", "Services")',
+                    type: 'POST',
+                    //contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: { 'data': obj},
+                    success: function (response) {
+                        UnblockUI();
+                        if (response.Status == SysProcess.SessionExpired) {
+                            PopupSessionTimeOut();
+                        } else if (response.Status == SysProcess.Duplicate) {
+                            DialogDuplicate();
+                        } else if (response.Status == SysProcess.Failed) {
+                            //DialogSaveFail(response.Msg);
+                            DialogWarning(response.Msg);
+                        } else {
+                            DialogSucessRedirect('@Url.Action("Index", "Services")');
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            });
+         //   }
+
+        });
+
+        $('#btnBack').on('click', function () {
+            window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
+        });
+
+    });
+
+
+</script>
+

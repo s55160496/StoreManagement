@@ -24,7 +24,7 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateVehicle()
         {
-            var CUSTOMER = GET_CUSTOMER(new TBM_CUSTOMER() { });
+            var CUSTOMER = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
             ViewData["CUSTOMER"] = CUSTOMER.ToArray();
 
             return View();
@@ -66,7 +66,7 @@ namespace StoreManagement.Controllers
         {
             try
             {
-                var lstData = GET_VEHICLE(new TBM_VEHICLE() { });
+                var lstData = GET_TBM_VEHICLE(new TBM_VEHICLE() { });
                 if (lstData.Any())
                 {
                     foreach (var item in lstData)

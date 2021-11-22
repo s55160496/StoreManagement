@@ -8,22 +8,73 @@
         <div id="divForm">
             <div class="container">
                 <form>
-                    <div class="form-group">
-                        <label for="inputAddress">Job</label>
-                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ddlType_job">Type Job</label>
+                            <select id="ddlType_job" class="form-control">
+                                <option selected>Choose...</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ddlEmployee">Employee</label>
+                            <select id="ddlEmployee" class="form-control">
+                                <option selected>Choose...</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="inputAddress2">Mechanic</label>
-                        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtLicense_No">License No</label>
+                            <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No">
+                            <input type="hidden" class="form-control" id="txtLicense_Email">
+                            <input type="hidden" class="form-control" id="txtCustomerID">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtPassword">Lastname</label>
+                            <input type="text" class="form-control" id="txtLastname" placeholder="Lastname" maxlength="255">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="inputAddress2">Status</label>
-                        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtAddress">Address</label>
+                            <textarea type="text" rows="2" class="form-control" id="txtAddress" placeholder="Address"></textarea>
+                        </div>
                     </div>
-                    <div id="divbtnSearch" class="form-group form-control-inline">
-                        <button id="btnSearch" type="button" class="btn btn-info" title="Search" data-toggle="tooltip">
-                            <i class="fa fa-search"></i>&nbsp;Search
-                        </button>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="ddlProvince">Province</label>
+                            <select id="ddlProvince" class="form-control">
+                                <option selected>Choose...</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="ddlDistrict">District</label>
+                            <select id="ddlDistrict" class="form-control _address">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="ddlSub_District">Sub District</label>
+                            <select id="ddlSub_District" class="form-control _address">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtZip_Code">Zip Code</label>
+                            <input type="text" class="form-control _address" id="txtZip_Code" placeholder="Zip Code" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtPhone">Phone</label>
+                            <input type="text" class="form-control" id="txtPhone" placeholder="Phone" maxlength="500">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtEmail">Email</label>
+                            <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="100">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -32,5 +83,92 @@
     <div class="clearfix"></div>
 </div>
 <div class="card-footer bg-light">
+    <div class="col-sm-12 text-center">
+        <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Submit</button>
+        <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
+    </div>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        SetAutocom();
+
+        //var objValidate = {};
+        //objValidate[GetElementName("txtLicense_No", objControl.txtbox)] = addValidate_notEmpty("Please Specify License No, Or Employee ID");
+        //BindValidate("divForm", objValidate);
+    });
+
+    var IsSelectedtxtLicense_No = false;
+    function SetAutocom() {
+        $("input[id$=txtLicense_No]")
+            .on("change", function () {
+                if (!IsSelectedtxtLicense_No || !IsBrowserFirefox()) {
+                    $("input[id$=txtLicense_Email]").val("");
+                    //$("input[id$=txtLicense_No]").val("");
+                    $("input[id$=txtCustomerID]").val("");
+
+                }
+            }).focus(function () {
+                IsSelectedtxtLicense_No = false;
+            })
+            .autocomplete({
+                source: function (request, response) {
+                    IsSelectedtxtLicense_No = false;
+
+                    if (request.term.replace(/\s/g, "") != "" && request.term.replace(/\s/g, "").length >= 1) {
+                        $.ajax({
+                            url: UrlSearchLicense_No(),
+                            type: 'POST',
+                            dataType: 'json',
+                            data: { 'License_No': request.term },
+                            success: function (data) {
+                                UnblockUI();
+                                response($.map(data, function (item) {
+                                    return {
+                                        value: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
+                                        label: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
+                                        CUSTOMER_ID: item.CUSTOMER_ID,
+                                        EMAIL: item.EMAIL,
+                                        LICENSE_NO: item.LICENSE_NO,
+
+                                    }
+                                }));
+                            },
+                            error: function () {
+                            }
+                        });
+                        //AjaxWebMethod(UrlSearchLicense_No(), { 'License_No': request.term }, function (data) {
+                        //    UnblockUI();
+                        //    response($.map(data, function (item) {
+                        //        return {
+                        //            value: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
+                        //            label: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
+                        //            CUSTOMER_ID: item.CUSTOMER_ID,
+                        //            EMAIL: item.EMAIL,
+                        //            LICENSE_NO: item.LICENSE_NO,
+
+                        //        }
+                        //    }));
+                        //});
+                    }
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    IsSelectedtxtLicense_No = true;
+                    $("input[id$=txtLicense_Email]").val(ui.item.EMAIL);
+                    //$("input[id$=txtLicense_No]").val(ui.item.LICENSE_NO);
+                    $("input[id$=txtCustomerID]").val(ui.item.CUSTOMER_ID);
+
+                    if (IsBrowserFirefox()) {
+                        $("input[id$=txtLicense_No]").blur();
+                    }
+                }
+            });
+    }
+
+    function UrlSearchLicense_No() {
+        BlockUI();
+
+        return '@Url.Action("GET_CUSTOMER_BY_LICENSE_NO", "Job")';
+        }
+</script>
