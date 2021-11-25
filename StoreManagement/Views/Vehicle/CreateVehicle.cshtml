@@ -14,29 +14,29 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtUsername">License No</label>
-                            <input type="text" class="form-control" id="txtLicense_no" placeholder="License No" maxlength="20">
+                            <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No" maxlength="20">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtBrand_no">Brand No</label>
-                            <input type="text" class="form-control" id="txtBrand_no" placeholder="Brand No" maxlength="3">
+                            <input type="text" class="form-control" id="txtBrand_No" name="txtBrand_No" placeholder="Brand No" maxlength="3">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtModel_no">Model No</label>
-                            <textarea rows="3" type="text" class="form-control" id="txtModel_no" placeholder="Model No"></textarea>
+                            <textarea rows="3" type="text" class="form-control" id="txtModel_No" name="txtModel_No" placeholder="Model No"></textarea>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtChassis_no">Chassis No</label>
-                            <textarea rows="3" type="text" class="form-control" id="txtChassis_no" placeholder="Chassis No"></textarea>
+                            <textarea rows="3" type="text" class="form-control" id="txtChassis_No" name="txtChassis_No" placeholder="Chassis No"></textarea>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtColor">Color</label>
-                            <input type="text" class="form-control" id="txtColor" placeholder="Color" maxlength="50">
+                            <input type="text" class="form-control" id="txtColor" name="txtColor" placeholder="Color" maxlength="50">
                         </div>
                     </div>
 
@@ -64,22 +64,22 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtService_Price">Service Price</label>
-                            <input type="text" class="form-control" id="txtService_Price" placeholder="Service Price">
+                            <input type="text" class="form-control" id="txtService_Price" name="txtService_Price" placeholder="Service Price">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtService_No">Service No</label>
-                            <input type="text" class="form-control" id="txtService_No" placeholder="Service No">
+                            <input type="text" class="form-control" id="txtService_No" name="txtService_No" placeholder="Service No">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtContract_No">Contract No</label>
-                            <input type="text" class="form-control" id="txtContract_No" placeholder="Contract No">
+                            <input type="text" class="form-control" id="txtContract_No" name="txtContract_No" placeholder="Contract No">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="ddlCustomer_ID">Customer ID</label>
-                            <select id="ddlCustomer_ID" class="form-control">
+                            <select id="ddlCustomer_ID" name="ddlCustomer_ID" class="form-control">
                                 <option selected>Choose...</option>
                                 @{
                                     if (CUSTOMER != null && CUSTOMER.Any())
@@ -118,23 +118,26 @@
 
     $(document).ready(function () {
 
+        SetDatePicker($('#txtEffective_Date'));
+        SetDatePicker($('#txtExpire_Date'));
+
         $('#btnSubmit').on('click', function () {
             DialogConfirmSubmit(function () {
                 swal.disableButtons();
                 BlockUI();
 
                 var obj = {
-                    'LICENSE_NO': "",//GetValTextBox('hddID'),
-                    'BRAND_NO': GetValTextBox('txtUsername'),
-                    'MODEL_NO': GetValTextBox('txtPassword'),
-                    'CHASSIS_NO':  GetValTextBox('txtFirstname'),
-                    'COLOR': GetValTextBox('txtLastname'),
-                    'EFFECTIVE_DATE': GetValTextBox('txtIDCard'),
-                    'EXPIRE_DATE': GetValDropdown('ddlPosition'),
-                    'SERVICE_PRICE': GetValTextBox('txtFirstname'),
-                    'SERVICE_NO': GetValTextBox('txtLastname'),
-                    'CONTRACT_NO': GetValTextBox('txtIDCard'),
-                    'CUSTOMER_ID': GetValDropdown('ddlPosition')
+                    'LICENSE_NO': GetValTextBox('txtLicense_No'),//GetValTextBox('hddID'),
+                    'BRAND_NO': GetValTextBox('txtBrand_No'),
+                    'MODEL_NO': GetValTextArea('txtModel_No'),
+                    'CHASSIS_NO': GetValTextArea('txtChassis_No'),
+                    'COLOR': GetValTextBox('txtColor'),
+                    'EFFECTIVE_DATE': GetValTextBox('txtEffective_Date'),
+                    'EXPIRE_DATE': GetValTextBox('txtExpire_Date'),
+                    'SERVICE_PRICE': GetValTextBox('txtService_Price'),
+                    'SERVICE_NO': GetValTextBox('txtService_No'),
+                    'CONTRACT_NO': GetValTextBox('txtContract_No'),
+                    'CUSTOMER_ID': GetValDropdown('ddlCustomer_ID')
                 }
                 BlockUI();
                 $.ajax({

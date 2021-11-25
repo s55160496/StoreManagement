@@ -8,44 +8,28 @@
     <div>
         <div id="divForm">
             <div class="container">
-
-                <div class="form-group">
-                    <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateServices","Services")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
-                </div>
                 <div id="divSearch">
-                    <form>
-                        <div class="form-group">
-                            <label for="inputAddress">Job</label>
-                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAddress2">Mechanic</label>
-                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAddress2">Status</label>
-                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-                        </div>
-                        <div id="divbtnSearch" class="form-group form-control-inline">
-                            <button id="btnSearch" type="button" class="btn btn-info" title="Search" data-toggle="tooltip">
-                                <i class="fa fa-search"></i>&nbsp;Search
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
             <div class="clearfix"></div>
         </div>
         <div class="row">
-            <div id="divData" class="col-sm-12">
+            <div id="divData" class="col-md-12">
                 <div class="table-responsive">
-                    <table id="tbSearchData" class="table tableData">
+                    <div class="form-group">
+                        <a id="btnDel" onclick="DeleteData()" class="btn btn-danger" title="Delete" data-toggle="tooltip"><i class="fa fa-trash-alt" aria-hidden="true"></i>&nbsp;</a>
+                        <a id="btnAdd" style="float:right" class="btn btn-success" href="@Url.Action("CreateServices","Services")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
+                    </div>
+                    <table id="tbSearchData" class="table tableData" style="min-width:1000px">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
-                                <th style="width: 11%"></th>
+                                <th class="text-center"><input type="checkbox" name="select_all" value="1" id="select-all"></th>
                                 <th class="text-center">Services No</th>
                                 <th class="text-center">Services Name</th>
                                 <th class="text-center">Period Year</th>
+                                <th class="text-center">Create Date</th>
+                                <th class="text-center">Update Date</th>
+                                <th style="width: 11%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,13 +85,110 @@ var urlSearchData = "@Url.Action("GetData", "Services")";
             let html = '';
             $.each(arrData_, function (i, el) {
                 let td = '';
-                td = '<td class="text-center">' + (i + 1 )+ '</td>';
+                td = '<td class="text-center">' + (el.SERVICES_NO_ENCRYPT || '' )+ '</td>';
                 td += '<td>' + (el.SERVICES_NO || '') + '</td>';
                 td += '<td>' + (el.SERVICES_NAME || '') + '</td>';
                 td += '<td>' + (el.PERIOD_YEAR || '') + '</td>';
+                td += '<td class="text-center">' + (el.CREATE_DATE || '') + '</td>';
+                td += '<td class="text-center">' + (el.UPDATE_DATE || '') + '</td>';
+                td += '<td class="text-center">' + '<a href="@Url.Action("CreateServices", "Services")' + '?str=' + el.SERVICES_NO_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
+
                 html += "<tr>" + td + "</tr>";
             });
             $("table[id$=tbSearchData] tbody").html(html);
-        $('#tbSearchData').DataTable();
+       // $('#tbSearchData').DataTable();
+        let table = $('#tbSearchData').DataTable({
+            //scrollY: "300px",
+            //scrollX: true,
+            //scrollCollapse: true,
+            columnDefs: [
+                {
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                    }
+                },
+                /*{ width: 300, targets: 9 },*/
+            ],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [
+                [1, 'asc']
+            ]
+        });
+
+        // Handle click on "Select all" control
+        $('#select-all').on('click', function () {
+            // Get all rows with search applied
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        // Handle click on checkbox to set state of "Select all" control
+        $('#tbSearchData tbody').on('change', 'input[type="checkbox"]', function () {
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#select-all').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
+    }
+
+    function DeleteData() {
+
+        let table = $('#tbSearchData').DataTable();
+        let arr = [];
+        let checkedvalues = table.$('input:checked').each(function () {
+            //arr.push($(this).val());
+            arr.push({ 'ID': $(this).val(),'MSG':'' });
+        });
+        //arr = arr.toString();
+        if (arr.length > 0) {
+            DialogConfirmDel(function () {
+            swal.disableButtons();
+            BlockUI();
+
+            var obj = {
+                'USER_ID': "",
+                'DATA': arr
+            }
+            BlockUI();
+            $.ajax({
+                url: '@Url.Action("DeleteData", "Services")',
+                type: 'POST',
+                //contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: { 'data': obj },
+                success: function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut();
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.Failed) {
+                        //DialogSaveFail(response.Msg);
+                        DialogWarning(response.Msg);
+                    } else {
+                        DialogSucessRedirect('@Url.Action("Index", "Services")');
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+        } else {
+            DialogWarning("เลือกรายการที่ต้องการลบ อย่างน้อย 1 รายการ");
+        }
     }
 </script>

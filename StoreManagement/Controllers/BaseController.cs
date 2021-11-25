@@ -73,99 +73,204 @@ namespace StoreManagement.Controllers
 
         public List<PROVINCE> GET_PROVINCE()
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_PROVINCE", Method.GET);
-            return client.Execute<List<PROVINCE>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_PROVINCE", Method.GET);
+                return client.Execute<List<PROVINCE>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<DISTRICT> GET_DISTRICT(string PROVINCE_CODE)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_DISTRICT/" + PROVINCE_CODE, Method.GET);
-            return client.Execute<List<DISTRICT>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_DISTRICT/" + PROVINCE_CODE, Method.GET);
+                return client.Execute<List<DISTRICT>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<SUB_DISTRICT> GET_SUB_DISTRICT(string DISTRICT_CODE)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_SUB_DISTRICT/" + DISTRICT_CODE, Method.GET);
-            return client.Execute<List<SUB_DISTRICT>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_SUB_DISTRICT/" + DISTRICT_CODE, Method.GET);
+                return client.Execute<List<SUB_DISTRICT>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<EMPLOYEE_POSITION> GET_EMPLOYEE_POSITION()
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_EMPLOYEE_POSITION", Method.GET);
-            return client.Execute<List<EMPLOYEE_POSITION>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_EMPLOYEE_POSITION", Method.GET);
+                return client.Execute<List<EMPLOYEE_POSITION>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<JOBTYPE> GET_JOBTYPE()
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_JOBTYPE", Method.GET);
-            return client.Execute<List<JOBTYPE>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_JOBTYPE", Method.GET);
+                return client.Execute<List<JOBTYPE>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<UNIT> GET_UNIT()
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_UNIT", Method.GET);
-            return client.Execute<List<UNIT>>(request).Data;
-        }
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_UNIT", Method.GET);
+                return client.Execute<List<UNIT>>(request).Data;
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+        }
 
         public List<TBM_EMPLOYEE> GET_TBM_EMPLOYEE(TBM_EMPLOYEE req)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_TBM_EMPLOYEE", Method.POST);
-            request.AddJsonBody(req);
-            return client.Execute<List<TBM_EMPLOYEE>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBM_EMPLOYEE", Method.POST);
+                request.AddJsonBody(req);
+                return client.Execute<List<TBM_EMPLOYEE>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
         }
+
         public List<TBM_VEHICLE> GET_TBM_VEHICLE(TBM_VEHICLE req)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_TBM_VEHICLE", Method.POST);
-            request.AddJsonBody(req);
-            return client.Execute<List<TBM_VEHICLE>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBM_VEHICLE", Method.POST);
+                request.AddJsonBody(req);
+                return client.Execute<List<TBM_VEHICLE>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<TBM_CUSTOMER> GET_TBM_CUSTOMER(TBM_CUSTOMER req)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_TBM_CUSTOMER", Method.POST);
-            request.AddJsonBody(req);
-            return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBM_CUSTOMER", Method.POST);
+                request.AddJsonBody(req);
+                return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<TBM_CUSTOMER> GET_CUSTOMER_BY_JOB(string license_no)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_CUSTOMER_BY_JOB?license_no=" + license_no, Method.POST);
-            return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_CUSTOMER_BY_JOB?license_no=" + license_no, Method.POST);
+                return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<TBM_LOCATION_STORE> GET_TBM_LOCATION_STORE(TBM_LOCATION_STORE req)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_TBM_LOCATION_STORE", Method.POST);
-            request.AddJsonBody(req);
-            return client.Execute<List<TBM_LOCATION_STORE>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBM_LOCATION_STORE", Method.POST);
+                request.AddJsonBody(req);
+                return client.Execute<List<TBM_LOCATION_STORE>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
-        
+
         public List<TBM_SERVICES> GET_TBM_SERVICES(TBM_SERVICES req)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_TBM_SERVICES", Method.POST);
-            request.AddJsonBody(req);
-            return client.Execute<List<TBM_SERVICES>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBM_SERVICES", Method.POST);
+                request.AddJsonBody(req);
+                return client.Execute<List<TBM_SERVICES>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public List<TBM_SPAREPART> GET_TBM_SPAREPART(TBM_SPAREPART req)
         {
-            var client = new RestClient(URL_API);
-            var request = new RestRequest("GET_TBM_SPAREPART", Method.POST);
-            request.AddJsonBody(req);
-            return client.Execute<List<TBM_SPAREPART>>(request).Data;
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBM_SPAREPART", Method.POST);
+                request.AddJsonBody(req);
+                return client.Execute<List<TBM_SPAREPART>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
 

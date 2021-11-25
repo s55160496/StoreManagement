@@ -1,10 +1,12 @@
-﻿
+﻿@model StoreManagement.Models.TBM_SPAREPART
 @{
     ViewData["Title"] = "CreateSparePart";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 
     var LOCATION = (TBM_LOCATION_STORE[])ViewData["LOCATION"];
     var UNIT = (UNIT[])ViewData["UNIT"];
+
+    var EDIT_FLG = (string)ViewData["EDIT_FLG"];
 }
 
 <div class="card-body">
@@ -15,11 +17,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="txtPart_No">Part No</label>
-                            <input type="text" class="form-control" id="txtPart_No" name="txtPart_No" placeholder="Part No" maxlength="50" />
+                            <input type="text" class="form-control" id="txtPart_No" name="txtPart_No" placeholder="Part No" maxlength="50" value="@Model.PART_NO" />
                         </div>
                         <div class="form-group col-md-4">
                             <label for="txtPart_Name">Part Name</label>
-                            <input type="text" class="form-control" id="txtPart_Name" name="txtPart_Name" placeholder="Part Name" maxlength="100" />
+                            <input type="text" class="form-control" id="txtPart_Name" name="txtPart_Name" placeholder="Part Name" maxlength="100" value="@Model.PART_NAME" />
                         </div>
                         <div class="form-group col-md-4">
                             <label for="ddlPart_Type">Part Type</label>
@@ -33,17 +35,17 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="txtPart_Desc">Part Desc</label>
-                            <textarea type="text" rows="3" class="form-control" id="txtPart_Desc" name="txtPart_Desc" placeholder="Part Desc" ></textarea>
+                            <textarea type="text" rows="3" class="form-control" id="txtPart_Desc" name="txtPart_Desc" placeholder="Part Desc"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="txtCost_Price">Cost Price</label>
-                            <input type="text" class="form-control" id="txtCost_Price" name="txtCost_Price" placeholder="Cost Price" />
+                            <input type="text" class="form-control" id="txtCost_Price" name="txtCost_Price" placeholder="Cost Price" value="@Model.COST_PRICE" />
                         </div>
                         <div class="form-group col-md-3">
                             <label for="txtSale_Price">Sale Price</label>
-                            <input type="text" class="form-control" id="txtSale_Price" name="txtSale_Price" placeholder="Sale Price" />
+                            <input type="text" class="form-control" id="txtSale_Price" name="txtSale_Price" placeholder="Sale Price" value="@Model.SALE_PRICE" />
                         </div>
 
                         <div class="form-group col-md-4">
@@ -63,18 +65,18 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="txtPart_Value">Part Value</label>
-                            <input type="text" class="form-control" id="txtPart_Value" name="txtPart_Value" placeholder="Part Value" />
+                            <input type="text" class="form-control" id="txtPart_Value" name="txtPart_Value" placeholder="Part Value" value="@Model.PART_VALUE" />
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="txtMinimum_Value">Minimum Value</label>
-                            <input type="text" class="form-control" id="txtMinimum_Value" name="txtMinimum_Value" placeholder="Minimum Value" />
+                            <input type="text" class="form-control" id="txtMinimum_Value" name="txtMinimum_Value" placeholder="Minimum Value" value="@Model.MINIMUM_VALUE" />
                         </div>
                         <div class="form-group col-md-4">
                             <label for="txtMaximum_Value">Maximum Value</label>
-                            <input type="text" class="form-control" id="txtMaximum_Value" name="txtMaximum_Value" placeholder="Maximum Value" />
+                            <input type="text" class="form-control" id="txtMaximum_Value" name="txtMaximum_Value" placeholder="Maximum Value" value="@Model.MAXIMUM_VALUE" />
                         </div>
 
                         <div class="form-group col-md-4">
@@ -160,6 +162,13 @@
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
+
+        if ('@EDIT_FLG' == 'Y') {
+            $('#ddlPart_Type').val();
+            $('#ddlUnit_Code').val();
+            $('#ddlLocation_ID').val();
+            $('#txtPart_Desc').html();
+        }
     });
 </script>
 

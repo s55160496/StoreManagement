@@ -23,7 +23,7 @@ namespace StoreManagement.Models
         public string MAXIMUM_VALUE { get; set; }
 
         public string LOCATION_ID { get; set; }
-        public string LOCATION_LOCATION_NAME { get; set; }
+        public string LOCATION_NAME { get; set; }
         public string CREATE_DATE { get; set; }
         public string CREATE_BY { get; set; }
         public string CANCAL_DATE { get; set; }

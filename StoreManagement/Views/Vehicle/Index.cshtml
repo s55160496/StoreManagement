@@ -11,7 +11,7 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbData" class="table tableData">
+                    <table id="tbSearchData" class="table tableData">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th>#</th>
@@ -41,8 +41,82 @@
 </div>
 
 <script>
+var urlSearchData = "@Url.Action("GetData", "Vehicle")";
+
     $(document).ready(function () {
-        $('#tbData').DataTable();
+        SearchData();
     });
+
+    function SearchData() {
+        var obj = {
+            "LICENSE_NO": "",
+            "SEQ": "",
+            "BRAND_NO": "",
+            "MODEL_NO": "",
+            "CHASSIS_NO": "",
+            "COLOR": "",
+            "EFFECTIVE_DATE": "",
+            "EXPIRE_DATE": "",
+            "SERVICE_PRICE": "",
+            "SERVICE_NO": "",
+            "SERVICES_NAME": "",
+            "CONTRACT_NO": "",
+            "CUSTOMER_ID": ""
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlSearchData,
+            type: 'POST',
+            //contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                BindDataTable(response);
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        $("#tbSearchData tbody").html("");
+            let html = '';
+            $.each(arrData_, function (i, el) {
+                let td = '';
+
+                td = '<td class="text-center">' + ( i+1 )+ '</td>';
+                td += '<td>' + (el.LICENSE_NO || '') + '</td>';
+                td += '<td>' + (el.BRAND_NO || '') + '</td>';
+                td += '<td>' + (el.MODEL_NO || '') + '</td>';
+                td += '<td>' + (el.CHASSIS_NO || '') + '</td>';
+                td += '<td>' + (el.COLOR || '') + '</td>';
+                td += '<td>' + (el.EFFECTIVE_DATE || '') + '</td>';
+                td += '<td>' + (el.SERVICE_PRICE || '') + '</td>';
+                td += '<td>' + (el.SERVICE_NO || '') + '</td>';
+                td += '<td>' + (el.CONTRACT_NO || '') + '</td>';
+                td += '<td>' + (el.CUSTOMER_ID || '') + '</td>';
+                td += '<td class="text-center">' + '<a href="@Url.Action("CreateVehicle", "Vehicle")' + '?str=' + el.LICENSE_NO_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+
+        $("table[id$=tbSearchData] tbody").html(html);
+        let table = $('#tbSearchData').DataTable({
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            columnDefs: [
+                /*{ width: 300, targets: 9 },*/
+            ],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [
+                [1, 'asc']
+            ]
+        });
+    }
 </script>
 

@@ -27,8 +27,8 @@
                             <input type="text" class="form-control" id="txtFirstname" placeholder="Firstname" value="@Model.FULLNAME">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="txtPassword">Lastname</label>
-                            <input type="text" class="form-control" id="txtLastname" placeholder="Lastname" @Model.LASTNAME>
+                            <label for="txtLastname">Lastname</label>
+                            <input type="text" class="form-control" id="txtLastname" placeholder="Lastname" value="@Model.LASTNAME">
                         </div>
                     </div>
 
@@ -77,6 +77,10 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+ 
+        $("#txtIDCard").on('input blur', cardFormat);
+
+        $('#txtIDCard').blur();
 
         $('#btnSubmit').on('click', function () {
             DialogConfirmSubmit(function () {
@@ -89,7 +93,7 @@
                     'PASSWORD': GetValTextBox('txtPassword'),
                     'FULLNAME':  GetValTextBox('txtFirstname'),
                     'LASTNAME': GetValTextBox('txtLastname'),
-                    'IDCARD': GetValTextBox('txtIDCard'),
+                    'IDCARD': GetValTextBox('txtIDCard').replace(/-/g, ''),
                     'POSITION': GetValDropdown('ddlPosition')
                 }
                 BlockUI();

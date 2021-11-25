@@ -1,9 +1,10 @@
-﻿
+﻿@model StoreManagement.Models.TBM_LOCATION_STORE
 @{
     ViewData["Title"] = "CreateLocationStore";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 
     var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
+    var EDIT_FLG = (string)ViewData["EDIT_FLG"];
 }
 
 <div class="card-body">
@@ -14,11 +15,11 @@
                     <div class="form-row">
                         <div class="form- col-md-6">
                             <label for="txtLocationID">Location ID</label>
-                            <input type="text" class="form-control" id="txtLocationID" placeholder="Location ID" maxlength="3" />
+                            <input type="text" class="form-control" id="txtLocationID" placeholder="Location ID" maxlength="3" value="@Model.LOCATION_ID" />
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtLocationName">Location Name</label>
-                            <input type="text" class="form-control" id="txtLocationName" placeholder="Location Name" maxlength="200"/>
+                            <input type="text" class="form-control" id="txtLocationName" placeholder="Location Name" maxlength="200" value="@Model.LOCATION_NAME" />
                         </div>
                     </div>
                     <div class="form-row">
@@ -97,6 +98,11 @@
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
 
+
+        if ('@EDIT_FLG' == 'Y') {
+            $('#ddlOwnerID').val('@Model.OWNER_ID');
+            $('#txtLocationID').attr('disabled',true);
+        }
     });
 
 

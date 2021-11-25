@@ -1,4 +1,4 @@
-﻿
+﻿@model StoreManagement.Models.TBM_SERVICES
 @{
     ViewData["Title"] = "CreateServices";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
@@ -12,17 +12,17 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtServicesNo">Services No</label>
-                            <input type="text" class="form-control" id="txtServicesNo" name="txtServicesNo" placeholder="Services No" maxlength="4" />
-                        </div>                        
+                            <input type="text" class="form-control" id="txtServicesNo" name="txtServicesNo" placeholder="Services No" maxlength="4" value="@Model.SERVICES_NO" />
+                        </div>
                         <div class="form-group col-md-6">
                             <label for="txtServicesName">Services Name</label>
-                            <input type="text" class="form-control" id="txtServicesName" name="txtServicesName" placeholder="Services Name" />
+                            <input type="text" class="form-control" id="txtServicesName" name="txtServicesName" placeholder="Services Name" value="@Model.SERVICES_NAME" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtPeriodYear">Period Year</label>
-                            <input type="text" class="form-control" id="txtPeriodYear" name="txtPeriodYear" placeholder="Period Year" />
+                            <input type="text" class="form-control" id="txtPeriodYear" name="txtPeriodYear" placeholder="Period Year" value="@Model.PERIOD_YEAR" />
                         </div>
                     </div>
                 </form>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,12 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateJob()
         {
+            var JOBTYPE = GET_JOBTYPE();
+            ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+
+            var EMPLOYEE = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+            ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+
             return View();
         }
 

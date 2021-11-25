@@ -22,15 +22,35 @@ namespace StoreManagement.Controllers
             return View();
         }
 
-        public IActionResult CreateSparePart()
+        public IActionResult CreateSparePart(string str)
         {
+            #region EDIT
+            string ID = string.Empty;
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                ID = STCrypt.Decrypt(str);
+            }
+
+            TBM_SPAREPART model = new TBM_SPAREPART();
+
+            string EDIT_FLG = "N";
+            var lstData = GET_TBM_SPAREPART(new TBM_SPAREPART() { PART_ID = ID });
+            if (lstData != null && !string.IsNullOrEmpty(ID))
+            {
+                model = lstData.Where(w => w.PART_ID == ID).FirstOrDefault();
+                EDIT_FLG = "Y";
+            }
+
+            ViewData["EDIT_FLG"] = EDIT_FLG;
+            #endregion
+
             var LOCATION = GET_TBM_LOCATION_STORE(new TBM_LOCATION_STORE() { });
             ViewData["LOCATION"] = LOCATION.ToArray();
 
             var UNIT = GET_UNIT();
             ViewData["UNIT"] = UNIT.ToArray();
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -71,7 +91,7 @@ namespace StoreManagement.Controllers
             try
             {
                 var lstData = GET_TBM_SPAREPART(new TBM_SPAREPART() { });
-                if (lstData.Any())
+                if (lstData != null && lstData.Any())
                 {
                     foreach (var item in lstData)
                     {

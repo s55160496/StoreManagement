@@ -6,16 +6,17 @@
 
 <div class="card-body">
     <div>
-        <div class="form-group">
-            <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateCustomer","Customer")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
-        </div>
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
+                    <div class="form-group">
+                        <a id="btnDel" onclick="DeleteData()" class="btn btn-danger" title="Delete" data-toggle="tooltip"><i class="fa fa-trash-alt" aria-hidden="true"></i>&nbsp;</a>
+                        <a id="btnAdd" style="float:right" class="btn btn-success" href="@Url.Action("CreateCustomer","Customer")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
+                    </div>
                     <table id="tbSearchData" class="table tableData">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
-                                <th style="width: 11%"></th>
+                                <th><input type="checkbox" name="select_all" value="1" id="select-all"></th>
                                 <th class="text-center">FNAME</th>
                                 <th class="text-center">LNAME</th>
                                 <th class="text-center">ADDRESS</th>
@@ -37,20 +38,20 @@
             </div>
         </div>
     </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="card-footer bg-light">
-    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+</div>
 
 
-    <script>
+<script>
 var urlSearchData = "@Url.Action("GetData", "Customer")";
 
     $(document).ready(function () {
         SearchData();
     });
 
-        function SearchData() {
+    function SearchData() {
         var obj = {
             'LICENSE_NO': "",
             'CUSTOMER_ID': "",
@@ -88,7 +89,7 @@ var urlSearchData = "@Url.Action("GetData", "Customer")";
             let html = '';
             $.each(arrData_, function (i, el) {
                 let td = '';
-                td = '<td class="text-center">' + (i + 1 )+ '</td>';
+                td = '<td class="text-center">' + (el.CUSTOMER_ID_ENCRYPT || '' )+ '</td>';
                 td += '<td>' + (el.FNAME || '') + '</td>';
                 td += '<td>' + (el.LNAME || '') + '</td>';
                 td += '<td>' + (el.ADDRESS || '') + '</td>';
@@ -102,7 +103,101 @@ var urlSearchData = "@Url.Action("GetData", "Customer")";
                 html += "<tr>" + td + "</tr>";
             });
             $("table[id$=tbSearchData] tbody").html(html);
-        $('#tbSearchData').DataTable();
+       // $('#tbSearchData').DataTable();
+
+        let table = $('#tbSearchData').DataTable({
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            columnDefs: [
+                {
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                    }
+                },
+                { width: 300, targets: 9 },
+            ],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [
+                [1, 'asc']
+            ]
+        });
+
+        // Handle click on "Select all" control
+        $('#select-all').on('click', function () {
+            // Get all rows with search applied
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        // Handle click on checkbox to set state of "Select all" control
+        $('#tbSearchData tbody').on('change', 'input[type="checkbox"]', function () {
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#select-all').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
+            }
+        });
     }
-    </script>
+
+    function DeleteData() {
+
+        let table = $('#tbSearchData').DataTable();
+        let arr = [];
+        let checkedvalues = table.$('input:checked').each(function () {
+            //arr.push($(this).val());
+            arr.push({ 'ID': $(this).val(),'MSG':'' });
+        });
+        //arr = arr.toString();
+        if (arr.length > 0) {
+            DialogConfirmDel(function () {
+            swal.disableButtons();
+            BlockUI();
+
+            var obj = {
+                'USER_ID': "",
+                'DATA': arr
+            }
+            BlockUI();
+            $.ajax({
+                url: '@Url.Action("DeleteData", "Customer")',
+                type: 'POST',
+                //contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: { 'data': obj },
+                success: function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut();
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.Failed) {
+                        //DialogSaveFail(response.Msg);
+                        DialogWarning(response.Msg);
+                    } else {
+                        DialogSucessRedirect('@Url.Action("Index","Customer")');
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+        } else {
+            DialogWarning("เลือกรายการที่ต้องการลบ อย่างน้อย 1 รายการ");
+        }
+    }
+</script>
 

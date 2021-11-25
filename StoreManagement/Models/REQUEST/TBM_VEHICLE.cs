@@ -8,6 +8,7 @@ namespace StoreManagement.Models
     public class TBM_VEHICLE
     {
         public string LICENSE_NO { get; set; }
+        public string LICENSE_NO_ENCRYPT { get; set; }
         public string SEQ { get; set; }
         public string BRAND_NO { get; set; }
         public string MODEL_NO { get; set; }

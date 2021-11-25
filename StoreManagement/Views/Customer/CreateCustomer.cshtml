@@ -1,9 +1,10 @@
-﻿@using StoreManagement.Models
+﻿@model StoreManagement.Models.TBM_CUSTOMER
 @{
     ViewData["Title"] = "CreateCustomer";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 
     var PROVINCE = (PROVINCE[])ViewData["PROVINCE"];
+    var EDIT_FLG = (string)ViewData["EDIT_FLG"];
 }
 <div class="card-body">
     <div>
@@ -13,14 +14,32 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtID_Card">ID Card</label>
-                            <input type="text" class="form-control" id="txtID_Card" placeholder="x-xxxx-xxxxx-xx-x" maxlength="13" >
+                            <input type="text" class="form-control" id="txtID_Card" placeholder="x-xxxx-xxxxx-xx-x" maxlength="13" value="@Model.ID_CARD">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="ddlCustomer_Type">Customer TYPE</label>
                             <select id="ddlCustomer_Type" class="form-control">
                                 <option selected>- ระบุ  -</option>
-                                <option value="01">บุคคลธรรมดา</option>
-                                <option value="02">นิติบุคคล</option>
+                                @{
+                                    if (!string.IsNullOrEmpty(Model.CUST_TYPE))
+                                    {
+                                        if (Model.CUST_TYPE == "01")
+                                        {
+                                            <option value="01" selected>บุคคลธรรมดา</option>
+                                            <option value="02">นิติบุคคล</option>
+                                        }
+                                        else if (Model.CUST_TYPE == "02")
+                                        {
+                                            <option value="01">บุคคลธรรมดา</option>
+                                            <option value="02" selected>นิติบุคคล</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="01">บุคคลธรรมดา</option>
+                                        <option value="02">นิติบุคคล</option>
+                                    }
+                                }
                             </select>
                         </div>
                     </div>
@@ -28,11 +47,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtFirstname">Firstname</label>
-                            <input type="text" class="form-control" id="txtFirstname" placeholder="Firstname" maxlength="255">
+                            <input type="text" class="form-control" id="txtFirstname" placeholder="Firstname" maxlength="255" value="@Model.FNAME">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtPassword">Lastname</label>
-                            <input type="text" class="form-control" id="txtLastname" placeholder="Lastname" maxlength="255">
+                            <input type="text" class="form-control" id="txtLastname" placeholder="Lastname" maxlength="255" value="@Model.LNAME">
                         </div>
                     </div>
 
@@ -71,18 +90,18 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="txtZip_Code">Zip Code</label>
-                            <input type="text" class="form-control _address" id="txtZip_Code" placeholder="Zip Code" disabled>
+                            <input type="text" class="form-control _address" id="txtZip_Code" placeholder="Zip Code" value="@Model.ZIP_CODE" disabled>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtPhone">Phone</label>
-                            <input type="text" class="form-control" id="txtPhone" placeholder="Phone" maxlength="500">
+                            <input type="text" class="form-control" id="txtPhone" placeholder="Phone" maxlength="500" value="@Model.PHONE_NO">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtEmail">Email</label>
-                            <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="100">
+                            <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="100" value="@Model.EMAIL">
                         </div>
                     </div>
                 </form>
@@ -100,6 +119,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
         $("#txtID_Card").on('input blur', cardFormat);
 
         var objValidate = {};
@@ -129,7 +149,7 @@
                 BlockUI();
 
                 var obj = {
-                    'CUSTOMER_ID': "",
+                    'CUSTOMER_ID': "@Model.CUSTOMER_ID",
                     'ID_CARD': GetValTextBox('txtID_Card'),
                     'CUST_TYPE': GetValDropdown('ddlCustomer_Type'),
                     'FNAME': GetValTextBox('txtFirstname'),
@@ -140,7 +160,7 @@
                     'PROVINCE_CODE': GetValDropdown('ddlProvince'),
                     'ZIP_CODE': GetValTextBox('txtZip_Code'),
                     'PHONE_NO': GetValTextBox('txtPhone'),
-                    'EMAIL': GetValDropdown('txtEmail'),
+                    'EMAIL': GetValTextBox('txtEmail'),
                 }
                 BlockUI();
                 $.ajax({
@@ -159,7 +179,7 @@
                             //DialogSaveFail(response.Msg);
                             DialogWarning(response.Msg);
                         } else {
-                            DialogSucessRedirect('@Url.Action("Index","Employee")');
+                            DialogSucessRedirect('@Url.Action("Index","Customer")');
                         }
                     },
                     error: function () {
@@ -174,9 +194,24 @@
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
 
+
+        if ("@EDIT_FLG" == 'Y')
+        {
+            SetData();
+        }
     });
 
-    function GET_DISTRICT(province_code) {
+    async function SetData() {
+        $('#txtAddress').html('@Model.ADDRESS');
+
+        $('#ddlProvince').val('@Model.PROVINCE_CODE');
+
+        await GET_DISTRICT('@Model.PROVINCE_CODE', '@Model.DISTRICT_CODE');
+
+        await GET_SUB_DISTRICT('@Model.DISTRICT_CODE', '@Model.SUB_DISTRICT_NO');
+    }
+
+    function GET_DISTRICT(province_code, district_code) {
         BlockUI();
         $.ajax({
             url: '@Url.Action("GET_DISTRICT_BY_PROVINCE_CODE", "Customer")',
@@ -189,7 +224,15 @@
                 if (response != undefined && response != null) {
                     $("#ddlDistrict").append("<option selected>Choose...</option>");
                     $.each(response, function (i, el) {
-                        $("#ddlDistrict").append("<option data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
+                        if (district_code != undefined && district_code != "" && district_code != null) {
+                            if (district_code == el.DISTRICT_CODE) {
+                                $("#ddlDistrict").append("<option selected data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
+                            } else {
+                                $("#ddlDistrict").append("<option data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
+                            }
+                        } else {
+                            $("#ddlDistrict").append("<option data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
+                        }
                     });
                 }
             },
@@ -198,7 +241,7 @@
         });
     }
 
-    function GET_SUB_DISTRICT(district_code) {
+    function GET_SUB_DISTRICT(district_code, sub_district_code) {
         BlockUI();
         $.ajax({
             url: '@Url.Action("GET_SUB_DISTRICT_BY_DISTRICT_CODE", "Customer")',
@@ -208,11 +251,19 @@
             success: function (response) {
                 UnblockUI();
                 $('#ddlSub_District').html("");
+                debugger
                 if (response != undefined && response != null) {
                     $("#ddlSub_District").append("<option selected>Choose...</option>");
                     $.each(response, function (i, el) {
-                        $("#ddlSub_District").append("<option value=\"" + el.SUB_DISTICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
-
+                        if (sub_district_code != undefined && sub_district_code != "" && sub_district_code != null) {
+                            if (sub_district_code == el.SUB_DISTRICT_CODE) {
+                                $("#ddlSub_District").append("<option selected value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
+                            } else {
+                                $("#ddlSub_District").append("<option value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
+                            }
+                        } else {
+                            $("#ddlSub_District").append("<option value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
+                        }
                     });
                 }
             },

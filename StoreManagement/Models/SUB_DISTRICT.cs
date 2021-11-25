@@ -7,9 +7,9 @@ namespace StoreManagement.Models
 {
     public class SUB_DISTRICT
     {
-        public string SUB_DISTICT_CODE { get; set; }
+        public string SUB_DISTRICT_CODE { get; set; }
         public string SUB_DISTRICT_NAME_THA { get; set; }
-        public string DISTICT_CODE { get; set; }
+        public string DISTRICT_CODE { get; set; }
         public string STATUS { get; set; }
     }
 }

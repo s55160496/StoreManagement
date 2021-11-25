@@ -23,12 +23,30 @@ namespace StoreManagement.Controllers
             return View();
         }
 
-        public IActionResult CreateCustomer()
+        public IActionResult CreateCustomer(string str)
         {
+            string ID = string.Empty;
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                ID = STCrypt.Decrypt(str);
+            }
+
+            TBM_CUSTOMER model = new TBM_CUSTOMER();
+
+            string EDIT_FLG = "N";
+            var lstData = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
+            if (lstData != null && !string.IsNullOrEmpty(ID))
+            {
+                model = lstData.Where(w => w.CUSTOMER_ID == ID).FirstOrDefault();
+                EDIT_FLG = "Y";
+            }
+
+            ViewData["EDIT_FLG"] = EDIT_FLG;
+
             var PROVINCE = GET_PROVINCE();
             ViewData["PROVINCE"] = PROVINCE.ToArray();
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -68,7 +86,7 @@ namespace StoreManagement.Controllers
             try
             {
                 var lstData = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
-                if (lstData.Any())
+                if (lstData != null && lstData.Any())
                 {
                     foreach (var item in lstData)
                     {
@@ -112,6 +130,42 @@ namespace StoreManagement.Controllers
 
                 throw ex;
             }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteData(TMN_DATA data)
+        {
+            data.USER_ID = "1";
+            foreach (var item in data.DATA)
+            {
+                item.ID = SysFunctions.Decrypt_UrlDecode(item.ID);
+            }
+            CResutlWebMethod result = new CResutlWebMethod();
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("TERMINATE_TBM_CUSTOMER", Method.POST);
+
+                request.AddJsonBody(data);
+
+                IRestResponse response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    var content = response.Content;
+
+                }
+                else
+                {
+                    throw new Exception(response.Content);
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                result.Status = SysFunctions.process_Failed;
+            }
+
+            return Json(result);
         }
     }
 }

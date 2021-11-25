@@ -22,9 +22,26 @@ namespace StoreManagement.Controllers
             return View();
         }
 
-        public IActionResult CreateServices()
+        public IActionResult CreateServices(string str)
         {
-            return View();
+            string ID = string.Empty;
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                ID = STCrypt.Decrypt(str);
+            }
+
+            TBM_SERVICES model = new TBM_SERVICES();
+
+            string EDIT_FLG = "N";
+            var lstData = GET_TBM_SERVICES(new TBM_SERVICES() { SERVICES_NO = ID });
+            if (lstData != null && !string.IsNullOrEmpty(ID))
+            {
+                model = lstData.Where(w => w.SERVICES_NO == ID).FirstOrDefault();
+                EDIT_FLG = "Y";
+            }
+
+            ViewData["EDIT_FLG"] = EDIT_FLG;
+            return View(model);
         }
 
         [HttpPost]
@@ -65,11 +82,11 @@ namespace StoreManagement.Controllers
             try
             {
                 var lstData = GET_TBM_SERVICES(new TBM_SERVICES() { });
-                if (lstData.Any())
+                if (lstData != null && lstData.Any())
                 {
                     foreach (var item in lstData)
                     {
-                        //item.USER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.USER_ID);
+                        item.SERVICES_NO_ENCRYPT = Encrypt_UrlEncrypt(item.SERVICES_NO);
                     }
                 }
                 return Json(lstData);
@@ -79,6 +96,42 @@ namespace StoreManagement.Controllers
 
                 throw ex;
             }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteData(TMN_DATA data)
+        {
+            data.USER_ID = "1";
+            foreach (var item in data.DATA)
+            {
+                item.ID = SysFunctions.Decrypt_UrlDecode(item.ID);
+            }
+            CResutlWebMethod result = new CResutlWebMethod();
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("TERMINATE_TBM_SERVICES", Method.POST);
+
+                request.AddJsonBody(data);
+
+                IRestResponse response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    var content = response.Content;
+
+                }
+                else
+                {
+                    throw new Exception(response.Content);
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                result.Status = SysFunctions.process_Failed;
+            }
+
+            return Json(result);
         }
     }
 }

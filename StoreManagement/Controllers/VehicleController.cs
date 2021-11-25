@@ -22,12 +22,30 @@ namespace StoreManagement.Controllers
             return View();
         }
 
-        public IActionResult CreateVehicle()
+        public IActionResult CreateVehicle(string str)
         {
-            var CUSTOMER = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
-            ViewData["CUSTOMER"] = CUSTOMER.ToArray();
+            string ID = string.Empty;
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                ID = STCrypt.Decrypt(str);
+            }
 
-            return View();
+            TBM_VEHICLE model = new TBM_VEHICLE();
+
+            string EDIT_FLG = "N";
+            var lstData = GET_TBM_VEHICLE(new TBM_VEHICLE() { });
+            if (lstData != null && !string.IsNullOrEmpty(ID))
+            {
+                model = lstData.Where(w => w.LICENSE_NO == ID).FirstOrDefault();
+                EDIT_FLG = "Y";
+            }
+
+            ViewData["EDIT_FLG"] = EDIT_FLG;
+
+            var CUSTOMER = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
+            ViewData["CUSTOMER"] = CUSTOMER == null ? null : CUSTOMER.ToArray();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -67,11 +85,11 @@ namespace StoreManagement.Controllers
             try
             {
                 var lstData = GET_TBM_VEHICLE(new TBM_VEHICLE() { });
-                if (lstData.Any())
+                if (lstData != null && lstData.Any())
                 {
                     foreach (var item in lstData)
                     {
-                        //item.USER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.USER_ID);
+                        item.LICENSE_NO_ENCRYPT = Encrypt_UrlEncrypt(item.LICENSE_NO);
                     }
                 }
                 return Json(lstData);

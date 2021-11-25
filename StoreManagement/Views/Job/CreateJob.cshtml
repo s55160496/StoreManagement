@@ -2,6 +2,15 @@
 @{
     ViewData["Title"] = "CreateJob";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
+
+    var JOBTYPE = (JOBTYPE[])ViewData["JOBTYPE"];
+    var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
+
+    //var JOBTYPE = GET_JOBTYPE();
+    //ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+
+    //var EMPLOYEE = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+    //ViewData["EMPLOYEE"] = JOBTYPE.ToArray();
 }
 <div class="card-body">
     <div>
@@ -13,12 +22,30 @@
                             <label for="ddlType_job">Type Job</label>
                             <select id="ddlType_job" class="form-control">
                                 <option selected>Choose...</option>
+                                @{
+                                    if (JOBTYPE != null)
+                                    {
+                                        foreach (var item in JOBTYPE)
+                                        {
+                                            <option value="@item.JOBCODE">@item.JOBDESCRIPTION</option>
+                                        }
+                                    }
+                                }
                             </select>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="ddlEmployee">Employee</label>
                             <select id="ddlEmployee" class="form-control">
                                 <option selected>Choose...</option>
+                                @{
+                                    if (EMPLOYEE != null)
+                                    {
+                                        foreach (var item in EMPLOYEE)
+                                        {
+                                            <option value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
+                                        }
+                                    }
+                                }
                             </select>
                         </div>
                     </div>
@@ -31,49 +58,8 @@
                             <input type="hidden" class="form-control" id="txtCustomerID">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="txtPassword">Lastname</label>
-                            <input type="text" class="form-control" id="txtLastname" placeholder="Lastname" maxlength="255">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="txtAddress">Address</label>
-                            <textarea type="text" rows="2" class="form-control" id="txtAddress" placeholder="Address"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="ddlProvince">Province</label>
-                            <select id="ddlProvince" class="form-control">
-                                <option selected>Choose...</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="ddlDistrict">District</label>
-                            <select id="ddlDistrict" class="form-control _address">
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="ddlSub_District">Sub District</label>
-                            <select id="ddlSub_District" class="form-control _address">
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="txtZip_Code">Zip Code</label>
-                            <input type="text" class="form-control _address" id="txtZip_Code" placeholder="Zip Code" disabled>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="txtPhone">Phone</label>
-                            <input type="text" class="form-control" id="txtPhone" placeholder="Phone" maxlength="500">
-                        </div>
-                        <div class="form-group col-md-6">
                             <label for="txtEmail">Email</label>
-                            <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="100">
+                            <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="255" disabled>
                         </div>
                     </div>
                 </form>
@@ -105,6 +91,7 @@
                 if (!IsSelectedtxtLicense_No || !IsBrowserFirefox()) {
                     $("input[id$=txtLicense_Email]").val("");
                     //$("input[id$=txtLicense_No]").val("");
+                    $('#txtEmail').val("");
                     $("input[id$=txtCustomerID]").val("");
 
                 }
@@ -156,6 +143,7 @@
                 select: function (event, ui) {
                     IsSelectedtxtLicense_No = true;
                     $("input[id$=txtLicense_Email]").val(ui.item.EMAIL);
+                    $('#txtEmail').val(ui.item.EMAIL);
                     //$("input[id$=txtLicense_No]").val(ui.item.LICENSE_NO);
                     $("input[id$=txtCustomerID]").val(ui.item.CUSTOMER_ID);
 

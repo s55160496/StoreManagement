@@ -8,6 +8,7 @@ namespace StoreManagement.Models
     public class TBM_LOCATION_STORE
     {
         public string LOCATION_ID { get; set; }
+        public string LOCATION_ID_ENCRYPT { get; set; }
         public string LOCATION_NAME { get; set; }
         public string OWNER_ID { get; set; }
         public string OWNER_NAME { get; set; }

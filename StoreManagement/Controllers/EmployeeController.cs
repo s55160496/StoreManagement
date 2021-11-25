@@ -56,7 +56,7 @@ namespace StoreManagement.Controllers
             CResutlWebMethod result = new CResutlWebMethod();
             try
             {
-                data.CREATE_BY = "000000";
+                data.CREATE_BY = "1";
 
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBM_EMPLOYEE", Method.POST);
@@ -89,7 +89,7 @@ namespace StoreManagement.Controllers
             try
             {
                 var lstData = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
-                if (lstData.Any())
+                if (lstData != null)
                 {
                     foreach (var item in lstData)
                     {
@@ -103,6 +103,42 @@ namespace StoreManagement.Controllers
 
                 throw ex;
             }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteData(TMN_DATA data)
+        {
+            data.USER_ID = "1";
+            foreach (var item in data.DATA)
+            {
+                item.ID = SysFunctions.Decrypt_UrlDecode(item.ID);
+            }
+            CResutlWebMethod result = new CResutlWebMethod();
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("TERMINATE_TBM_EMPLOYEE", Method.POST);
+
+                request.AddJsonBody(data);
+
+                IRestResponse response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    var content = response.Content;
+
+                }
+                else
+                {
+                    throw new Exception(response.Content);
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                result.Status = SysFunctions.process_Failed;
+            }
+
+            return Json(result);
         }
 
     }

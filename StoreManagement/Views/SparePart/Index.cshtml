@@ -13,25 +13,25 @@
                     <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateSparePart","SparePart")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
                 </div>
                 <div id="divSearch">
-                    <form>
-                        <div class="form-group">
-                            <label for="inputAddress">Job</label>
-                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAddress2">Mechanic</label>
-                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAddress2">Status</label>
-                            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-                        </div>
-                        <div id="divbtnSearch" class="form-group form-control-inline">
-                            <button id="btnSearch" type="button" class="btn btn-info" title="Search" data-toggle="tooltip">
-                                <i class="fa fa-search"></i>&nbsp;Search
-                            </button>
-                        </div>
-                    </form>
+                    @*<form>
+                            <div class="form-group">
+                                <label for="inputAddress">Job</label>
+                                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAddress2">Mechanic</label>
+                                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAddress2">Status</label>
+                                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                            </div>
+                            <div id="divbtnSearch" class="form-group form-control-inline">
+                                <button id="btnSearch" type="button" class="btn btn-info" title="Search" data-toggle="tooltip">
+                                    <i class="fa fa-search"></i>&nbsp;Search
+                                </button>
+                            </div>
+                        </form>*@
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -39,13 +39,13 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbSearchData" class="table tableData" style="min-width:800px">
+                    <table id="tbSearchData" class="table tableData" style="min-width:1200px">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
-                                <th></th>
+                                <th>@*<input type="checkbox" name="select_all" value="1" id="select-all">*@</th>
                                 <th class="text-center">part_no</th>
                                 <th class="text-center">part_name</th>
-                                <th class="text-center" style="width:30%">part_desc</th>
+                                <th class="text-center" style="width:40%">part_desc</th>
 
                                 <th class="text-center">part_type_desc</th>
                                 <th class="text-center">cost_price</th>
@@ -80,6 +80,22 @@ var urlSearchData = "@Url.Action("GetData", "SparePart")";
     $(document).ready(function () {
         SearchData();
     });
+
+    function Delete() {
+        debugger
+        let table = $('#tbSearchData').DataTable();
+        let arr = [];
+        let checkedvalues = table.$('input:checked').each(function () {
+            arr.push($(this).val());
+        });
+        //arr = arr.toString();
+        if (arr.length > 0) {
+
+        } else {
+            DialogWarning("เลือกรายการที่ต้องการลบ อย่างน้อย 1 รายการ");
+        }
+
+    }
 
     function SearchData() {
 
@@ -128,28 +144,43 @@ var urlSearchData = "@Url.Action("GetData", "SparePart")";
             let html = '';
             $.each(arrData_, function (i, el) {
                 let td = '';
-                td = '<td class="text-center">' + (i + 1 )+ '</td>';
-                td += '<td>' + (el.PART_NO || '') + '</td>';
-                td += '<td>' + (el.PART_NAME || '') + '</td>';
-                td += '<td>' + (el.PART_DESC || '') + '</td>';
+                td = '<td class="text-center">' + (i+1)+ '</td>';
+                td += '<td class="text-center">' + (el.PART_NO || '') + '</td>';
+                td += '<td class="text-center">' + (el.PART_NAME || '') + '</td>';
+                td += '<td class="text-left">' + (el.PART_DESC || '') + '</td>';
 
-                td += '<td>' + (el.PART_TYPE_DESC || '') + '</td>';
-                td += '<td>' + (el.COST_PRICE || '') + '</td>';
-                td += '<td>' + (el.SALE_PRICE || '') + '</td>';
+                td += '<td class="text-center">' + (el.PART_TYPE_DESC || '') + '</td>';
+                td += '<td class="text-right">' + (el.COST_PRICE || '') + '</td>';
+                td += '<td class="text-right">' + (el.SALE_PRICE || '') + '</td>';
 
-                td += '<td>' + (el.UNIT_CODE || '') + '</td>';
-                td += '<td>' + (el.UNIT_NAME || '') + '</td>';
-                td += '<td>' + (el.PART_VALUE || '') + '</td>';
+                td += '<td class="text-right">' + (el.UNIT_CODE || '') + '</td>';
+                td += '<td class="text-center">' + (el.UNIT_NAME || '') + '</td>';
+                td += '<td class="text-right">' + (el.PART_VALUE || '') + '</td>';
 
-                td += '<td>' + (el.MINIMUM_VALUE || '') + '</td>';
-                td += '<td>' + (el.MAXIMUM_VALUE || '') + '</td>';
-                td += '<td>' + (el.LOCATION_LOCATION_NAME || '') + '</td>';
+                td += '<td class="text-right">' + (el.MINIMUM_VALUE || '') + '</td>';
+                td += '<td class="text-right">' + (el.MAXIMUM_VALUE || '') + '</td>';
+                td += '<td class="text-center">' + (el.LOCATION_NAME || '') + '</td>';
                 td += '<td class="text-center">' + '<a href="@Url.Action("CreateSparePart", "SparePart")' + '?str=' + el.PART_ID_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
 
                 html += "<tr>" + td + "</tr>";
             });
-            $("table[id$=tbSearchData] tbody").html(html);
-        $('#tbSearchData').DataTable();
+
+        $("table[id$=tbSearchData] tbody").html(html);
+
+        var table = $('#tbSearchData').removeAttr('width').DataTable({
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            columnDefs: [
+                {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets: 0
+                },
+                { width: 350, targets: 3 }
+            ],
+        });
     }
 </script>
 
