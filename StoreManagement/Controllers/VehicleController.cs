@@ -45,6 +45,9 @@ namespace StoreManagement.Controllers
             var CUSTOMER = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
             ViewData["CUSTOMER"] = CUSTOMER == null ? null : CUSTOMER.ToArray();
 
+            var SERVICES = GET_TBM_SERVICES(new TBM_SERVICES() { });
+            ViewData["SERVICES"] = SERVICES == null ? null : SERVICES.ToArray();
+
             return View(model);
         }
 

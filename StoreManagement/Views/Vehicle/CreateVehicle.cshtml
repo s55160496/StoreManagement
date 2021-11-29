@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 
     var CUSTOMER = (TBM_CUSTOMER[])ViewData["CUSTOMER"];
+    var SERVICES = (TBM_SERVICES[])ViewData["SERVICES"];
+
+    var EDIT_FLG = (string)ViewData["EDIT_FLG"];
 }
 
 <div class="card-body">
@@ -14,11 +17,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtUsername">License No</label>
-                            <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No" maxlength="20">
+                            <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No" maxlength="20" value="@Model.LICENSE_NO">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtBrand_no">Brand No</label>
-                            <input type="text" class="form-control" id="txtBrand_No" name="txtBrand_No" placeholder="Brand No" maxlength="3">
+                            <input type="text" class="form-control" id="txtBrand_No" name="txtBrand_No" placeholder="Brand No" maxlength="3" value="@Model.BRAND_NO">
                         </div>
                     </div>
 
@@ -36,7 +39,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtColor">Color</label>
-                            <input type="text" class="form-control" id="txtColor" name="txtColor" placeholder="Color" maxlength="50">
+                            <input type="text" class="form-control" id="txtColor" name="txtColor" placeholder="Color" maxlength="50" value="@Model.COLOR">
                         </div>
                     </div>
 
@@ -44,7 +47,7 @@
                         <div class="form-group col-md-4">
                             <label for="txtEffective_Date">Effective Date</label>
                             <div class="input-group mb-3">
-                                <input ID="txtEffective_Date" name="txtEffective_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" />
+                                <input ID="txtEffective_Date" name="txtEffective_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" value="@Model.EFFECTIVE_DATE.Substring(0, 10)" />
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
@@ -53,7 +56,7 @@
                         <div class="form-group col-md-4">
                             <label for="txtEffective_Date">Expire Date</label>
                             <div class="input-group mb-3">
-                                <input ID="txtExpire_Date" name="txtExpire_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" />
+                                <input ID="txtExpire_Date" name="txtExpire_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" value="@Model.EXPIRE_DATE.Substring(0,10)" />
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
@@ -64,18 +67,36 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtService_Price">Service Price</label>
-                            <input type="text" class="form-control" id="txtService_Price" name="txtService_Price" placeholder="Service Price">
+                            <input type="text" class="form-control" id="txtService_Price" name="txtService_Price" placeholder="Service Price" value="@Model.SERVICE_PRICE">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="txtService_No">Service No</label>
-                            <input type="text" class="form-control" id="txtService_No" name="txtService_No" placeholder="Service No">
+                            <label for="ddlService_No">Service No</label>
+                            <select id="ddlService_No" name="ddlService_No" class="form-control">
+                                <option selected>Choose...</option>
+                                @{
+                                    if (SERVICES != null && SERVICES.Any())
+                                    {
+                                        foreach (var item in SERVICES)
+                                        {
+                                            if (item.SERVICES_NO == Model.SERVICE_NO)
+                                            {
+                                                <option value="@item.SERVICES_NO" selected>@item.SERVICES_NAME</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.SERVICES_NO">@item.SERVICES_NAME</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtContract_No">Contract No</label>
-                            <input type="text" class="form-control" id="txtContract_No" name="txtContract_No" placeholder="Contract No">
+                            <input type="text" class="form-control" id="txtContract_No" name="txtContract_No" placeholder="Contract No" value="@Model.CONTRACT_NO">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="ddlCustomer_ID">Customer ID</label>
@@ -135,7 +156,7 @@
                     'EFFECTIVE_DATE': GetValTextBox('txtEffective_Date'),
                     'EXPIRE_DATE': GetValTextBox('txtExpire_Date'),
                     'SERVICE_PRICE': GetValTextBox('txtService_Price'),
-                    'SERVICE_NO': GetValTextBox('txtService_No'),
+                    'SERVICE_NO': GetValDropdown('ddlService_No'),
                     'CONTRACT_NO': GetValTextBox('txtContract_No'),
                     'CUSTOMER_ID': GetValDropdown('ddlCustomer_ID')
                 }
@@ -167,6 +188,11 @@
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
+
+        if ('@EDIT_FLG' == 'Y') {
+            $('#txtModel_No').val('@Model.MODEL_NO');
+            $('#txtChassis_No').val('@Model.CHASSIS_NO');
+        }
     });
 
 </script>

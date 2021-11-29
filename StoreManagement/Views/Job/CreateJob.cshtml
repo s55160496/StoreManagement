@@ -27,7 +27,7 @@
                                     {
                                         foreach (var item in JOBTYPE)
                                         {
-                                            <option value="@item.JOBCODE">@item.JOBDESCRIPTION</option>
+                                            <option value="@item.JOBCODE">@item.JOBCODE -@item.JOBDESCRIPTION</option>
                                         }
                                     }
                                 }
@@ -56,6 +56,7 @@
                             <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No">
                             <input type="hidden" class="form-control" id="txtLicense_Email">
                             <input type="hidden" class="form-control" id="txtCustomerID">
+                            <input type="hidden" class="form-control" id="txtLicense">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtEmail">Email</label>
@@ -79,9 +80,55 @@
     $(document).ready(function () {
         SetAutocom();
 
-        //var objValidate = {};
-        //objValidate[GetElementName("txtLicense_No", objControl.txtbox)] = addValidate_notEmpty("Please Specify License No, Or Employee ID");
-        //BindValidate("divForm", objValidate);
+        var objValidate = {};
+        objValidate[GetElementName("txtLicense_No", objControl.txtbox)] = addValidate_notEmpty("Please Specify License No, Or Employee ID");
+        BindValidate("divForm", objValidate);
+
+        $('#btnSubmit').on('click', function () {
+            if (CheckValidate("divForm")) {
+                DialogConfirmSubmit(function () {
+                    swal.disableButtons();
+
+                    var obj = {
+                        "JOB_ID": "",
+                        "TYPE_JOB": GetValDropdown('ddlType_job'),
+                        "OWNER_ID": GetValDropdown('ddlEmployee'),
+                        "LICENSE_NO": GetValTextBox('txtLicense'),
+                        "CUSTOMER_ID": GetValTextBox('txtCustomerID'),
+                        "EMAIL_CUSTOMER": GetValTextBox('txtLicense_Email'),
+                        "REF_HJOB_ID": "",
+                        "USER_ID": ""
+                    }
+                    BlockUI();
+                    $.ajax({
+                        url: '@Url.Action("SaveData", "Job")',
+                        type: 'POST',
+                        //contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: { 'data': obj },
+                        success: function (response) {
+                            UnblockUI();
+                            if (response.Status == SysProcess.SessionExpired) {
+                                PopupSessionTimeOut();
+                            } else if (response.Status == SysProcess.Duplicate) {
+                                DialogDuplicate();
+                            } else if (response.Status == SysProcess.Failed) {
+                                //DialogSaveFail(response.Msg);
+                                DialogWarning(response.Msg);
+                            } else {
+                                DialogSucessRedirect('@Url.Action("Index", "Job")');
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+            }
+        });
+
+        $('#btnBack').on('click', function () {
+            window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
+        });
     });
 
     var IsSelectedtxtLicense_No = false;
@@ -90,10 +137,11 @@
             .on("change", function () {
                 if (!IsSelectedtxtLicense_No || !IsBrowserFirefox()) {
                     $("input[id$=txtLicense_Email]").val("");
-                    //$("input[id$=txtLicense_No]").val("");
+                    $("input[id$=txtLicense_No]").val("");
                     $('#txtEmail').val("");
                     $("input[id$=txtCustomerID]").val("");
-
+                    $("input[id$=txtLicense]").val("");
+                    ReValidateFieldControl('divForm', $("input[name$=txtLicense_No]"))
                 }
             }).focus(function () {
                 IsSelectedtxtLicense_No = false;
@@ -146,7 +194,7 @@
                     $('#txtEmail').val(ui.item.EMAIL);
                     //$("input[id$=txtLicense_No]").val(ui.item.LICENSE_NO);
                     $("input[id$=txtCustomerID]").val(ui.item.CUSTOMER_ID);
-
+                    $("input[id$=txtLicense]").val(ui.item.LICENSE_NO);
                     if (IsBrowserFirefox()) {
                         $("input[id$=txtLicense_No]").blur();
                     }

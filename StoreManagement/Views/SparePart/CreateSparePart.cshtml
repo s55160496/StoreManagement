@@ -164,10 +164,10 @@
         });
 
         if ('@EDIT_FLG' == 'Y') {
-            $('#ddlPart_Type').val();
-            $('#ddlUnit_Code').val();
-            $('#ddlLocation_ID').val();
-            $('#txtPart_Desc').html();
+            $('#ddlPart_Type').val('@Model.PART_TYPE');
+            $('#ddlUnit_Code').val('@Model.UNIT_CODE');
+            $('#ddlLocation_ID').val('@Model.LOCATION_ID');
+            $('#txtPart_Desc').html('@Model.PART_DESC');
         }
     });
 </script>

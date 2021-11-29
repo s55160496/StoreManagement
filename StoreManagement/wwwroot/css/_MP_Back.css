@@ -193,6 +193,12 @@
     transition: padding .3s;
 }
 
+    #SITE_CONTENT label {
+        color: #241a72;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
 #HEAD {
     z-index: 9999;
     position: fixed;
