@@ -1683,11 +1683,11 @@ function InputMaskDecimal(objCtrl, integerDigits, digits, allowPlus, allowMinus)
         integerDigits: integerDigits, //จำนวนหลักของของค่าจำนวนเต็ม
         digits: digits, //จำนวนหลักของค่าทศนิยม
         radixPoint: '.', //จุดทศนิยม
-        //groupSeparator: ',', //สัญลักษณ์แบ่งหลัก
+        groupSeparator: ',', //สัญลักษณ์แบ่งหลัก
         autoGroup: true, //การจัดกลุ่มอัตโนมัตื
         allowPlus: Boolean(allowPlus), //อนุญาตใส่เครื่องหมายบวก
         allowMinus: Boolean(allowMinus), //อนุญาตใส่เครื่องหมายลบ,
-        rightAlign: false,
+        rightAlign: true,
     });
 }
 

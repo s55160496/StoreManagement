@@ -413,9 +413,57 @@ String.prototype.replaceAll = function (strOld, strNew) {
     var target = this;
     return target.split(strOld).join(strNew);
 };
+//function FancyBox_ViewFile(sFileURL) {
+//    debugger
+//    var sFileExt = sFileURL.split('.').pop(); //File Extension
+//    var isImage = $.inArray(sFileExt, Extension.Image) > -1; //Extension.Image.indexOf(sFileExt) > -1;
+//    if (isImage || sFileExt == 'pdf') {
+//        $.fancybox.open({
+//            src: sFileURL,
+//            type: isImage ? 'image' : 'iframe',
+//            iframe: { preload: false }, // fixes issue with iframe and IE
+//            padding: 5,
+//            openEffect: 'elastic',
+//            openSpeed: 150,
+//            closeEffect: 'elastic',
+//            closeSpeed: 150,
+//            closeClick: true,
+//            helpers: {
+//                overlay: {
+//                    locked: false
+//                }
+//            }
+//        });
+//    } else {
+//        location.href = sFileURL;
+//    }
+//}
+
+function FancyBox_OpenIframe_Url(url, width, height) {
+    $.fancybox.open({
+        src: url,
+        type: 'iframe',
+        padding: 5,
+        opts: {
+            iframe: {
+                css: {
+                    width: (width == undefined ? 100 : width),
+                    height: height == undefined ? 100 : height
+                }
+            },
+            fullScreen: false,
+        }
+    });
+}
+
 function FancyBox_ViewFile(sFileURL) {
     var sFileExt = sFileURL.split('.').pop(); //File Extension
-    var isImage = $.inArray(sFileExt, Extension.Image) > -1; //Extension.Image.indexOf(sFileExt) > -1;
+    var sPath = window.location.origin + '/StoreManagement/';
+    if (window.location.pathname.split("/").length > 3) {
+        //sPath = "..";
+    }
+    sFileURL = sPath + sFileURL;
+    var isImage = $.inArray(sFileExt.toLowerCase(), Extension.Image) > -1; //Extension.Image.indexOf(sFileExt) > -1;
     if (isImage || sFileExt == 'pdf') {
         $.fancybox.open({
             src: sFileURL,
@@ -434,7 +482,11 @@ function FancyBox_ViewFile(sFileURL) {
             }
         });
     } else {
-        location.href = sFileURL;
+        if ($.inArray(sFileExt.toLowerCase(), Extension.Video) > -1) {
+            playVideo(sFileURL);
+        } else {
+            window.open(sFileURL, '_blank');
+        }
     }
 }
 

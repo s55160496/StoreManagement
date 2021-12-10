@@ -83,16 +83,16 @@ namespace StoreManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetData(TBM_EMPLOYEE data)
+        public IActionResult GetData(string USER_ID)
         {
             try
             {
-                var lstData = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+                var lstData = GET_JOBDETAIL_LIST(USER_ID);
                 if (lstData != null)
                 {
                     foreach (var item in lstData)
                     {
-                        item.USER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.USER_ID);
+                        item.JOB_ID_ENCRYPT = Encrypt_UrlEncrypt(item.JOB_ID);
                     }
                 }
                 return Json(lstData);
@@ -102,6 +102,51 @@ namespace StoreManagement.Controllers
 
                 throw ex;
             }
+        }
+
+        public IActionResult ModifyJob(string str)
+        {
+            try
+            {
+                MODIFYFY_JOB Model = new MODIFYFY_JOB();
+
+                if (string.IsNullOrEmpty(str))
+                {
+                    throw new Exception("ไม่พบ JOB_ID");
+                }
+
+                str = SysFunctions.Decrypt_UrlDecode(str);
+
+                var JOBDETAIL = GET_JOBDETAIL(str);
+                Model.JOBDETAIL = JOBDETAIL;
+
+                var CHECKLIST = GET_CHECKLIST();
+                Model.CHECKLIST = CHECKLIST;
+
+                var JOBTYPE = GET_JOBTYPE();
+                ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+
+                var EMPLOYEE = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+
+                var SPAREPART = GET_TBM_SPAREPART(new TBM_SPAREPART() { });
+                ViewData["SPAREPART"] = SPAREPART.ToArray();
+
+                ViewBag.UserID = "1";
+
+                return View(Model);
+            }
+            catch (Exception ex)
+            {
+
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        public IActionResult CreateJobParts(string str)
+        {
+
+            return View();
         }
     }
 }

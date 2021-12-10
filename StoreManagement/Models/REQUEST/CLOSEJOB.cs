@@ -21,6 +21,7 @@ namespace StoreManagement.Models
         public List<job_file> JOB_IMAGES { get; set; }
         public List<tbt_job_image> IMAGE_DETAIL { get; set; }
         public List<tbt_job_part> JOB_PARTS { get; set; }
+        public string FLG_CLOSE { get; set; }
     }
     public class job_file : DataFile
     {

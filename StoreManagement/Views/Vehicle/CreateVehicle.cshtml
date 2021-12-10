@@ -47,7 +47,7 @@
                         <div class="form-group col-md-4">
                             <label for="txtEffective_Date">Effective Date</label>
                             <div class="input-group mb-3">
-                                <input ID="txtEffective_Date" name="txtEffective_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" value="@Model.EFFECTIVE_DATE.Substring(0, 10)" />
+                                <input ID="txtEffective_Date" name="txtEffective_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" value="@(string.IsNullOrEmpty(Model.EFFECTIVE_DATE) ? "" : Model.EFFECTIVE_DATE.Substring(0, 10))" />
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
@@ -56,7 +56,7 @@
                         <div class="form-group col-md-4">
                             <label for="txtEffective_Date">Expire Date</label>
                             <div class="input-group mb-3">
-                                <input ID="txtExpire_Date" name="txtExpire_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" value="@Model.EXPIRE_DATE.Substring(0,10)" />
+                                <input ID="txtExpire_Date" name="txtExpire_Date" type="text" class="form-control" MaxLength="10" placeholder="--/--/----" value="@(string.IsNullOrEmpty(Model.EXPIRE_DATE) ? "" : Model.EXPIRE_DATE.Substring(0, 10))" />
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>

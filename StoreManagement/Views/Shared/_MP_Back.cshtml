@@ -12,16 +12,18 @@
     @* fontawesome-5 *@
     <link href="~/lib/fontawesome-5.0.13/css/fontawesome-all.css" rel="stylesheet" />
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-    @*<script src="~/js/jquery-ui-1.11.4/jquery-ui.min.js"></script>
-        <link href="~/js/jquery-ui-1.11.4/jquery-ui.css" rel="stylesheet" />
-        <link href="~/js/jquery-ui-1.11.4/theme.css" rel="stylesheet" />*@
+    @*  jquery-3.6.0 *@
+    <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/jquery-ui-1.13.0/jquery-ui.min.js"></script>
+    <link href="~/lib/jquery-ui-1.13.0/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/lib/jquery-ui-1.13.0/jquery-ui.theme.css" rel="stylesheet" />
+
     <script src="~/js/jquery.reDefaultTools.js"></script>
 
+    @* jquery-inputmask *@
+    <script src="~/js/jquery-inputmask/jquery.inputmask.bundle.js"></script>
+    <script src="~/js/jquery-inputmask/inputmask/inputmask.extensions.js"></script>
+    <script src="~/js/jquery-inputmask/inputmask/jquery.inputmask.js"></script>
 
     @* Bootstrap *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -72,6 +74,11 @@
     <script src="~/lib/FormValidation/bootstrap.min.js"></script>
     <script src="~/lib/FormValidation/CustomFormValidation.js"></script>
 
+    @*File Upload*@
+    <link href="~/lib/Fileupload/src/jquery.fileuploader.css" rel="stylesheet" />
+    <script src="~/lib/Fileupload/src/jquery.fileuploader.js"></script>
+    <script src="~/lib/Fileupload/AsyncUploadFile.js"></script>
+
     <link href="~/css/_MP_Back.css" rel="stylesheet" />
     <script src="~/js/_MP_Back.js"></script>
 
@@ -118,23 +125,23 @@
         </button>
         <ul id="MENU_LIST" clientidmode="static">
             @*<li class="treeview">
-            <a class="treeview-a active">
-                <div class='menu-icon'><i class="fas fa-list-alt"></i></div>
-                <div class='menu-label'>Master Data </i></div>
-            </a>
-        </li>
-        <li class="treeview">
-            <a class="treeview-a">
-                <div class='menu-icon'><i class="fas fa-cogs"></i></div>
-                <div class='menu-label'>Organization Registration </i></div>
-            </a>
-        </li>
-        <li class="treeview">
-            <a class="treeview-a">
-                <div class='menu-icon'><i class="fas fa-users-cog"></i></div>
-                <div class='menu-label'>User Permission  </i></div>
-            </a>
-        </li>*@
+                    <a class="treeview-a active">
+                        <div class='menu-icon'><i class="fas fa-list-alt"></i></div>
+                        <div class='menu-label'>Master Data </i></div>
+                    </a>
+                </li>
+                <li class="treeview">
+                    <a class="treeview-a">
+                        <div class='menu-icon'><i class="fas fa-cogs"></i></div>
+                        <div class='menu-label'>Organization Registration </i></div>
+                    </a>
+                </li>
+                <li class="treeview">
+                    <a class="treeview-a">
+                        <div class='menu-icon'><i class="fas fa-users-cog"></i></div>
+                        <div class='menu-label'>User Permission  </i></div>
+                    </a>
+                </li>*@
             <li class="">
                 <a href="@Url.Action("Index","Stock")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Stock" ? "active" : "")">
                     <div class="menu-icon"><i class="fa fa-list-ul"></i></div>

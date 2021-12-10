@@ -41,6 +41,10 @@ namespace StoreManagement.Controllers
             }
 
             ViewData["EDIT_FLG"] = EDIT_FLG;
+
+            var JOBTYPE = GET_JOBTYPE();
+            ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+
             return View(model);
         }
 

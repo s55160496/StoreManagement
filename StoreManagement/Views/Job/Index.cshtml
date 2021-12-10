@@ -25,34 +25,22 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbData" class="table tableData">
+                    <table id="tbSearchData" class="table tableData">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th style="width: 11%"></th>
-                                <th class="text-center" style="width: 30%">Name</th>
-                                <th class="text-center" style="width: 30%">Position</th>
-                                <th class="text-center">modify</th>
+                                <th class="text-center">JOB_ID</th>
+                                <th class="text-center">LICENSE_NO</th>
+                                <th class="text-center">CUS_FULLNAME</th>
+                                <th class="text-center">EMAIL_CUSTOMER</th>
+                                <th class="text-center">INVOICE_NO</th>
+                                <th class="text-center">EMP_FULLNAME</th>
+                                <th class="text-center">CREATE_DATE</th>
+                                <th class="text-center">MODIFY</th>
+                                <th class="text-center">DETAIL</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>mdo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>fat</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>twitter</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -66,7 +54,63 @@
 
 
 <script>
+var urlSearchData = "@Url.Action("GetData", "Job")";
+
     $(document).ready(function () {
-        $('#tbData').DataTable();
+        SearchData();
     });
+
+    function SearchData() {
+        BlockUI();
+        $.ajax({
+            url: urlSearchData,
+            type: 'POST',
+            dataType: 'json',
+            data: { "USER_ID": "1" },
+            success: function (response) {
+                UnblockUI();
+                BindDataTable(response);
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        $("#tbSearchData tbody").html("");
+            let html = '';
+            $.each(arrData_, function (i, el) {
+                let td = '';
+                td = '<td class="text-center">' + (i + 1) + '</td>';
+                td += '<td class="text-center">' + (el.JOB_ID || '') + '</td>';
+                td += '<td class="text-center">' + (el.LICENSE_NO || '') + '</td>';
+                td += '<td class="text-center">' + (el.CUS_FULLNAME || '') + '</td>';
+                td += '<td class="text-left">' + (el.EMAIL_CUSTOMER || '') + '</td>';
+
+                td += '<td class="text-center">' + (el.INVOICE_NO || '') + '</td>';
+                td += '<td class="text-left">' + (el.EMP_FULLNAME || '') + '</td>';
+                td += '<td class="text-left">' + (el.CREATE_DATE || '') + '</td>';
+
+                td += '<td class="text-center">' + '<a href="@Url.Action("ModifyJob", "Job")' + '?str=' + el.JOB_ID_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
+                td += '<td class="text-center">' + '<a href="@Url.Action("CreateSparePart", "SparePart")' + '?str=' + el.JOB_ID_ENCRYPT + '" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>' + '</td>';
+
+                html += "<tr>" + td + "</tr>";
+            });
+
+        $("table[id$=tbSearchData] tbody").html(html);
+
+        var table = $('#tbSearchData').removeAttr('width').DataTable({
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            columnDefs: [
+                { width: 35, targets: 0 }
+                , { width: 70, targets: 1 }
+                , { width: 200, targets: 3 }
+                , { width: 200, targets: 4 }
+                , { width: 200, targets: 7 }
+            ],
+        });
+    }
 </script>

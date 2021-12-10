@@ -273,6 +273,52 @@ namespace StoreManagement.Controllers
             }
         }
 
+        #region JOB
+        public List<JOBDETAIL_LIST> GET_JOBDETAIL_LIST(string user_id)
+        {
 
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_JOBDETAIL_LIST/" + user_id, Method.GET);
+                return client.Execute<List<JOBDETAIL_LIST>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public JOBDETAIL GET_JOBDETAIL(string job_id)
+        {
+
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_JOBDETAIL?job_id=" + job_id, Method.POST);
+                return client.Execute<JOBDETAIL>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public List<CHECKLIST> GET_CHECKLIST()
+        {
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("CHECKLIST", Method.GET);
+                return client.Execute<List<CHECKLIST>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        #endregion
     }
 }

@@ -5,13 +5,8 @@
 
     var JOBTYPE = (JOBTYPE[])ViewData["JOBTYPE"];
     var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
-
-    //var JOBTYPE = GET_JOBTYPE();
-    //ViewData["JOBTYPE"] = JOBTYPE.ToArray();
-
-    //var EMPLOYEE = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
-    //ViewData["EMPLOYEE"] = JOBTYPE.ToArray();
 }
+
 <div class="card-body">
     <div>
         <div id="divForm">
@@ -54,7 +49,7 @@
                         <div class="form-group col-md-6">
                             <label for="txtLicense_No">License No</label>
                             <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No">
-                            <input type="hidden" class="form-control" id="txtLicense_Email">
+                            <input type="hidden" class="form-control" id="txtLicense_Email" value="">
                             <input type="hidden" class="form-control" id="txtCustomerID">
                             <input type="hidden" class="form-control" id="txtLicense">
                         </div>
