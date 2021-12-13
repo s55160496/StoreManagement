@@ -84,10 +84,10 @@ namespace StoreManagement.Controllers
                         {
                             file.CopyTo(stream);
                         }
-                        using (var stream = new FileStream(MapPathBackUp("./" + filepath + sSysFileName), FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
+                        //using (var stream = new FileStream(MapPathBackUp("./" + filepath + sSysFileName), FileMode.Create))
+                        //{
+                        //    file.CopyTo(stream);
+                        //}
                         filepath = filepath.Replace("../", "");
                         data.nID = 0;
                         data.IsCompleted = true;

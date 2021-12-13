@@ -21,10 +21,17 @@ namespace StoreManagement.Models
         public List<job_file> JOB_IMAGES { get; set; }
         public List<tbt_job_image> IMAGE_DETAIL { get; set; }
         public List<tbt_job_part> JOB_PARTS { get; set; }
-        public string FLG_CLOSE { get; set; }
+        public string FLG_CLOSE { get; set; } // Y : close , N : draft
     }
     public class job_file : DataFile
     {
+        public job_file(string path, string file_name)
+        {
+            DataFile s = new DataFile(path);
+            this.FileName = (string.IsNullOrEmpty(file_name) ? s.FileName : file_name);
+            this.FileData = s.FileData;
+            this.ContentType = s.ContentType;
+        }
         public string IMAGE_TYPE { get; set; }
 
     }
