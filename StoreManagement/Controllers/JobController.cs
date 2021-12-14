@@ -120,7 +120,11 @@ namespace StoreManagement.Controllers
 
                     path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"), imageName);
 
-                    job_file jt = new job_file(path, "");
+                    DataFile df = new DataFile(path);
+                    job_file jt = new job_file();
+                    jt.ContentType = df.ContentType;
+                    jt.FileName = df.FileName;
+                    jt.FileData = Convert.ToBase64String(df.FileData);
                     jt.IMAGE_TYPE = "sig";
                     data.JOB_IMAGES.Add(jt);
 
@@ -136,7 +140,11 @@ namespace StoreManagement.Controllers
                     foreach (var item in arr_file)
                     {
                         string path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", item.sPath.Replace("/", "\\"), item.sSystemFileName);
-                        job_file jt = new job_file(path, item.sFileName);
+                        DataFile df = new DataFile(path);
+                        job_file jt = new job_file();
+                        jt.ContentType = df.ContentType;
+                        jt.FileData = Convert.ToBase64String(df.FileData);
+                        jt.FileName = item.sFileName;
                         jt.IMAGE_TYPE = "pic";
 
                         data.JOB_IMAGES.Add(jt);

@@ -23,16 +23,24 @@ namespace StoreManagement.Models
         public List<tbt_job_part> JOB_PARTS { get; set; }
         public string FLG_CLOSE { get; set; } // Y : close , N : draft
     }
-    public class job_file : DataFile
+    public class job_file /*: DataFile*/
     {
-        public job_file(string path, string file_name)
-        {
-            DataFile s = new DataFile(path);
-            this.FileName = (string.IsNullOrEmpty(file_name) ? s.FileName : file_name);
-            this.FileData = s.FileData;
-            this.ContentType = s.ContentType;
-        }
+        //public job_file(string path, string file_name)
+        //{
+        //    DataFile s = new DataFile(path);
+        //    this.FileName = (string.IsNullOrEmpty(file_name) ? s.FileName : file_name);
+        //    this.FileData = s.FileData;
+        //    this.ContentType = s.ContentType;
+        //}
         public string IMAGE_TYPE { get; set; }
+        public string FileName
+        { get; set; }
+
+        public string ContentType
+        { get; set; }
+
+        public string FileData
+        { get; set; }
 
     }
     public class tbt_job_checklist

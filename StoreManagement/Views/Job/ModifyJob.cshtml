@@ -99,7 +99,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label for="ddlType_job">Type Job</label>
                                                         <select id="ddlType_job" class="form-control">
-                                                            <option selected>Choose...</option>
+                                                            <option value="" selected>Choose...</option>
                                                             @{
                                                                 if (JOBTYPE != null)
                                                                 {
@@ -187,7 +187,7 @@
                                                     <div class="form-group col-md-6">
                                                         <label for="ddlTransfer_To">Transfer To</label>
                                                         <select id="ddlTransfer_To" class="form-control">
-                                                            <option selected>Choose...</option>
+                                                            <option value="" selected>Choose...</option>
                                                             @{
                                                                 if (EMPLOYEE != null)
                                                                 {
@@ -664,7 +664,7 @@
         var html = '';
         var option = '';
         var id = 'ddlJobpart_Sparepart_' + seq + '';
-        option = '<option selected="">Choose...</option>';
+        option = '<option value="" selected="">Choose...</option>';
         $.each(arr_sparepart, function (i, el) {
             let selected = '';
             if (el.PART_ID == sVal) {
