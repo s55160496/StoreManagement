@@ -22,6 +22,7 @@ namespace StoreManagement.App_Extension
             public string Status { get; set; }
             public string Msg { get; set; }
             public string Content { get; set; }
+            public object data { get; set; }
         }
 
         public static int? GetIntNull(string sVal)
@@ -148,7 +149,7 @@ namespace StoreManagement.App_Extension
             string result = "";
             if (!string.IsNullOrEmpty(sValue))
             {
-                result = HttpUtility.UrlEncode(STCrypt.Encrypt(sValue));
+                result = System.Net.WebUtility.UrlEncode(STCrypt.Encrypt(sValue));
             }
             return result;
         }
@@ -158,7 +159,7 @@ namespace StoreManagement.App_Extension
             string result = "";
             if (!string.IsNullOrEmpty(sValue))
             {
-                result = STCrypt.Decrypt(HttpUtility.UrlDecode(sValue));
+                result = STCrypt.Decrypt(sValue);
             }
             return result;
         }

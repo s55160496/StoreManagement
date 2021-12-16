@@ -85,13 +85,13 @@ namespace StoreManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult CloseJob(CLOSEJOB data, FileUpLoad[] arr_file)
+        public IActionResult CloseJob(CLOSEJOB data, FileUpLoad[] arr_file,string SIGNNATURE)
         {
             CResutlWebMethod result = new CResutlWebMethod();
             try
             {
                 data.USERID = "1";
-                if (!string.IsNullOrEmpty(data.SIGNNATURE))
+                if (!string.IsNullOrEmpty(SIGNNATURE))
                 {
                     string path = @"UploadFile\\Temp";
                     path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"));
@@ -108,7 +108,7 @@ namespace StoreManagement.Controllers
                     //set the image path
                     string imgPath = Path.Combine(path, imageName);
 
-                    var arr = data.SIGNNATURE.Split(',');
+                    var arr = SIGNNATURE.Split(',');
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
 
                     System.IO.File.WriteAllBytes(imgPath, imageBytes);
@@ -204,7 +204,6 @@ namespace StoreManagement.Controllers
         {
             try
             {
-
                 if (string.IsNullOrEmpty(str))
                 {
                     throw new Exception("ไม่พบ JOB_ID");
@@ -212,15 +211,16 @@ namespace StoreManagement.Controllers
 
                 str = SysFunctions.Decrypt_UrlDecode(str);
 
-                MODIFYFY_JOB Model = new MODIFYFY_JOB();
-                Model.JOBDETAIL = new JOBDETAIL();
-                Model.JOBDETAIL.JOB_ID = str;
+                CLOSEJOB Model = new CLOSEJOB();
 
-                var JOBDETAIL = GET_JOBDETAIL(str);
-                Model.JOBDETAIL = JOBDETAIL;
+                var CLOSE_JOB_DETAIL = GET_CLOSE_JOB_DETAIL(str);
+                if (CLOSE_JOB_DETAIL != null)
+                {
+                    Model = CLOSE_JOB_DETAIL;
+                }
 
-                var CHECKLIST = GET_CHECKLIST();
-                Model.CHECKLIST = CHECKLIST;
+                var CHECK_LIST_MASTER = GET_CHECKLIST();
+                ViewData["CHECK_LIST_MASTER"] = CHECK_LIST_MASTER.ToArray();
 
                 var JOBTYPE = GET_JOBTYPE();
                 ViewData["JOBTYPE"] = JOBTYPE.ToArray();
@@ -246,6 +246,64 @@ namespace StoreManagement.Controllers
         {
 
             return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult SaveSignature(string SIGNATURE)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            FileUpLoad fu = new FileUpLoad();
+
+            try
+            {
+                if (!string.IsNullOrEmpty(SIGNATURE))
+                {
+                    string path = @"UploadFile\\Temp";
+                    path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"));
+
+                    //Check if directory exist
+                    if (!System.IO.Directory.Exists(path))
+                    {
+                        System.IO.Directory.CreateDirectory(path); //Create directory if it doesn't exist
+                    }
+
+                    string sSysFileName = DateTime.Now.ToString("ddMMyyyyHHmmssff");
+                    string imageName = sSysFileName + ".png";
+
+                    //set the image path
+                    string imgPath = Path.Combine(path, imageName);
+
+                    var arr = SIGNATURE.Split(',');
+                    byte[] imageBytes = Convert.FromBase64String(arr[1]);
+
+                    System.IO.File.WriteAllBytes(imgPath, imageBytes);
+
+                    path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"), imageName);
+                    DataFile df = new DataFile(path);
+
+                    fu.IsDelete = false;
+                    fu.IsNew = true;
+                    fu.nID = 1;
+                    fu.sFileName = sSysFileName;
+                    fu.sPath = path;
+
+                    //job_file jt = new job_file();
+                    //jt.ContentType = df.ContentType;
+                    //jt.FileName = df.FileName;
+                    //jt.FileData = Convert.ToBase64String(df.FileData);
+                    //jt.IMAGE_TYPE = "sig";
+                    //data.JOB_IMAGES.Add(jt);
+                    result.data = Convert.ToBase64String(df.FileData);
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                result.Status = SysFunctions.process_Failed;
+            }
+
+            return Json(result);
         }
 
         //public class FileData

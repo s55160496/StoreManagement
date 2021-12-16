@@ -21,8 +21,8 @@ namespace StoreManagement.Models
         public string OWNER_NAME { get; set; }
         public string REF_HJOB_ID { get; set; }
         public string USERID { get; set; }
-        public tbt_job_detail JOB_DETAIL { get; set; }
-        public List<tbt_job_checklist> JOB_CHECKLISTS { get; set; }
+        public JOBDETAIL JOB_DETAIL { get; set; }
+        public List<CHECKLIST> JOB_CHECKLISTS { get; set; }
         public List<job_file> JOB_IMAGES { get; set; }
         public List<tbt_job_image> IMAGE_DETAIL { get; set; }
         public List<tbt_job_part> JOB_PARTS { get; set; }

@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\REQUEST\JOBDETAIL.cs" />
+    <Compile Remove="Models\REQUEST\MODIFYFY_JOB.cs" />
     <Compile Remove="Models\UserAccount.cs" />
   </ItemGroup>
 

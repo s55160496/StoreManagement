@@ -289,14 +289,14 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
-        public JOBDETAIL GET_JOBDETAIL(string job_id)
+        public CLOSEJOB GET_CLOSE_JOB_DETAIL(string job_id)
         {
 
             try
             {
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_JOBDETAIL?job_id=" + job_id, Method.POST);
-                return client.Execute<JOBDETAIL>(request).Data;
+                return client.Execute<CLOSEJOB>(request).Data;
             }
             catch (Exception ex)
             {

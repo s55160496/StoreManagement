@@ -19,7 +19,7 @@
                         <div class="form-group col-md-6">
                             <label for="ddlCustomer_Type">Customer TYPE</label>
                             <select id="ddlCustomer_Type" class="form-control">
-                                <option selected>- ระบุ  -</option>
+                                <option value="" selected>- ระบุ  -</option>
                                 @{
                                     if (!string.IsNullOrEmpty(Model.CUST_TYPE))
                                     {
@@ -71,7 +71,7 @@
                         <div class="form-group col-md-3">
                             <label for="ddlProvince">Province</label>
                             <select id="ddlProvince" class="form-control">
-                                <option selected>Choose...</option>
+                                <option value="" selected>Choose...</option>
                                 @{
                                     if (PROVINCE != null && PROVINCE.Any())
                                     {
@@ -227,7 +227,7 @@
                 UnblockUI();
                 $('#ddlDistrict').html("");
                 if (response != undefined && response != null) {
-                    $("#ddlDistrict").append("<option selected>Choose...</option>");
+                    $("#ddlDistrict").append("<option value='' selected>Choose...</option>");
                     $.each(response, function (i, el) {
                         if (district_code != undefined && district_code != "" && district_code != null) {
                             if (district_code == el.DISTRICT_CODE) {
@@ -258,7 +258,7 @@
                 $('#ddlSub_District').html("");
                 debugger
                 if (response != undefined && response != null) {
-                    $("#ddlSub_District").append("<option selected>Choose...</option>");
+                    $("#ddlSub_District").append("<option value='' selected>Choose...</option>");
                     $.each(response, function (i, el) {
                         if (sub_district_code != undefined && sub_district_code != "" && sub_district_code != null) {
                             if (sub_district_code == el.SUB_DISTRICT_CODE) {

@@ -1,4 +1,4 @@
-﻿@model StoreManagement.Models.MODIFYFY_JOB
+﻿@model StoreManagement.Models.CLOSEJOB
 @{
     ViewData["Title"] = "ModifyJob";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
@@ -6,6 +6,7 @@
     var JOBTYPE = (JOBTYPE[])ViewData["JOBTYPE"];
     var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
     var SPAREPART = (TBM_SPAREPART[])ViewData["SPAREPART"];
+    var CHECKLIST = (CHECKLIST[])ViewData["CHECK_LIST_MASTER"];
 }
 <script src="~/lib/jSignature/flashcanvas.js"></script>
 <script src="~/lib/jSignature/jSignature.min.js"></script>
@@ -65,7 +66,7 @@
 
     /* Large rounded green border */
     hr.lineBlue {
-        border: 1px solid #29abe2;
+        border: 1px solid #000000;
         border-radius: 5px;
     }
 </style>
@@ -93,7 +94,7 @@
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapse_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_1">
+                                        <div id="collapse_1" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_1">
                                             <div class="panel-body">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
@@ -105,7 +106,7 @@
                                                                 {
                                                                     foreach (var item in JOBTYPE)
                                                                     {
-                                                                        if (Model.JOBDETAIL != null)
+                                                                        if (Model.JOB_DETAIL != null)
                                                                         {
 
                                                                         }
@@ -118,15 +119,15 @@
                                                     <div class="form-group col-md-6">
                                                         <label for="ddlEmployee">Employee</label>
                                                         <select id="ddlEmployee" class="form-control">
-                                                            <option selected>Choose...</option>
+                                                            <option value="" selected>Choose...</option>
                                                             @{
                                                                 if (EMPLOYEE != null)
                                                                 {
                                                                     foreach (var item in EMPLOYEE)
                                                                     {
-                                                                        if (Model.JOBDETAIL != null)
+                                                                        if (Model.JOB_DETAIL != null)
                                                                         {
-                                                                            if (Model.JOBDETAIL.OWNER_ID == item.USER_ID)
+                                                                            if (Model.CUSTOMER_ID == item.USER_ID)
                                                                             {
                                                                                 <option selected value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
 
@@ -150,39 +151,39 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
                                                         <label for="txtLicense_No">License No</label>
-                                                        <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No" value="@Model.JOBDETAIL.LICENSE_NO - @Model.JOBDETAIL.CUSTOMER_ID" disabled>
-                                                        <input type="hidden" class="form-control" id="txtLicense_Email" value="@Model.JOBDETAIL.EMAIL_CUSTOMER">
-                                                        <input type="hidden" class="form-control" id="txtCustomerID" value="@Model.JOBDETAIL.CUSTOMER_ID">
-                                                        <input type="hidden" class="form-control" id="txtLicense" value="@Model.JOBDETAIL.LICENSE_NO">
+                                                        <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No" value="@Model.LICENSE_NO - @Model.CUSTOMER_ID" disabled>
+                                                        <input type="hidden" class="form-control" id="txtLicense_Email" value="@Model.EMAIL_CUSTOMER">
+                                                        <input type="hidden" class="form-control" id="txtCustomerID" value="@Model.CUSTOMER_ID">
+                                                        <input type="hidden" class="form-control" id="txtLicense" value="@Model.LICENSE_NO">
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="txtEmail">Email</label>
-                                                        <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="255" disabled value="@Model.JOBDETAIL.EMAIL_CUSTOMER">
+                                                        <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="255" disabled value="@Model.EMAIL_CUSTOMER">
                                                     </div>
                                                 </div>
 
                                                 <div class="form-row">
                                                     <div class=" form-group col-md-6">
                                                         <label for="txtSummarry">Summarry</label>
-                                                        <textarea type="text" rows="2" class="form-control" id="txtSummarry" name="txtSummarry" placeholder="Summarry"></textarea>
+                                                        <textarea type="text" rows="2" class="form-control" id="txtSummarry" name="txtSummarry" placeholder="Summarry">@Model.SUMMARY</textarea>
                                                     </div>
                                                     <div class=" form-group col-md-6">
                                                         <label for="txtAction">Action</label>
-                                                        <textarea type="text" rows="2" class="form-control" id="txtAction" name="txtAction" placeholder="Action"></textarea>
+                                                        <textarea type="text" rows="2" class="form-control" id="txtAction" name="txtAction" placeholder="Action">@Model.ACTION</textarea>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-row">
                                                     <div class="form-group col-md-12">
                                                         <label for="txtResult">Result</label>
-                                                        <textarea type="text" rows="2" class="form-control" id="txtResult" name="txtResult" placeholder="Result"></textarea>
+                                                        <textarea type="text" rows="2" class="form-control" id="txtResult" name="txtResult" placeholder="Result">@Model.RESULT</textarea>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-row">
                                                     <div class=" form-group col-md-6">
                                                         <label for="txtInvoice_No">Invoice No</label>
-                                                        <input type="text" class="form-control" id="txtInvoice_No" name="txtInvoice_No" placeholder="Invoice No" />
+                                                        <input type="text" class="form-control" id="txtInvoice_No" name="txtInvoice_No" placeholder="Invoice No" value="@Model.INVOICE_NO" />
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="ddlTransfer_To">Transfer To</label>
@@ -193,7 +194,14 @@
                                                                 {
                                                                     foreach (var item in EMPLOYEE)
                                                                     {
-                                                                        <option value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
+                                                                        if (Model.TRANSFER_TO != null && Model.TRANSFER_TO == item.USER_ID)
+                                                                        {
+                                                                            <option selected value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -206,12 +214,12 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="heading_2">
                                             <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_2" aria-expanded="false" aria-controls="collapse_2">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_2" aria-expanded="true" aria-controls="collapse_2">
                                                     JOB DETAIL
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapse_2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_2">
+                                        <div id="collapse_2" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_2">
                                             <div class="panel-body">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
@@ -232,64 +240,64 @@
                                                                 <tr>
                                                                     <th>MODEL</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtModel_1" name="txtModel_1" maxlength="50" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtModel_1" name="txtModel_1" maxlength="50" placeholder="" value="@Model.JOB_DETAIL.B1_MODEL">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtModel_2" name="txtModel_2" maxlength="50" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtModel_2" name="txtModel_2" maxlength="50" placeholder="" value="@Model.JOB_DETAIL.B2_MODEL">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>SERIAL</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtSerial_1" name="txtSerial_1" maxlength="50" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtSerial_1" name="txtSerial_1" maxlength="50" placeholder="" value="@Model.JOB_DETAIL.B1_SERIAL">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtSerial_2" name="txtSerial_2" maxlength="50" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtSerial_2" name="txtSerial_2" maxlength="50" placeholder="" value="@Model.JOB_DETAIL.B2_SERIAL">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>AMP HRS</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtAMP_1" name="txtAMP_1" maxlength="10" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtAMP_1" name="txtAMP_1" maxlength="10" placeholder="" value="@Model.JOB_DETAIL.B1_AMP_HRS">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtAMP_2" name="txtAMP_2" maxlength="10" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtAMP_2" name="txtAMP_2" maxlength="10" placeholder="" value="@Model.JOB_DETAIL.B2_AMP_HRS">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>DATE CODE</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtDate_Code_1" name="txtDate_Code_1" maxlength="20" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtDate_Code_1" name="txtDate_Code_1" maxlength="20" placeholder="" value="@Model.JOB_DETAIL.B1_DATE_CODE">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtDate_Code_2" name="txtDate_Code_2" maxlength="20" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtDate_Code_2" name="txtDate_Code_2" maxlength="20" placeholder="" value="@Model.JOB_DETAIL.B2_DATE_CODE">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>SPECIFIC GRAVITY</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtSpecific_Gravity_1" name="txtSpecific_Gravity_1" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtSpecific_Gravity_1" name="txtSpecific_Gravity_1" placeholder="" value="@Model.JOB_DETAIL.B1_SPEC_GRAVITY">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtSpecific_Gravity_2" name="txtSpecific_Gravity_2" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtSpecific_Gravity_2" name="txtSpecific_Gravity_2" placeholder="" value="@Model.JOB_DETAIL.B2_SPEC_GRAVITY">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>VOLT STATIC</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtVolt_Static_1" name="txtVolt_Static_1" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtVolt_Static_1" name="txtVolt_Static_1" placeholder="" value="@Model.JOB_DETAIL.B1_VOLT_STATIC">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtVolt_Static_2" name="txtVolt_Static_2" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtVolt_Static_2" name="txtVolt_Static_2" placeholder="" value="@Model.JOB_DETAIL.B2_VOLT_STATIC">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>VOLT U/LOAD</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtVolt_Load_1" name="txtVolt_Load_1" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtVolt_Load_1" name="txtVolt_Load_1" placeholder="" value="@Model.JOB_DETAIL.B1_VOLT_LOAD">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtVolt_Load_2" name="txtVolt_Load_2" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtVolt_Load_2" name="txtVolt_Load_2" placeholder="" value="@Model.JOB_DETAIL.B2_VOLT_LOAD">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -310,7 +318,7 @@
                                                                         MANUFACTURER
                                                                     </th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtCDManufacturer" name="txtCDManufacturer" maxlength="50" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtCDManufacturer" name="txtCDManufacturer" maxlength="50" placeholder="" value="@Model.JOB_DETAIL.CD_MANUFACT">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -318,19 +326,19 @@
                                                                         MODEL
                                                                     </th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtCDModel" name="txtCDModel" maxlength="50" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtCDModel" name="txtCDModel" maxlength="50" placeholder="" value="@Model.JOB_DETAIL.CD_MODEL">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>SERIAL</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtCDSerial" name="txtCDSerial" maxlength="50" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtCDSerial" name="txtCDSerial" maxlength="50" placeholder="" value="@Model.JOB_DETAIL.CD_SERIAL">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>TEST TAG DATE</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtCDTest_Tag_Date" name="txtCDTest_Tag_Date" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtCDTest_Tag_Date" name="txtCDTest_Tag_Date" placeholder="" value="@Model.JOB_DETAIL.CD_TAG_DATE">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -338,7 +346,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="2">
-                                                                        <input type="text" class="form-control" id="txtCDHour_Meter" name="txtCDHour_Meter" placeholder="">
+                                                                        <input type="text" class="form-control" id="txtCDHour_Meter" name="txtCDHour_Meter" placeholder="" value="@Model.JOB_DETAIL.H_METER">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -410,17 +418,17 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="heading_3">
                                             <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_3" aria-expanded="false" aria-controls="collapse_3">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_3" aria-expanded="true" aria-controls="collapse_3">
                                                     CHECK LIST
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapse_3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_3">
+                                        <div id="collapse_3" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_3">
                                             <div class="panel-body">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
                                                         @{
-                                                            if (Model.CHECKLIST != null)
+                                                            if (CHECKLIST != null)
                                                             {
                                                                 <table style="width:100%" class="table-bordered">
                                                                     <thead>
@@ -435,15 +443,29 @@
                                                                         @for (int i = 0; i < 7; i++)
                                                                         {
                                                                             <tr>
-                                                                                <th colspan="3">@Model.CHECKLIST[i].CHECK_GROUP_NAME</th>
+                                                                                <th colspan="3">CHECKLIST[i].CHECK_GROUP_NAME</th>
                                                                             </tr>
-                                                                            for (int j = 0; j < Model.CHECKLIST[i].CHECK_LIST.Count(); j++)
+                                                                            for (int j = 0; j < CHECKLIST[i].CHECK_LIST.Count(); j++)
                                                                             {
+                                                                                string checked_ = string.Empty;
+                                                                                string Desc = string.Empty;
+                                                                                string disabled_ = "disabled";
+
+                                                                                if (Model.JOB_CHECKLISTS != null && Model.JOB_CHECKLISTS.Any())
+                                                                                {
+                                                                                    var Data_Edit = Model.JOB_CHECKLISTS.FirstOrDefault(w => w.CK_ID == CHECKLIST[i].CHECK_LIST[j].CH_ID && w.CHECK_LIST == "Y");
+                                                                                    if (Data_Edit != null)
+                                                                                    {
+                                                                                        checked_ = "checked";
+                                                                                        Desc = Data_Edit.DESCRIPTION;
+                                                                                        disabled_ = string.Empty;
+                                                                                    }
+                                                                                }
                                                                                 <tr>
-                                                                                    <td>@Model.CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" checked></td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1"></td>
-                                                                                    <td style="text-align:center"><input type="text" disabled class="form-control" id="chk_list_desc_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}")" /></td>
+                                                                                    <td>@CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
+                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" @(string.IsNullOrEmpty(checked_) ? "checked" : "")></td>
+                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1" @checked_></td>
+                                                                                    <td style="text-align:center"><input type="text" @disabled_ class="form-control" id="chk_list_desc_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="@Desc" /></td>
                                                                                 </tr>
                                                                             }
                                                                         }
@@ -454,7 +476,7 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         @{
-                                                            if (Model.CHECKLIST != null)
+                                                            if (CHECKLIST != null)
                                                             {
                                                                 <table style="width:100%" class="table-bordered">
                                                                     <thead>
@@ -466,18 +488,32 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        @for (int i = 7; i < @Model.CHECKLIST.Count(); i++)
+                                                                        @for (int i = 7; i < CHECKLIST.Count(); i++)
                                                                         {
                                                                             <tr>
-                                                                                <th colspan="3">@Model.CHECKLIST[i].CHECK_GROUP_NAME</th>
+                                                                                <th colspan="3">CHECKLIST[i].CHECK_GROUP_NAME</th>
                                                                             </tr>
-                                                                            for (int j = 0; j < Model.CHECKLIST[i].CHECK_LIST.Count(); j++)
+                                                                            for (int j = 0; j < CHECKLIST[i].CHECK_LIST.Count(); j++)
                                                                             {
+                                                                                string checked_ = string.Empty;
+                                                                                string Desc = string.Empty;
+                                                                                string disabled_ = "disabled";
+
+                                                                                if (Model.JOB_CHECKLISTS != null && Model.JOB_CHECKLISTS.Any())
+                                                                                {
+                                                                                    var Data_Edit = Model.JOB_CHECKLISTS.FirstOrDefault(w => w.CK_ID == CHECKLIST[i].CHECK_LIST[j].CH_ID && w.CHECK_LIST == "Y");
+                                                                                    if (Data_Edit != null)
+                                                                                    {
+                                                                                        checked_ = "checked";
+                                                                                        Desc = Data_Edit.DESCRIPTION;
+                                                                                        disabled_ = string.Empty;
+                                                                                    }
+                                                                                }
                                                                                 <tr>
-                                                                                    <td>@Model.CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" checked></td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1"></td>
-                                                                                    <td style="text-align:center"><input type="text" disabled class="form-control" id="chk_list_desc_@($"{Model.CHECKLIST[i].CH_GROUP_ID}_{Model.CHECKLIST[i].CHECK_LIST[j].CH_ID}")" /></td>
+                                                                                    <td>@CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
+                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" @(string.IsNullOrEmpty(checked_) ? "checked" : "")></td>
+                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1" @checked_></td>
+                                                                                    <td style="text-align:center"><input type="text" @disabled_ class="form-control" id="chk_list_desc_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="@Desc" /></td>
                                                                                 </tr>
                                                                             }
                                                                         }
@@ -494,12 +530,12 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="heading_4">
                                             <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_4" aria-expanded="false" aria-controls="collapse_4">
+                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_4" aria-expanded="true" aria-controls="collapse_4">
                                                     COMFIRM
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapse_4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_4">
+                                        <div id="collapse_4" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_4">
                                             <div class="panel-body">
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 col-form-label" for="dvFile" id="lbProductCompany">
@@ -510,11 +546,20 @@
                                                         <div id="dvFile"></div>
                                                     </div>
                                                 </div>
+                                                <hr class="lineBlue" />
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-12">
+                                                    <div class="form-group col-md-10" style="text-align:center">
                                                         <div id="signatureparent">
                                                             <div id="signature"></div>
                                                         </div>
+                                                        <div id="PreviewSignature">
+                                                            <img id="ItemPreviewSignature" src="" width="500">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <button id="btnConfirmSignature" type="button" class="btn-md btn-outline-info" title="Confirm" data-toggle="tooltip"><i class="fa fa-check"></i>&nbsp;Confrim Signature</button>
+                                                        <button id="btnClearSignature" type="button" class="btn-md btn-outline-dark" title="Confirm" data-toggle="tooltip"><i class="fas fa-undo"></i>&nbsp;Clear</button>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -536,7 +581,7 @@
         <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
     </div>
 </div>
-<input type="hidden" id="hddID" value="@Model.JOBDETAIL.JOB_ID" />
+<input type="hidden" id="hddID" value="@Model.JOB_ID" />
 <input type="hidden" id="hddUserID" value="@ViewBag.UserID" />
 <input type="hidden" id="hddPermission" value="1" />
 
@@ -558,8 +603,8 @@
 
         $(document).ready(function () {
             $("#signature").jSignature({
-                color: "#f00",
-                lineWidth: 5,
+                color: "#000000",
+                lineWidth: 2,
                 width: 800,
                 height: 200,
             });
@@ -814,9 +859,7 @@
                 'ACTION': GetValTextArea('txtAction'),
                 'RESULT': GetValTextArea('txtResult'),
                 'TRANSFER_TO': GetValDropdown('ddlTransfer_To'),
-                'FIX_DATE': "",
                 'INVOICE_NO': GetValTextBox('txtInvoice_No'),
-                'SIGNNATURE': $("#signature").jSignature('getData'),
                 'USERID': "",
                 'JOB_DETAIL': {
                     'BJOB_ID': GetValTextBox('hddID'),
@@ -863,31 +906,87 @@
                 'JOB_PARTS': arrJobParts,
                 'FLG_CLOSE': 'Y'
             };
-                    BlockUI();
-                    $.ajax({
-                        url: '@Url.Action("CloseJob", "Job")',
-                        type: 'POST',
-                        //contentType: 'application/json; charset=utf-8',
-                        dataType: 'json',
-                        data: { 'data': obj, 'arr_file': ArrFileTemp },
-                        success: function (response) {
-                            UnblockUI();
-                            if (response.Status == SysProcess.SessionExpired) {
-                                PopupSessionTimeOut();
-                            } else if (response.Status == SysProcess.Duplicate) {
-                                DialogDuplicate();
-                            } else if (response.Status == SysProcess.Failed) {
-                                DialogWarning(response.Msg);
-                            } else {
-                                DialogSucessRedirect('@Url.Action("Index", "Job")');
-                            }
-                        },
-                        error: function () {
-                        }
-                    });
-                });
+            BlockUI();
+            $.ajax({
+                url: '@Url.Action("CloseJob", "Job")',
+                type: 'POST',
+                //contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: { 'data': obj, 'arr_file': ArrFileTemp, 'SIGNNATURE': $("#signature").jSignature('getData') },
+                success: function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut();
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.Failed) {
+                        DialogWarning(response.Msg);
+                    } else {
+                        DialogSucessRedirect('@Url.Action("Index", "Job")');
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
     }
 
+
+    </script>
+
+    @* Signature *@
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#btnConfirmSignature').on('click', function () {
+            DialogConfirmSubmit(function () {
+                swal.disableButtons();
+
+                BlockUI();
+                $.ajax({
+                    url: '@Url.Action("SaveSignature", "Job")',
+                    type: 'POST',
+                    //contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: { 'SIGNATURE': $("#signature").jSignature('getData')},
+                    success: function (response) {
+                        UnblockUI();
+                        swal.close();
+                        if (response.Status == SysProcess.SessionExpired) {
+                            PopupSessionTimeOut();
+                        } else if (response.Status == SysProcess.Duplicate) {
+                            DialogDuplicate();
+                        } else if (response.Status == SysProcess.Failed) {
+                            DialogWarning(response.Msg);
+                        } else {
+                            ControlSignature(true);
+                            document.getElementById("ItemPreviewSignature").src = "data:image/png;base64," + response.data;
+                               // DialogSucessRedirect('@Url.Action("Index", "Job")');
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            });
+        });
+
+        $('#btnClearSignature').on('click', function () {
+            ControlSignature(false);
+        });
+    });
+
+    function ControlSignature(IsHas) {
+        if (IsHas === true) {
+            $('#signatureparent').hide();
+            $('#PreviewSignature').show();
+        } else {
+            $('#signatureparent').show();
+            $('#PreviewSignature').hide();
+            $('#signature').jSignature("reset");
+        }
+
+    }
 
     </script>
 

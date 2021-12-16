@@ -26,7 +26,7 @@
                         <div class="form-group col-md-4">
                             <label for="ddlPart_Type">Part Type</label>
                             <select id="ddlPart_Type" name="ddlPart_Type" class="form-control">
-                                <option selected>Choose...</option>
+                                <option value="" selected>Choose...</option>
                                 <option value="00">Normal Part</option>
                                 <option value="01">Dummy Part</option>
                             </select>
@@ -51,7 +51,7 @@
                         <div class="form-group col-md-4">
                             <label for="ddlUnit_Code">Unit Code</label>
                             <select id="ddlUnit_Code" name="ddlUnit_Code" class="form-control">
-                                <option selected>Choose...</option>
+                                <option value="" selected>Choose...</option>
                                 @{
                                     if (UNIT != null && UNIT.Any())
                                     {
@@ -82,7 +82,7 @@
                         <div class="form-group col-md-4">
                             <label for="ddlLocation_ID">Location ID</label>
                             <select id="ddlLocation_ID" name="ddlLocation_ID" class="form-control">
-                                <option selected>Choose...</option>
+                                <option value="" selected>Choose...</option>
                                 @{
                                     if (LOCATION != null && LOCATION.Any())
                                     {
