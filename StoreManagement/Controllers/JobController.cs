@@ -217,6 +217,10 @@ namespace StoreManagement.Controllers
                 if (CLOSE_JOB_DETAIL != null)
                 {
                     Model = CLOSE_JOB_DETAIL;
+                    if(Model.JOB_DETAIL == null)
+                    {
+                        Model.JOB_DETAIL = new tbt_job_detail();
+                    }
                 }
 
                 var CHECK_LIST_MASTER = GET_CHECKLIST();
@@ -275,7 +279,12 @@ namespace StoreManagement.Controllers
                     string imgPath = Path.Combine(path, imageName);
 
                     var arr = SIGNATURE.Split(',');
+
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
+                    if(imageBytes.Length == 3416)
+                    {
+                        throw new Exception("ระบุ ลายเช็นต์");
+                    }
 
                     System.IO.File.WriteAllBytes(imgPath, imageBytes);
 

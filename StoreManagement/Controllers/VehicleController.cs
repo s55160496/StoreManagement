@@ -48,6 +48,9 @@ namespace StoreManagement.Controllers
             var SERVICES = GET_TBM_SERVICES(new TBM_SERVICES() { });
             ViewData["SERVICES"] = SERVICES == null ? null : SERVICES.ToArray();
 
+            var BRAND = GET_TBM_BRAND();
+            ViewData["BRAND"] = BRAND == null ? null : BRAND.ToArray();
+
             return View(model);
         }
 

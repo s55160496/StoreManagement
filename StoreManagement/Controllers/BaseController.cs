@@ -273,6 +273,21 @@ namespace StoreManagement.Controllers
             }
         }
 
+        public List<TBM_BRAND> GET_TBM_BRAND()
+        {
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBM_BRAND", Method.GET);
+                return client.Execute<List<TBM_BRAND>>(request).Data;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         #region JOB
         public List<JOBDETAIL_LIST> GET_JOBDETAIL_LIST(string user_id)
         {

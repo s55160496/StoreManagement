@@ -21,7 +21,7 @@
                                     {
                                         foreach (var item in JOBTYPE)
                                         {
-                                            if (Model.SERVICES_NO == item.JOBCODE)
+                                            if (Model.JOBCODE == item.JOBCODE)
                                             {
                                                 <option selected value="@item.JOBCODE">@item.JOBCODE -@item.JOBDESCRIPTION</option>
                                             }
@@ -34,10 +34,19 @@
                                 }
                             </select>
                         </div>
+                        @if (Model.SERVICES_NO != null)
+                        {
+                            <input hidden type="text" class="form-control" id="txtServicesNo" name="txtServicesNo" placeholder="Services No" maxlength="4" value="@Model.SERVICES_NO" />
+
+                        }
+                        else
+                        {
+                            <input hidden type="text" class="form-control" id="txtServicesNo" name="txtServicesNo" value="" />
+                        }
                         @*<div class="form-group col-md-6">
-                                <label for="txtServicesNo">Services No</label>
-                                <input type="text" class="form-control" id="txtServicesNo" name="txtServicesNo" placeholder="Services No" maxlength="4" value="@Model.SERVICES_NO" />
-                            </div>*@
+            <label for="txtServicesNo">Services No</label>
+            <input type="text" class="form-control" id="txtServicesNo" name="txtServicesNo" placeholder="Services No" maxlength="4" value="@Model.SERVICES_NO" />
+        </div>*@
                         <div class="form-group col-md-6">
                             <label for="txtServicesName">Services Name</label>
                             <input type="text" class="form-control" id="txtServicesName" name="txtServicesName" placeholder="Services Name" value="@Model.SERVICES_NAME" />
@@ -71,7 +80,8 @@
                     swal.disableButtons();
 
                 var obj = {
-                    'SERVICES_NO': GetValDropdown('ddlType_job'),
+                    'JOBCODE': GetValDropdown('ddlType_job'),
+                    'SERVICES_NO': GetValTextBox('txtServicesNo'),
                     'SERVICES_NAME': GetValTextBox('txtServicesName'),
                     'PERIOD_YEAR': GetValTextBox('txtPeriodYear'),
                     }

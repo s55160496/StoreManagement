@@ -8,6 +8,7 @@ namespace StoreManagement.Models
     public class CLOSEJOB
     {
         public string JOB_ID { get; set; }
+        public string TYPE_JOB { get; set; }
         public string LICENSE_NO { get; set; }
         public string CUSTOMER_ID { get; set; }
         public string CUSTOMER_NAME { get; set; }

@@ -4,20 +4,22 @@
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 
     var POSITION = (EMPLOYEE_POSITION[])ViewData["POSITION"];
+    var EDIT_FLG = (string)ViewData["EDIT_FLG"];
 }
 <div class="card-body">
     <div>
         <div id="divForm">
             <div class="container">
                 <form>
+
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtUsername">Username</label>
-                            <input type="text" class="form-control" id="txtUsername" placeholder="Username" value="@Model.USER_NAME">
+                            <input @(EDIT_FLG == "Y" ? "disabled": "") type="text" class="form-control" id="txtUsername" placeholder="Username" value="@Model.USER_NAME">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtPassword">Password</label>
-                            <input type="password" class="form-control" id="txtPassword" placeholder="Password" value="@Model.PASSWORD">
+                            <input @(EDIT_FLG == "Y" ? "disabled": "") type="password" class="form-control" id="txtPassword" placeholder="Password" value="@Model.PASSWORD">
                         </div>
                     </div>
 
@@ -77,7 +79,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
- 
+
         $("#txtIDCard").on('input blur', cardFormat);
 
         $('#txtIDCard').blur();

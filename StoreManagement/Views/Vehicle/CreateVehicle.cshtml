@@ -5,6 +5,7 @@
 
     var CUSTOMER = (TBM_CUSTOMER[])ViewData["CUSTOMER"];
     var SERVICES = (TBM_SERVICES[])ViewData["SERVICES"];
+    var BRAND = (TBM_BRAND[])ViewData["BRAND"];
 
     var EDIT_FLG = (string)ViewData["EDIT_FLG"];
 }
@@ -20,9 +21,31 @@
                             <input type="text" class="form-control" id="txtLicense_No" name="txtLicense_No" placeholder="License No" maxlength="20" value="@Model.LICENSE_NO">
                         </div>
                         <div class="form-group col-md-6">
+                            <label for="ddlBrand">Brand</label>
+                            <select id="ddlBrand" name="ddlBrand" class="form-control">
+                                <option value="" selected>Choose...</option>
+                                @{
+                                    if (BRAND != null && BRAND.Any())
+                                    {
+                                        foreach (var item in BRAND)
+                                        {
+                                            if (item.BRAND_CODE == Model.BRAND_NO)
+                                            {
+                                                <option value="@item.BRAND_CODE" selected>@item.BRAND_NAME_THA</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.BRAND_CODE">@item.BRAND_NAME_THA</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        @*<div class="form-group col-md-6">
                             <label for="txtBrand_no">Brand No</label>
                             <input type="text" class="form-control" id="txtBrand_No" name="txtBrand_No" placeholder="Brand No" maxlength="3" value="@Model.BRAND_NO">
-                        </div>
+                        </div>*@
                     </div>
 
                     <div class="form-row">
@@ -99,7 +122,7 @@
                             <input type="text" class="form-control" id="txtContract_No" name="txtContract_No" placeholder="Contract No" value="@Model.CONTRACT_NO">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="ddlCustomer_ID">Customer ID</label>
+                            <label for="ddlCustomer_ID">Customer Name</label>
                             <select id="ddlCustomer_ID" name="ddlCustomer_ID" class="form-control">
                                 <option value="" selected>Choose...</option>
                                 @{
@@ -149,7 +172,7 @@
 
                 var obj = {
                     'LICENSE_NO': GetValTextBox('txtLicense_No'),//GetValTextBox('hddID'),
-                    'BRAND_NO': GetValTextBox('txtBrand_No'),
+                    'BRAND_NO': GetValDropdown('ddlBrand'),
                     'MODEL_NO': GetValTextArea('txtModel_No'),
                     'CHASSIS_NO': GetValTextArea('txtChassis_No'),
                     'COLOR': GetValTextBox('txtColor'),

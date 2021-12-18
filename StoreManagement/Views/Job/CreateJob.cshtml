@@ -58,6 +58,13 @@
                             <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email" maxlength="255" disabled>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class=" form-group col-md-12">
+                            <label for="txtSummarry">Summarry</label>
+                            <textarea type="text" rows="3" class="form-control" id="txtSummarry" name="txtSummarry" placeholder="Summarry"></textarea>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -91,6 +98,7 @@
                         "LICENSE_NO": GetValTextBox('txtLicense'),
                         "CUSTOMER_ID": GetValTextBox('txtCustomerID'),
                         "EMAIL_CUSTOMER": GetValTextBox('txtLicense_Email'),
+                        'SUMMARY': GetValTextArea('txtSummarry'),
                         "REF_HJOB_ID": "",
                         "USER_ID": ""
                     }

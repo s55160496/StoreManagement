@@ -11,6 +11,7 @@ namespace StoreManagement.Models
         public string LICENSE_NO_ENCRYPT { get; set; }
         public string SEQ { get; set; }
         public string BRAND_NO { get; set; }
+        public string BRAND_NAME_THA { get; set; }
         public string MODEL_NO { get; set; }
         public string CHASSIS_NO { get; set; }
         public string COLOR { get; set; }

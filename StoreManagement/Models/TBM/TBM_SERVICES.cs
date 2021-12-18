@@ -7,6 +7,7 @@ namespace StoreManagement.Models
 {
     public class TBM_SERVICES
     {
+        public string JOBCODE { get; set; }
         public string SERVICES_NO { get; set; }
         public string SERVICES_NO_ENCRYPT { get; set; }
         public string SERVICES_NAME { get; set; }

@@ -11,7 +11,7 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbSearchData" class="table tableData" style="min-width:1200px">
+                    <table id="tbSearchData" class="table tableData" width="100%">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th>#</th>
@@ -88,7 +88,7 @@ var urlSearchData = "@Url.Action("GetData", "Vehicle")";
 
                 td = '<td class="text-center">' + ( i+1 )+ '</td>';
                 td += '<td>' + (el.LICENSE_NO || '') + '</td>';
-                td += '<td>' + (el.BRAND_NO || '') + '</td>';
+                td += '<td>' + (el.BRAND_NAME_THA|| '') + '</td>';
                 td += '<td>' + (el.MODEL_NO || '') + '</td>';
                 td += '<td>' + (el.CHASSIS_NO || '') + '</td>';
                 td += '<td>' + (el.COLOR || '') + '</td>';
@@ -103,9 +103,9 @@ var urlSearchData = "@Url.Action("GetData", "Vehicle")";
 
         $("table[id$=tbSearchData] tbody").html(html);
         let table = $('#tbSearchData').DataTable({
-            scrollY: "300px",
-            scrollX: true,
-            scrollCollapse: true,
+            //scrollY: "300px",
+            //scrollX: true,
+            //scrollCollapse: true,
             columnDefs: [
                 /*{ width: 300, targets: 9 },*/
             ],

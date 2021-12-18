@@ -14,6 +14,7 @@ namespace StoreManagement.Models
         public string LASTNAME { get; set; }
         public string IDCARD { get; set; }
         public string POSITION { get; set; }
+        public string POSITION_DESCRIPTION { get; set; }
         public string STATUS { get; set; }
         public string CREATE_BY { get; set; }
         public string CREATE_DATE { get; set; }

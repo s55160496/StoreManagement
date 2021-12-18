@@ -38,11 +38,14 @@ namespace StoreManagement.Controllers
             TBM_EMPLOYEE model = new TBM_EMPLOYEE();
 
             var lstData = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
-
+            string EDIT_FLG = "N";
             if (lstData != null && !string.IsNullOrEmpty(sUser_ID))
             {
                 model = lstData.Where(w => w.USER_ID == sUser_ID).FirstOrDefault();
+                EDIT_FLG = "Y";
             }
+
+            ViewData["EDIT_FLG"] = EDIT_FLG;
 
             var POSITION = GET_EMPLOYEE_POSITION();
             ViewData["POSITION"] = POSITION.ToArray();

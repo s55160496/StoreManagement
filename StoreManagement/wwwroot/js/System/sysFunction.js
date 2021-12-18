@@ -21,6 +21,7 @@ var AlertMsg = {
     ConfirmRevisit: "Do you want to revisit data?",
     ConfirmCancel: "Do you want to cancel data?",
     ConfirmSendMail: "Do you want to send mail?",
+    ConfirmSignature: "Do you want to confirm signature?",
     NoPermission: "Access denied",
     SessionTimeOut: "Session time out",
     DeleteFail: 'Please select <i class="far fa-check-square"></i>',
@@ -48,6 +49,9 @@ function PopupSessionTimeOut(url) {
 
 function DialogConfirmSubmit(funcYes, funcNo) {
     SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmSave, funcYes, funcNo);
+}
+function DialogConfirmSignature(funcYes, funcNo) {
+    SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmSignature, funcYes, funcNo);
 }
 
 function DialogConfirmExport(funcYes, funcNo) {

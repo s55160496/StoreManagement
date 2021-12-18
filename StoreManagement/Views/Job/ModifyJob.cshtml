@@ -106,11 +106,14 @@
                                                                 {
                                                                     foreach (var item in JOBTYPE)
                                                                     {
-                                                                        if (Model.JOB_DETAIL != null)
+                                                                        if (Model.TYPE_JOB == item.JOBCODE)
                                                                         {
-
+                                                                            <option selected value="@item.JOBCODE">@item.JOBCODE -@item.JOBDESCRIPTION</option>
                                                                         }
-                                                                        <option value="@item.JOBCODE">@item.JOBCODE -@item.JOBDESCRIPTION</option>
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.JOBCODE">@item.JOBCODE -@item.JOBDESCRIPTION</option>
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -225,8 +228,6 @@
                                                     <div class="form-group col-md-6">
                                                         <table id="tbBatteryDetails" class="table tableData">
                                                             <thead class="thead-HMCPO darkCustom">
-                                                                @*<table id="tbBatteryDetails" style="width:100%" class="table-bordered">
-                                                                    <thead class="thead-HMCPO darkCustom">*@
                                                                 <tr>
                                                                     <th style="text-align:center" colspan="3">BATTERY DETAILS</th>
                                                                 </tr>
@@ -306,8 +307,6 @@
                                                     <div class="form-group col-md-6">
                                                         <table id="tbChargeDetails" class="table tableData">
                                                             <thead class="thead-HMCPO darkCustom">
-                                                                @*<table id="tbChargeDetails" style="width:100%" class="table-bordered">
-                                                                    <thead class="thead-HMCPO darkCustom">*@
                                                                 <tr>
                                                                     <th style="text-align:center" colspan="2">CHARGER DETAILS</th>
                                                                 </tr>
@@ -838,13 +837,17 @@
     @* SAVE DATA *@
     <script type="text/javascript">
     $(document).ready(function () {
-
+        var IsSignature = false;
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
 
         $('#btnSubmit').on('click', function () {
-            SAVEDATA();
+           // if (IsSignature) {
+                SAVEDATA();
+            //} else {
+            //    DialogWarning("ระบุ ลายเช็นต์");
+            //}
         });
     });
 
@@ -935,40 +938,37 @@
     </script>
 
     @* Signature *@
-    <script type="text/javascript">
+<script type="text/javascript">
 
     $(document).ready(function () {
-
         $('#btnConfirmSignature').on('click', function () {
-            DialogConfirmSubmit(function () {
-                swal.disableButtons();
-
-                BlockUI();
-                $.ajax({
-                    url: '@Url.Action("SaveSignature", "Job")',
-                    type: 'POST',
-                    //contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    data: { 'SIGNATURE': $("#signature").jSignature('getData')},
-                    success: function (response) {
-                        UnblockUI();
-                        swal.close();
-                        if (response.Status == SysProcess.SessionExpired) {
-                            PopupSessionTimeOut();
-                        } else if (response.Status == SysProcess.Duplicate) {
-                            DialogDuplicate();
-                        } else if (response.Status == SysProcess.Failed) {
-                            DialogWarning(response.Msg);
-                        } else {
-                            ControlSignature(true);
-                            document.getElementById("ItemPreviewSignature").src = "data:image/png;base64," + response.data;
-                               // DialogSucessRedirect('@Url.Action("Index", "Job")');
+            DialogConfirmSignature(function () {
+                    swal.disableButtons();
+                    BlockUI();
+                    $.ajax({
+                        url: '@Url.Action("SaveSignature", "Job")',
+                        type: 'POST',
+                        //contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: { 'SIGNATURE': $("#signature").jSignature('getData') },
+                        success: function (response) {
+                            UnblockUI();
+                            swal.close();
+                            if (response.Status == SysProcess.SessionExpired) {
+                                PopupSessionTimeOut();
+                            } else if (response.Status == SysProcess.Duplicate) {
+                                DialogDuplicate();
+                            } else if (response.Status == SysProcess.Failed) {
+                                DialogWarning(response.Msg);
+                            } else {
+                                ControlSignature(true);
+                                document.getElementById("ItemPreviewSignature").src = "data:image/png;base64," + response.data;
+                            }
+                        },
+                        error: function () {
                         }
-                    },
-                    error: function () {
-                    }
+                    });
                 });
-            });
         });
 
         $('#btnClearSignature').on('click', function () {
@@ -976,19 +976,19 @@
         });
     });
 
-    function ControlSignature(IsHas) {
-        if (IsHas === true) {
-            $('#signatureparent').hide();
-            $('#PreviewSignature').show();
-        } else {
-            $('#signatureparent').show();
-            $('#PreviewSignature').hide();
-            $('#signature').jSignature("reset");
+        function ControlSignature(IsHas) {
+            IsSignature = IsHas;
+            if (IsHas === true) {
+                $('#signatureparent').hide();
+                $('#PreviewSignature').show();
+            } else {
+                $('#signatureparent').show();
+                $('#PreviewSignature').hide();
+                $('#signature').jSignature("reset");
+            }
         }
 
-    }
-
-    </script>
+</script>
 
 }
 

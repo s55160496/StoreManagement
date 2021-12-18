@@ -10,6 +10,7 @@ namespace StoreManagement.Models
         public string JOB_ID { get; set; }
         public string TYPE_JOB { get; set; }
         public string OWNER_ID { get; set; }
+        public string SUMMARY { get; set; }
         public string LICENSE_NO { get; set; }
         public string CUSTOMER_ID { get; set; }
         public string EMAIL_CUSTOMER { get; set; }
