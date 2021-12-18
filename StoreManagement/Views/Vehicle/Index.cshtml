@@ -11,7 +11,7 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbSearchData" class="table tableData">
+                    <table id="tbSearchData" class="table tableData" style="min-width:1200px">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th>#</th>
@@ -114,7 +114,7 @@ var urlSearchData = "@Url.Action("GetData", "Vehicle")";
                 selector: 'td:first-child'
             },
             order: [
-                [1, 'asc']
+                [0, 'asc']
             ]
         });
     }

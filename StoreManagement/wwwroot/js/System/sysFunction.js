@@ -1055,6 +1055,7 @@ function AsyncUploadFile_BindEventMulti(arrAllowFile, sTempPath, $afu, $txtFileN
 function SetDatePicker($txtDate) {
     $txtDate
         .datepicker({
+            language: 'th-th',
             format: 'dd/mm/yyyy',
             autoclose: true
         })
@@ -1068,6 +1069,7 @@ function SetDatePicker($txtDate) {
         });
     $txtDate.prev().click(function () { $txtDate.focus(); });
 }
+
 
 function SetDatePickerEndNow($txtDate) {
     $txtDate

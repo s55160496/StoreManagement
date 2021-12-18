@@ -155,7 +155,7 @@
 
                 var obj = {
                     'CUSTOMER_ID': "@Model.CUSTOMER_ID",
-                    'ID_CARD': GetValTextBox('txtID_Card'),
+                    'ID_CARD': GetValTextBox('txtID_Card').replace(/-/g, ''),
                     'CUST_TYPE': GetValDropdown('ddlCustomer_Type'),
                     'FNAME': GetValTextBox('txtFirstname'),
                     'LNAME': GetValTextBox('txtLastname'),
