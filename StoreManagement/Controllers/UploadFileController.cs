@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,11 @@ namespace StoreManagement.Controllers
 {
     public class UploadFileController : Controller
     {
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public UploadFileController(IWebHostEnvironment hostingEnvironment)
+        {
+            this._hostingEnvironment = hostingEnvironment;
+        }
         public IActionResult Index()
         {
             return View();
@@ -72,10 +78,10 @@ namespace StoreManagement.Controllers
                         System.IO.Directory.CreateDirectory(MapPath(filepath));
                     }
 
-                    if (!System.IO.Directory.Exists(MapPathBackUp(filepath)))
-                    {
-                        System.IO.Directory.CreateDirectory(MapPathBackUp(filepath));
-                    }
+                    //if (!System.IO.Directory.Exists(MapPathBackUp(filepath)))
+                    //{
+                    //    System.IO.Directory.CreateDirectory(MapPathBackUp(filepath));
+                    //}
                     if (System.IO.Directory.Exists(MapPath(filepath)))
                     {
 
@@ -136,7 +142,7 @@ namespace StoreManagement.Controllers
         //}
         public string MapPath(string path)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"));
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, path);
             return filePath;
         }
         public string MapPathBackUp(string path)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RestSharp;
 using StoreManagement.App_Extension;
@@ -15,9 +16,10 @@ namespace StoreManagement.Controllers
 {
     public class JobController : BaseController
     {
-        public JobController(IConfiguration config) : base(config)
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public JobController(IConfiguration config, IWebHostEnvironment hostingEnvironment) : base(config)
         {
-
+            this._hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -93,8 +95,9 @@ namespace StoreManagement.Controllers
                 data.USERID = "1";
                 if (!string.IsNullOrEmpty(SIGNNATURE))
                 {
-                    string path = @"UploadFile\\Temp";
-                    path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"));
+                    string path = @"UploadFile\Temp\";
+                    //path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"));
+                    path = Path.Combine(_hostingEnvironment.WebRootPath, path);
 
                     //Check if directory exist
                     if (!System.IO.Directory.Exists(path))
@@ -110,7 +113,10 @@ namespace StoreManagement.Controllers
 
                     var arr = SIGNNATURE.Split(',');
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
-
+                    if (imageBytes.Length == 3416)
+                    {
+                        throw new Exception("ระบุ ลายเช็นต์");
+                    }
                     System.IO.File.WriteAllBytes(imgPath, imageBytes);
 
                     if (data.JOB_IMAGES == null)
@@ -118,9 +124,9 @@ namespace StoreManagement.Controllers
                         data.JOB_IMAGES = new List<job_file>();
                     }
 
-                    path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"), imageName);
+                    //path = Path.Combine(_hostingEnvironment.ContentRootPath + "\\wwwroot\\", path.Replace("/", "\\"), imageName);
 
-                    DataFile df = new DataFile(path);
+                    DataFile df = new DataFile(imgPath);
                     job_file jt = new job_file();
                     jt.ContentType = df.ContentType;
                     jt.FileName = df.FileName;
@@ -139,7 +145,7 @@ namespace StoreManagement.Controllers
 
                     foreach (var item in arr_file)
                     {
-                        string path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", item.sPath.Replace("/", "\\"), item.sSystemFileName);
+                        string path = Path.Combine(_hostingEnvironment.WebRootPath, item.sPath, item.sSystemFileName);
                         DataFile df = new DataFile(path);
                         job_file jt = new job_file();
                         jt.ContentType = df.ContentType;
@@ -263,8 +269,8 @@ namespace StoreManagement.Controllers
             {
                 if (!string.IsNullOrEmpty(SIGNATURE))
                 {
-                    string path = @"UploadFile\\Temp";
-                    path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"));
+                    string path = @"UploadFile\Temp\";
+                    path = Path.Combine(_hostingEnvironment.WebRootPath, path);
 
                     //Check if directory exist
                     if (!System.IO.Directory.Exists(path))
@@ -286,16 +292,14 @@ namespace StoreManagement.Controllers
                         throw new Exception("ระบุ ลายเช็นต์");
                     }
 
-                    System.IO.File.WriteAllBytes(imgPath, imageBytes);
-
-                    path = Path.Combine(Directory.GetCurrentDirectory() + "\\wwwroot\\", path.Replace("/", "\\"), imageName);
-                    DataFile df = new DataFile(path);
+                    System.IO.File.WriteAllBytes(imgPath, imageBytes);            
+                    DataFile df = new DataFile(imgPath);
 
                     fu.IsDelete = false;
                     fu.IsNew = true;
                     fu.nID = 1;
                     fu.sFileName = sSysFileName;
-                    fu.sPath = path;
+                    fu.sPath = imgPath;
 
                     //job_file jt = new job_file();
                     //jt.ContentType = df.ContentType;

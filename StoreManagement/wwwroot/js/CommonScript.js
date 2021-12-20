@@ -458,7 +458,8 @@ function FancyBox_OpenIframe_Url(url, width, height) {
 
 function FancyBox_ViewFile(sFileURL) {
     var sFileExt = sFileURL.split('.').pop(); //File Extension
-    var sPath = window.location.origin + '/StoreManagement/';
+    //var sPath = window.location.origin + '/StoreManagement/';
+    var sPath = window.location.origin+'/';
     if (window.location.pathname.split("/").length > 3) {
         //sPath = "..";
     }
