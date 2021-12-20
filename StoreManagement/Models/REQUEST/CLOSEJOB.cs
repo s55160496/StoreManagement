@@ -102,6 +102,7 @@ namespace StoreManagement.Models
         //public string pjob_id{get;set;}
         public string SEQ { get; set; }
         public string PART_NO { get; set; }
+        public string PART_ID { get; set; }
         public string PART_NAME { get; set; }
         public string PART_DESC { get; set; }
         public string PART_TYPE { get; set; }
