@@ -111,6 +111,8 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        InputMaskDecimal('#txtCost_Price', 12, 2, false, false);
+        InputMaskDecimal('#txtSale_Price', 12, 2, false, false);
 
         $('#btnSubmit').on('click', function () {
             DialogConfirmSubmit(function () {
@@ -118,7 +120,7 @@
                 BlockUI();
 
                 var obj = {
-                    "PART_ID": "",
+                    "PART_ID": "@Model.PART_ID",
                     "PART_NO": GetValTextBox('txtPart_No'),
                     "PART_NAME": GetValTextBox('txtPart_Name'),
                     "PART_DESC": GetValTextArea('txtPart_Desc'),

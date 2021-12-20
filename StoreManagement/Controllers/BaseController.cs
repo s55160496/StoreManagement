@@ -319,7 +319,6 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
-
         public List<CHECKLIST> GET_CHECKLIST()
         {
             try
@@ -335,5 +334,7 @@ namespace StoreManagement.Controllers
             }
         }
         #endregion
+
+
     }
 }

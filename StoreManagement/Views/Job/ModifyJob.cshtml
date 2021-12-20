@@ -335,9 +335,9 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th>TEST TAG DATE</th>
+                                                                    <th>CD TAG DATE</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control" id="txtCDTest_Tag_Date" name="txtCDTest_Tag_Date" placeholder="" value="@Model.JOB_DETAIL.CD_TAG_DATE">
+                                                                        <input type="text" class="form-control" id="txtCD_Tag_Date" name="txtCD_Tag_Date" placeholder="" value="@Model.JOB_DETAIL.CD_TAG_DATE">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -407,6 +407,17 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+                                                                @*@{
+                                                                        if (Model.JOB_PARTS != null && Model.JOB_PARTS.Any())
+                                                                        {
+                                                                            foreach (var item in Model.JOB_PARTS)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td></td>
+                                                                                </tr>
+                                                                            }
+                                                                        }
+                                                                    }*@
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -656,7 +667,7 @@
             //    //background-color: "#0f0"
             //    });
 
-        SetDatePicker($('#txtTest_Tag_Date'));
+            SetDatePicker($('#txtCD_Tag_Date'));
 
         InputMaskDecimal('#txtSpecific_Gravity_1', 12, 2, false, false);
         InputMaskDecimal('#txtSpecific_Gravity_2', 12, 2, false, false);
@@ -705,13 +716,13 @@
     </script>
 
     @* TAB JOB DETAIL *@
-    <script type="text/javascript">
-    var arrJobParts = [];
+<script type="text/javascript">
+    var arrJobParts = @Html.Raw(Json.Serialize(Model.JOB_PARTS)) == null ? [] : @Html.Raw(Json.Serialize(Model.JOB_PARTS));
     var arr_sparepart = @Html.Raw(Json.Serialize(ViewData["SPAREPART"]));
     var UrlCreateJobParts = '@Url.Action("CreateJobParts","Job")';
 
     $(document).ready(function () {
-        $('#tbJobParts').DataTable();
+        BindTBJobParts();
 
         $('#btnAddJobParts').on('click', function () {
 
@@ -747,7 +758,7 @@
             if (el.PART_ID == sVal) {
                 selected = 'selected';
             }
-            option += '<option ' + selected+' value="' + el.PART_ID + '">' + el.PART_NO + ' - ' + el.PART_NAME+'</option>';
+            option += '<option ' + selected + ' value="' + el.PART_ID + '" data-item="' + el.PART_NO+'">' + el.PART_NO + ' - ' + el.PART_NAME+'</option>';
         });
         html = `<select onchange="Jobpart_Sparepart_Change('${seq}')" id='${id}' class="form-control">${option}</select>`;
         return html;
@@ -755,9 +766,11 @@
 
     @* JOB PARTS CHANGE *@
     function Jobpart_Sparepart_Change(seq) {
+
         let id_select = 'ddlJobpart_Sparepart_' + seq;
         let id_desc = 'txtJobParts_Desc_' + seq;
         let val = GetValDropdown(id_select);
+        let part_no = $('#' + id_select).find('option:selected').attr('data-item');
 
         var Data = Enumerable.From(arr_sparepart).Where(function (w) { return w.PART_ID == val }).FirstOrDefault();
         if (Data) {
@@ -766,6 +779,7 @@
 
             Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_DESC = Data.PART_DESC;
             Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_ID = val;
+            Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_NO = part_no;
         }
     }
 
@@ -818,7 +832,7 @@
         }
     }
 
-    </script>
+</script>
 
     @* TAB CHECK LIST *@
     <script type="text/javascript">
@@ -908,21 +922,21 @@
                     'B1_VOLT_LOAD': GetValTextBox('txtVolt_Load_1'),
                     'B2_MODEL': GetValTextBox('txtModel_2'),
                     'B2_SERIAL': GetValTextBox('txtSerial_2'),
-                    'B2_AMP_HRS ': GetValTextBox('txtAMP_2'),
-                    'B2_DATE_CODE ': GetValTextBox('txtDate_Code_2'),
-                    'B2_SPEC_GRAVITY ': GetValTextBox('txtSpecific_Gravity_2'),
-                    'B2_VOLT_STATIC ': GetValTextBox('txtVolt_Static_2'),
-                    'B2_VOLT_LOAD ': GetValTextBox('txtVolt_Load_2'),
-                    'CD_MANUFACT ': GetValTextBox('txtManufacturer'),
-                    'CD_MODEL ': GetValTextBox('txtCDModel'),
-                    'CD_SERIAL ': GetValTextBox('txtCDSerial'),
-                    'CD_TAG_DATE ': GetValTextBox('txtCDTest_Tag_Date'),
-                    'H_METER ': GetValTextBox('txtCDHour_Meter'),
-                    'V_SERVICE_MANE ': GetValTextBox('txtServiceman'),
-                    'V_LABOUR ': GetValTextBox('txtLabour'),
-                    'V_TRAVEL ': GetValTextBox('txtTravel'),
-                    'V_TOTAL ': GetValTextBox('txtTotal'),
-                    'FAILURE_CODE ': GetValTextBox('txtFailure_code'),
+                    'B2_AMP_HRS': GetValTextBox('txtAMP_2'),
+                    'B2_DATE_CODE': GetValTextBox('txtDate_Code_2'),
+                    'B2_SPEC_GRAVITY': GetValTextBox('txtSpecific_Gravity_2'),
+                    'B2_VOLT_STATIC': GetValTextBox('txtVolt_Static_2'),
+                    'B2_VOLT_LOAD': GetValTextBox('txtVolt_Load_2'),
+                    'CD_MANUFACT': GetValTextBox('txtCDManufacturer'),
+                    'CD_MODEL': GetValTextBox('txtCDModel'),
+                    'CD_SERIAL': GetValTextBox('txtCDSerial'),
+                    'CD_TAG_DATE': GetValTextBox('txtCD_Tag_Date'),
+                    'H_METER': GetValTextBox('txtCDHour_Meter'),
+                    'V_SERVICE_MANE': GetValTextBox('txtServiceman'),
+                    'V_LABOUR': GetValTextBox('txtLabour'),
+                    'V_TRAVEL': GetValTextBox('txtTravel'),
+                    'V_TOTAL': GetValTextBox('txtTotal'),
+                    'FAILURE_CODE': GetValTextBox('txtFailure_code'),
                     'AIR_WEAR': GetValTextBox('txtFair_wear'),
                 },
                 'JOB_CHECKLISTS': GetValCheckList(), // CK_ID,DESCRIPTION
