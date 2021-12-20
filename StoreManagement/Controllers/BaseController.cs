@@ -335,6 +335,21 @@ namespace StoreManagement.Controllers
         }
         #endregion
 
+        public string TERMINATE_TBT_JOB_IMAGE(string ijob_id,string seq)
+        {
+            try
+            {
+                string r = string.Empty;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("TERMINATE_TBT_JOB_IMAGE?ijob_id=" + ijob_id+ "&seq=" + seq, Method.GET);
+                return client.Execute(request).Content;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
     }
 }
