@@ -341,8 +341,34 @@ namespace StoreManagement.Controllers
             {
                 string r = string.Empty;
                 var client = new RestClient(URL_API);
-                var request = new RestRequest("TERMINATE_TBT_JOB_IMAGE?ijob_id=" + ijob_id+ "&seq=" + seq, Method.GET);
-                return client.Execute(request).Content;
+                var request = new RestRequest("TERMINATE_TBT_JOB_IMAGE?ijob_id=" + ijob_id+ "&seq=" + seq, Method.POST);
+                var respone = client.Execute(request);
+                if (respone.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    r = respone.Content;
+                }
+                return r;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public job_file GET_FILE(string ijob_id, string seq)
+        {
+            try
+            {
+                job_file file = new job_file();
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_FILE/" + ijob_id + "/" + seq, Method.GET);
+                var respone = client.Execute<job_file>(request);
+                if(respone.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    file = respone.Data;
+                }
+
+                return file;
             }
             catch (Exception ex)
             {

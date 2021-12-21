@@ -35,5 +35,11 @@ namespace StoreManagement.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public IActionResult _Error(string msg)
+        {
+            ViewBag.Msg = msg;
+            return View();
+        }
+
     }
 }

@@ -73,6 +73,9 @@ function DialogSucessRedirect(sPath) {
 function DialogSucess() {
     SwAlert.Success(AlertTitle.Info, AlertMsg.SaveComplete);
 }
+function DialogSucessCallBack(funcCallBack) {
+    SwAlert.Success(AlertTitle.Info, AlertMsg.SaveComplete, funcCallBack);
+}
 
 function DialogDeleteError() {
     SwAlert.Error(AlertTitle.Warning, AlertMsg.DeleteFail);

@@ -87,7 +87,7 @@ namespace StoreManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult CloseJob(CLOSEJOB data, FileUpLoad[] arr_file,string SIGNNATURE)
+        public IActionResult CloseJob(CLOSEJOB data, FileUpLoad[] arr_file, string SIGNNATURE)
         {
             CResutlWebMethod result = new CResutlWebMethod();
             try
@@ -215,7 +215,7 @@ namespace StoreManagement.Controllers
                     throw new Exception("ไม่พบ JOB_ID");
                 }
 
-                str = SysFunctions.Decrypt_UrlDecode(str);
+                str = Decrypt_UrlDecode(str);
 
                 CLOSEJOB Model = new CLOSEJOB();
 
@@ -223,10 +223,21 @@ namespace StoreManagement.Controllers
                 if (CLOSE_JOB_DETAIL != null)
                 {
                     Model = CLOSE_JOB_DETAIL;
-                    if(Model.JOB_DETAIL == null)
+                    if (Model.JOB_DETAIL == null)
                     {
                         Model.JOB_DETAIL = new tbt_job_detail();
                     }
+
+                    if (Model.IMAGE_DETAIL == null)
+                    {
+                        Model.IMAGE_DETAIL = new List<tbt_job_image>();
+                    }
+                }
+
+                foreach (var item in Model.IMAGE_DETAIL)
+                {
+                    item.IJOB_ID_ENCRYPT = Encrypt_UrlEncrypt(item.IJOB_ID);
+                    item.SEQ_ENCRYPT = Encrypt_UrlEncrypt(item.SEQ);
                 }
 
                 var CHECK_LIST_MASTER = GET_CHECKLIST();
@@ -287,12 +298,12 @@ namespace StoreManagement.Controllers
                     var arr = SIGNATURE.Split(',');
 
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
-                    if(imageBytes.Length == 3416)
+                    if (imageBytes.Length == 3416)
                     {
                         throw new Exception("ระบุ ลายเช็นต์");
                     }
 
-                    System.IO.File.WriteAllBytes(imgPath, imageBytes);            
+                    System.IO.File.WriteAllBytes(imgPath, imageBytes);
                     DataFile df = new DataFile(imgPath);
 
                     fu.IsDelete = false;
@@ -327,5 +338,58 @@ namespace StoreManagement.Controllers
         //    public string SaveToPath { get; set; }
         //    public string sSize { get; set; }
         //}
+
+        public IActionResult ViewImage(string IJOB_ID, string SEQ)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(IJOB_ID) && string.IsNullOrWhiteSpace(SEQ))
+                {
+                    throw new Exception("IJOB_ID or SEQ is null");
+                }
+
+                IJOB_ID = Decrypt_UrlDecode(IJOB_ID);
+                SEQ = Decrypt_UrlDecode(SEQ);
+
+                var file = GET_FILE(IJOB_ID, SEQ);
+                if (file == null)
+                {
+                    throw new Exception("ไม่พบ ไฟล์");
+                }
+                
+                return File(Convert.FromBase64String(file.FileData), file.ContentType);
+                //return View(file);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("_Error", "Home",new { msg  = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+            }
+
+        }
+
+        [HttpPost]
+        public IActionResult DeleteImageDetail(string IJOB_ID, string SEQ)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(IJOB_ID) && string.IsNullOrWhiteSpace(SEQ))
+                {
+                    throw new Exception("IJOB_ID or SEQ is null");
+                }
+
+                IJOB_ID = Decrypt_UrlDecode(IJOB_ID);
+                SEQ = Decrypt_UrlDecode(SEQ);
+                result.Msg = TERMINATE_TBT_JOB_IMAGE(IJOB_ID, SEQ);
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                result.Status = SysFunctions.process_Failed;
+            }
+
+            return Json(result);
+        }
+
     }
 }

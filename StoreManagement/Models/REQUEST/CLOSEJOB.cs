@@ -91,7 +91,9 @@ namespace StoreManagement.Models
     public class tbt_job_image
     {
         public string IJOB_ID { get; set; }
+        public string IJOB_ID_ENCRYPT { get; set; }
         public string SEQ { get; set; }
+        public string SEQ_ENCRYPT { get; set; }
         public string IMG_NAME { get; set; }
         public string IMAGE_DESCRIPTION { get; set; }
         public string IMG_PATH { get; set; }

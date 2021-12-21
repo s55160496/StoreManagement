@@ -576,32 +576,33 @@
                                                 </div>
 
                                                 <div class="form-group col-md-12">
-                                                    <table style="width:100%" class="table tableData">
+                                                    <table id="tbImage_Detail" style="width:100%" class="table tableData">
                                                         <thead class="thead-HMCPO darkCustom">
                                                             <tr>
                                                                 <th style="text-align:center">#</th>
                                                                 <th style="text-align:center">IMAGE_DESCRIPTION</th>
                                                                 <th style="text-align:center">IMAGE_NAME</th>
                                                                 <th style="text-align:center"></th>
+                                                                <th style="text-align:center"></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @{
-                                                                if (Model.IMAGE_DETAIL != null && Model.IMAGE_DETAIL.Any())
-                                                                {
-                                                                    int i = 1;
-                                                                    foreach (var item in Model.IMAGE_DETAIL)
+                                                            @*@{
+                                                                    if (Model.IMAGE_DETAIL != null && Model.IMAGE_DETAIL.Any())
                                                                     {
-                                                                        <tr>
-                                                                            <td style="text-align:center">@i</td>
-                                                                            <td style="text-align:left">@item.IMAGE_DESCRIPTION</td>
-                                                                            <td style="text-align: left">@item.IMG_NAME</td>
-                                                                            <td style="text-align:center"><a href="" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a></td>
-                                                                        </tr>
-                                                                        i++;
+                                                                        int i = 1;
+                                                                        foreach (var item in Model.IMAGE_DETAIL)
+                                                                        {
+                                                                            <tr>
+                                                                                <td style="text-align:center">@i</td>
+                                                                                <td style="text-align:left">@item.IMAGE_DESCRIPTION</td>
+                                                                                <td style="text-align: left">@item.IMG_NAME</td>
+                                                                                <td style="text-align:center"><a href="" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a></td>
+                                                                            </tr>
+                                                                            i++;
+                                                                        }
                                                                     }
-                                                                }
-                                                            }
+                                                                }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -716,13 +717,16 @@
     </script>
 
     @* TAB JOB DETAIL *@
-<script type="text/javascript">
+    <script type="text/javascript">
     var arrJobParts = @Html.Raw(Json.Serialize(Model.JOB_PARTS)) == null ? [] : @Html.Raw(Json.Serialize(Model.JOB_PARTS));
+    var arrImage_Detail = @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL)) == null ? [] : @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL));
+
     var arr_sparepart = @Html.Raw(Json.Serialize(ViewData["SPAREPART"]));
     var UrlCreateJobParts = '@Url.Action("CreateJobParts","Job")';
 
     $(document).ready(function () {
         BindTBJobParts();
+        BindDataTableImageDetail();
 
         $('#btnAddJobParts').on('click', function () {
 
@@ -832,7 +836,61 @@
         }
     }
 
-</script>
+    function BindDataTableImageDetail() {
+        $("#tbImage_Detail tbody").html("");
+            let html = '';
+            $.each(arrImage_Detail, function (i, el) {
+                let td = '';
+                td = '<td class="text-center">' + (i+1)+ '</td>';
+                td += '<td>' + (el.IMAGE_DESCRIPTION || '') + '</td>';
+                td += '<td>' + (el.IMG_NAME || '') + '</td>';
+                td += '<td class="text-center">' + '<a href="@Url.Action("ViewImage", "Job")' + '?IJOB_ID=' + el.IJOB_ID_ENCRYPT + '&&SEQ=' + el.SEQ_ENCRYPT + '" target="_blank" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>' + '</td>';
+                td += '<td class="text-center">' + `<a href="javascript:function() { return false; }" onclick="DeleteImageDetail('${ el.IJOB_ID_ENCRYPT } ','${ el.SEQ_ENCRYPT }')" class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i></a>` + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+        $("table[id$=tbImage_Detail] tbody").html(html);
+        let table = $('#tbImage_Detail').DataTable({
+            //scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [
+                [0, 'asc']
+            ]
+        });
+    }
+
+    function DeleteImageDetail(id, seq) {
+        DialogConfirmDel(function () {
+            swal.disableButtons();
+            BlockUI();
+            $.ajax({
+                url: '@Url.Action("DeleteImageDetail", "Job")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'IJOB_ID':id,'SEQ':seq },
+                success: function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut();
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.Failed) {
+                        DialogWarning(response.Msg);
+                    } else {
+                        DialogSucessCallBack(function () { window.location.reload()});
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+    }
+
+    </script>
 
     @* TAB CHECK LIST *@
     <script type="text/javascript">

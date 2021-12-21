@@ -16,7 +16,7 @@ namespace StoreManagement.App_Extension
         public static string process_Duplicate { get { return "DUP"; } }
         public static string process_SaveFail { get { return "SaveFail"; } }
 
-        public  class CResutlWebMethod
+        public class CResutlWebMethod
         {
             public int ID { get; set; }
             public string Status { get; set; }
@@ -157,11 +157,25 @@ namespace StoreManagement.App_Extension
         public static string Decrypt_UrlDecode(string sValue)
         {
             string result = "";
-            if (!string.IsNullOrEmpty(sValue))
+            try
             {
-                result = STCrypt.Decrypt(sValue);
+                if (!string.IsNullOrEmpty(sValue))
+                {
+                    result = STCrypt.Decrypt(sValue);
+                    //result = STCrypt.Decrypt(System.Net.WebUtility.UrlDecode(sValue));
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrEmpty(sValue))
+                {
+                    //result = STCrypt.Decrypt(sValue);
+                    result = STCrypt.Decrypt(System.Net.WebUtility.UrlDecode(sValue));
+                }
             }
             return result;
+
+           
         }
     }
 }
