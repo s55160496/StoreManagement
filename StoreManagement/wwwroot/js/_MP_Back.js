@@ -1,4 +1,6 @@
-﻿var MediaWidth = {
+﻿////const { debug } = require("console");
+
+var MediaWidth = {
     MoreThan: function (nWidth, orEqual) {
         orEqual = Boolean(orEqual);
         nWidth = nWidth + (orEqual ? 0 : 1);
@@ -46,4 +48,12 @@ $(function () {
 
     Menu_Preparing();
     //Header_Preparing();
+
+    $('.treeview').click(function () {
+        console.log($(this).children('ul.treeview-menu'));
+        $(this).children('ul.treeview-menu').toggle(200);
+    });
+
+    $('.treeview').parent().children('ul.treeview-menu').toggle(200);
+
 });

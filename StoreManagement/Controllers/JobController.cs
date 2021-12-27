@@ -113,10 +113,15 @@ namespace StoreManagement.Controllers
 
                     var arr = SIGNNATURE.Split(',');
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
-                    if (imageBytes.Length == 3416)
+                    
+                    if(data.FLG_CLOSE == "Y")
                     {
-                        throw new Exception("ระบุ ลายเช็นต์");
+                        if (imageBytes.Length == 3416)
+                        {
+                            throw new Exception("ระบุ ลายเช็นต์");
+                        }
                     }
+  
                     System.IO.File.WriteAllBytes(imgPath, imageBytes);
 
                     if (data.JOB_IMAGES == null)

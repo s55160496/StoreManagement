@@ -621,6 +621,7 @@
 </div>
 <div class="card-footer bg-light">
     <div class="col-sm-12 text-center">
+        <button id="btnDraft" type="button" class="btn btn-info" title="Draft" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Save Draft</button>
         <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Submit</button>
         <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
     </div>
@@ -942,21 +943,20 @@
     @* SAVE DATA *@
     <script type="text/javascript">
     $(document).ready(function () {
-        var IsSignature = false;
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
 
         $('#btnSubmit').on('click', function () {
-           // if (IsSignature) {
-                SAVEDATA();
-            //} else {
-            //    DialogWarning("ระบุ ลายเช็นต์");
-            //}
+            SAVEDATA('Y');
+        });
+
+        $('#btnDraft').on('click', function () {
+            SAVEDATA('N');
         });
     });
 
-    function SAVEDATA() {
+    function SAVEDATA(flg) {
 
         DialogConfirmSubmit(function () {
             swal.disableButtons();
@@ -1012,7 +1012,7 @@
                 //   }
                 //],
                 'JOB_PARTS': arrJobParts,
-                'FLG_CLOSE': 'Y'
+                'FLG_CLOSE': flg
             };
             BlockUI();
             $.ajax({
@@ -1082,7 +1082,6 @@
     });
 
         function ControlSignature(IsHas) {
-            IsSignature = IsHas;
             if (IsHas === true) {
                 $('#signatureparent').hide();
                 $('#PreviewSignature').show();

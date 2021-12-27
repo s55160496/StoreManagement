@@ -81,29 +81,14 @@
 
                         <div class="form-group col-md-4">
                             <label for="ddlLocation_ID">Location ID</label>
-                            <select @(EDIT_FLG == "N" ? "disabled" : "") id="ddlLocation_ID" name="ddlLocation_ID" class="form-control">
+                            <select id="ddlLocation_ID" name="ddlLocation_ID" class="form-control">
                                 <option value="" selected>Choose...</option>
                                 @{
                                     if (LOCATION != null && LOCATION.Any())
                                     {
                                         foreach (var item in LOCATION)
                                         {
-                                            if (@EDIT_FLG == "N")
-                                            {
-                                                if (item.LOCATION_ID == "001")
-                                                {
-                                                    <option selected value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
-                                            }
-
+                                            <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
                                         }
                                     }
                                 }

@@ -1,4 +1,6 @@
-﻿var msgAlert = {
+﻿////const { debug } = require("console");
+
+var msgAlert = {
     HeadConfDel: 'Do you want to delete data?',
     HeadConfBack: 'Do you want to go previous page ?',
     HeadDelComplete: 'Delete complete',
@@ -623,30 +625,30 @@ function DataSort(sDirection, fnByAscending, fnByDescending) {
     else fnByDescending();
 }
 
-function SetActiveMenu() {
-    /*menu handler*/
-    var arrPath = window.location.pathname.split('/');
-    var action = arrPath[arrPath.length - 1].toLowerCase();
+//function SetActiveMenu() {
+//    /*menu handler*/
+//    var arrPath = window.location.pathname.split('/');
+//    var action = arrPath[arrPath.length - 1].toLowerCase();
 
-    // If there's no action, highlight the first menu item
-    if (action == "") {
-        $('ul li:first').addClass('active');
-    } else {
-        action = action.replace('_edit', '');
+//    // If there's no action, highlight the first menu item
+//    if (action == "") {
+//        $('ul li:first').addClass('active');
+//    } else {
+//        action = action.replace('_edit', '');
 
-        // Highlight current menu
-        if ("etk_verify.aspx" == action || "etk_ranking.aspx" == action || "etk_verify_lst.aspx" == action || "etk_ranking_lst.aspx" == action) {
-            var type = window.location.href.split('?')[1].split('=')[1].substring(1, 0);
-            $('ul.cd-primary-nav li#sMenu_3' + type).addClass('active');
-            $('ul.cd-primary-nav li#sMenu_3' + type).parent().parent().addClass('active');
-        } else {
-            $('ul.cd-primary-nav li a[href="' + action + '"]').parent().addClass('active');
-        }
+//        // Highlight current menu
+//        if ("etk_verify.aspx" == action || "etk_ranking.aspx" == action || "etk_verify_lst.aspx" == action || "etk_ranking_lst.aspx" == action) {
+//            var type = window.location.href.split('?')[1].split('=')[1].substring(1, 0);
+//            $('ul.cd-primary-nav li#sMenu_3' + type).addClass('active');
+//            $('ul.cd-primary-nav li#sMenu_3' + type).parent().parent().addClass('active');
+//        } else {
+//            $('ul.cd-primary-nav li a[href="' + action + '"]').parent().addClass('active');
+//        }
 
-        //// Highlight parent menu item
-        $('ul.cd-primary-nav li a[href="' + action + '"]').parent().parent().parent().addClass('active');
-    }
-}
+//        //// Highlight parent menu item
+//        $('ul.cd-primary-nav li a[href="' + action + '"]').parent().parent().parent().addClass('active');
+//    }
+//}
 
 function BlockUI() {
     $.blockUI({
