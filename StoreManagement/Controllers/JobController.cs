@@ -263,8 +263,7 @@ namespace StoreManagement.Controllers
             }
             catch (Exception ex)
             {
-
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
             }
         }
 

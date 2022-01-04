@@ -376,6 +376,45 @@ namespace StoreManagement.Controllers
             }
         }
 
+        public List<TBT_ADJ_SPAREPART> GET_TBT_ADJ_SPAREPART()
+        {
+            try
+            {
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBT_ADJ_SPAREPART", Method.GET);
+                return client.Execute<List<TBT_ADJ_SPAREPART>>(request).Data;
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+        }
+
+        //public string INSERT_TBT_ADJ_SPAREPART(TBT_ADJ_SPAREPART req)
+        //{
+        //    try
+        //    {
+        //        var client = new RestClient(URL_API);
+        //        var request = new RestRequest("INSERT_TBT_ADJ_SPAREPART", Method.POST);
+        //        request.AddJsonBody(req);
+
+        //        IRestResponse response = client.Execute(request);
+        //        if (response.IsSuccessful)
+        //        {
+        //            var content = response.Content;
+
+        //        }
+        //        else
+        //        {
+        //            throw new Exception(response.Content);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw ex;
+        //    }
+        //}
     }
 }
