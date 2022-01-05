@@ -73,9 +73,15 @@ namespace StoreManagement.Controllers
             HttpStatusCode code = HttpStatusCode.OK;
             try
             {
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBM_CUSTOMER", Method.POST);
-
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
@@ -230,9 +236,15 @@ namespace StoreManagement.Controllers
             HttpStatusCode code = HttpStatusCode.OK;
             try
             {
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("TERMINATE_TBM_CUSTOMER", Method.POST);
-
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);

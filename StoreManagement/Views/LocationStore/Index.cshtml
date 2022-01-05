@@ -75,7 +75,13 @@ var urlSearchData = "@Url.Action("GetData", "LocationStore")";
             data: { 'data': obj },
             success: function (response) {
                 UnblockUI();
-                BindDataTable(response);
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    BindDataTable(response.data);
+                }
             },
             error: function () {
             }
@@ -174,7 +180,7 @@ var urlSearchData = "@Url.Action("GetData", "LocationStore")";
                 success: function (response) {
                     UnblockUI();
                     if (response.Status == SysProcess.SessionExpired) {
-                        PopupSessionTimeOut();
+                        PopupSessionTimeOut('@Url.Action("Index","Login")');
                     } else if (response.Status == SysProcess.Duplicate) {
                         DialogDuplicate();
                     } else if (response.Status == SysProcess.Failed) {

@@ -93,34 +93,34 @@
     <title>@ViewBag.Title</title>
 
     @*<style>
-        #SITE_NAVSIDE a {
-            color: #ffffff;
-            text-decoration: none;
-            background-color: transparent;
-        }
-
-            #SITE_NAVSIDE a:hover {
+            #SITE_NAVSIDE a {
                 color: #ffffff;
                 text-decoration: none;
                 background-color: transparent;
             }
 
-        #headTitle a {
-            color: #ffffff;
-            text-decoration: none;
-            background-color: transparent;
-        }
+                #SITE_NAVSIDE a:hover {
+                    color: #ffffff;
+                    text-decoration: none;
+                    background-color: transparent;
+                }
 
-        #headTitle {
-            font-size: 14px !important;
-        }
-
-            #headTitle a:hover {
+            #headTitle a {
                 color: #ffffff;
                 text-decoration: none;
                 background-color: transparent;
             }
-    </style>*@
+
+            #headTitle {
+                font-size: 14px !important;
+            }
+
+                #headTitle a:hover {
+                    color: #ffffff;
+                    text-decoration: none;
+                    background-color: transparent;
+                }
+        </style>*@
     <style type="text/css">
         a {
             color: #ffffff;
@@ -164,58 +164,93 @@
             </a>
         </li>*@
             @* @Url.Action("Index","Stock") *@
-            <li class="treeview">
-                <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "SparePart" || ViewContext.RouteData.Values["Controller"].ToString() == "AdjustPart") ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
-                    <div class="menu-label">Stock <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
-                </a>
-                <ul class="treeview-menu" style="display: none;">
-                    <li><a href="@Url.Action("Index","SparePart")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "SparePart" ? "active" : "")"><div class="menu-icon"><i class="fa fa-list-alt"></i></div><div class="menu-label">Spare Part</div></a></li>
-                    <li><a href="@Url.Action("Index","AdjustPart")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "AdjustPart" ? "active" : "")"><div class="menu-icon"><i class="fa fa-list-alt"></i></div><div class="menu-label">Adjust Part</div></a></li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="@Url.Action("Index","Vehicle")" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == "Vehicle" ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-car"></i></div>
-                    <div class="menu-label">Vehicle</div>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="@Url.Action("Index","Customer")" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == "Customer" ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-users"></i></div>
-                    <div class="menu-label">Customer</div>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="@Url.Action("Index","Employee")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Employee" ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-users"></i></div>
-                    <div class="menu-label">Employee</div>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="@Url.Action("Index","Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Job" ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-list-alt"></i></div>
-                    <div class="menu-label">Job</div>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="@Url.Action("Index","LocationStore")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "LocationStore" ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
-                    <div class="menu-label">Location Store</div>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="@Url.Action("Index","Services")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Services" ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
-                    <div class="menu-label">Services</div>
-                </a>
-            </li>
+
+            @{
+                var listMenuHead = new List<string>() { "SparePart", "AdjustPart" };
+                if (!SessionUserInfoIsExpired)
+                {
+                    if (SessionUserInfo.MENU != null && SessionUserInfo.MENU.Any())
+                    {
+                        var Q_Stock = SessionUserInfo.MENU.Where(w => listMenuHead.Contains(w.MENU_CONTROLLER)).ToList();
+                        if (Q_Stock.Any())
+                        {
+                            <li class="treeview">
+                                <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "SparePart" || ViewContext.RouteData.Values["Controller"].ToString() == "AdjustPart") ? "active" : "")">
+                                    <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
+                                    <div class="menu-label">Stock <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
+                                </a>
+                                <ul class="treeview-menu" style="display: none;">
+                                    @foreach (var item in Q_Stock)
+                                    {
+                                        <li><a href="@Url.Action("Index",item.MENU_CONTROLLER)" class="@(ViewContext.RouteData.Values["Controller"].ToString() == item.MENU_CONTROLLER ? "active" : "")"><div class="menu-icon"><i class="@item.ICON"></i></div><div class="menu-label">@item.MENU_DESCRIPTION</div></a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        foreach (var item in SessionUserInfo.MENU.Where(w => !listMenuHead.Contains(w.MENU_CONTROLLER)).ToList())
+                        {
+                            <li class="treeview">
+                                <a href="@Url.Action("Index",item.MENU_CONTROLLER)" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == item.MENU_CONTROLLER ? "active" : "")">
+                                    <div class="menu-icon"><i class="@item.ICON"></i></div>
+                                    <div class="menu-label">@item.MENU_DESCRIPTION</div>
+                                </a>
+                            </li>
+                        }
+                    }
+                }
+            }
             @*<li class="treeview">
-                <a href="@Url.Action("Index","SparePart")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "SparePart" ? "active" : "")">
-                    <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
-                    <div class="menu-label">Spare Part</div>
-                </a>
-            </li>*@
+            <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "SparePart" || ViewContext.RouteData.Values["Controller"].ToString() == "AdjustPart") ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
+                <div class="menu-label">Stock <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
+            </a>
+            <ul class="treeview-menu" style="display: none;">
+                <li><a href="@Url.Action("Index","SparePart")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "SparePart" ? "active" : "")"><div class="menu-icon"><i class="fa fa-list-alt"></i></div><div class="menu-label">Spare Part</div></a></li>
+                <li><a href="@Url.Action("Index","AdjustPart")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "AdjustPart" ? "active" : "")"><div class="menu-icon"><i class="fa fa-list-alt"></i></div><div class="menu-label">Adjust Part</div></a></li>
+            </ul>
+        </li>
+        <li class="treeview">
+            <a href="@Url.Action("Index","Vehicle")" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == "Vehicle" ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-car"></i></div>
+                <div class="menu-label">Vehicle</div>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="@Url.Action("Index","Customer")" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == "Customer" ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-users"></i></div>
+                <div class="menu-label">Customer</div>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="@Url.Action("Index","Employee")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Employee" ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-users"></i></div>
+                <div class="menu-label">Employee</div>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="@Url.Action("Index","Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Job" ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-list-alt"></i></div>
+                <div class="menu-label">Job</div>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="@Url.Action("Index","LocationStore")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "LocationStore" ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
+                <div class="menu-label">Location Store</div>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="@Url.Action("Index","Services")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Services" ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
+                <div class="menu-label">Services</div>
+            </a>
+        </li>*@
+            @*<li class="treeview">
+            <a href="@Url.Action("Index","SparePart")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "SparePart" ? "active" : "")">
+                <div class="menu-icon"><i class="fa fa-list-ul"></i></div>
+                <div class="menu-label">Spare Part</div>
+            </a>
+        </li>*@
         </ul>
     </div>
     <div id="SITE_CONTENT">
@@ -246,13 +281,13 @@
                                 <div class="name">
                                     @if (SessionUserInfoIsExpired == false)
                                     {
-                                        @SessionUserInfo.FullName
+                                        @SessionUserInfo.FULLNAME
                                     }
                                 </div>
                                 <div class="position">
                                     @if (SessionUserInfoIsExpired == false)
                                     {
-                                        @SessionUserInfo.Position
+                                        @SessionUserInfo.POSITION_DESCRIPTION
                                     }
                                 </div>
                             </div>

@@ -8,6 +8,7 @@ using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using static StoreManagement.App_Extension.SysFunctions;
@@ -29,6 +30,7 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateEmployee(string str)
         {
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 string sUser_ID = string.Empty;
@@ -39,7 +41,7 @@ namespace StoreManagement.Controllers
 
                 TBM_EMPLOYEE model = new TBM_EMPLOYEE();
 
-                var lstData = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+                var lstData = GET_TBM_EMPLOYEE(out code,new TBM_EMPLOYEE() { });
                 string EDIT_FLG = "N";
                 if (lstData != null && !string.IsNullOrEmpty(sUser_ID))
                 {
@@ -49,15 +51,21 @@ namespace StoreManagement.Controllers
 
                 ViewData["EDIT_FLG"] = EDIT_FLG;
 
-                var POSITION = GET_EMPLOYEE_POSITION();
+                var POSITION = GET_EMPLOYEE_POSITION(out code);
                 ViewData["POSITION"] = POSITION.ToArray();
 
                 return View(model);
             }
             catch (Exception ex)
             {
-
-                throw;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
             }
         }
 
@@ -65,30 +73,51 @@ namespace StoreManagement.Controllers
         public IActionResult SaveData(TBM_EMPLOYEE data)
         {
             CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 data.CREATE_BY = "1";
 
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBM_EMPLOYEE", Method.POST);
-
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
                 if (response.IsSuccessful)
                 {
                     var content = response.Content;
-
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);
@@ -97,9 +126,11 @@ namespace StoreManagement.Controllers
         [HttpPost]
         public IActionResult GetData(TBM_EMPLOYEE data)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+                var lstData = GET_TBM_EMPLOYEE(out code,new TBM_EMPLOYEE() { });
                 if (lstData != null)
                 {
                     foreach (var item in lstData)
@@ -107,13 +138,22 @@ namespace StoreManagement.Controllers
                         item.USER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.USER_ID);
                     }
                 }
-                return Json(lstData);
+                result.data = lstData;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
         }
 
         [HttpPost]
@@ -125,11 +165,17 @@ namespace StoreManagement.Controllers
                 item.ID = SysFunctions.Decrypt_UrlDecode(item.ID);
             }
             CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("TERMINATE_TBM_EMPLOYEE", Method.POST);
-
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
@@ -140,13 +186,29 @@ namespace StoreManagement.Controllers
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);

@@ -96,11 +96,8 @@
                     success: function (response) {
                         UnblockUI();
                         if (response.Status == SysProcess.SessionExpired) {
-                            PopupSessionTimeOut();
-                        } else if (response.Status == SysProcess.Duplicate) {
-                            DialogDuplicate();
+                         PopupSessionTimeOut('@Url.Action("Index","Login")');
                         } else if (response.Status == SysProcess.Failed) {
-                            //DialogSaveFail(response.Msg);
                             DialogWarning(response.Msg);
                         } else {
                             DialogSucessRedirect('@Url.Action("Index", "Services")');

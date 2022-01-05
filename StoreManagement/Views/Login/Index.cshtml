@@ -22,12 +22,12 @@
                         </span>
 
                         <div class="wrap-input100 validate-input" data-validate="Enter username">
-                            <input class="input100" type="text" id="txtUsername" name="txtUsername" placeholder="Username">
+                            <input class="input100" type="text" id="txtUsername" name="txtUsername" required placeholder="Username">
                             <span class="focus-input100" data-placeholder="&#xf207;"></span>
                         </div>
 
                         <div class="wrap-input100 validate-input" data-validate="Enter password">
-                            <input class="input100" type="password" id="txtPassword" name="txtPassword" placeholder="Password">
+                            <input class="input100" type="password" id="txtPassword" name="txtPassword" required placeholder="Password">
                             <span class="focus-input100" data-placeholder="&#xf191;"></span>
                         </div>
 
@@ -43,5 +43,44 @@
 
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        $('#btnLogin').on('click', function () {
+            if (GetValTextBox('txtUsername') == "" && GetValTextBox('txtPassword') == "") {
+                DialogWarning('Username or Password is null');
+            } else {
+                swal.disableButtons();
+                var obj = {
+                    'USERNAME': GetValTextBox('txtUsername'),
+                    'PASSWORD': GetValTextBox('txtPassword'),
+                };
+                BlockUI();
+
+                $.ajax({
+                    url: '@Url.Action("Authenticate", "Login")',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { 'data': obj },
+                    success: function (response) {
+                        UnblockUI();
+                        if (response.Status == SysProcess.SessionExpired) {
+                            PopupSessionTimeOut('@Url.Action("Index", "Login")');
+                        } else if (response.Status == SysProcess.Duplicate) {
+                            DialogDuplicate();
+                        } else if (response.Status == SysProcess.Failed) {
+                            DialogWarning(response.Msg);
+                        } else {
+                            window.location.href = '@Url.Action("Index", "Job")';
+                            //DialogSucessRedirect('@Url.Action("Index", "Job")');
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 

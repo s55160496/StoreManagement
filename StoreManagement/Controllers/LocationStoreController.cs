@@ -71,29 +71,50 @@ namespace StoreManagement.Controllers
         public IActionResult SaveData(TBM_LOCATION_STORE data)
         {
             CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 data.CREATE_BY = "1";
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBM_LOCATION_STORE", Method.POST);
-
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
                 if (response.IsSuccessful)
                 {
                     var content = response.Content;
-
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);
@@ -102,9 +123,11 @@ namespace StoreManagement.Controllers
         [HttpPost]
         public IActionResult GetData(TBM_LOCATION_STORE data)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_TBM_LOCATION_STORE(new TBM_LOCATION_STORE() { });
+                var lstData = GET_TBM_LOCATION_STORE(out code,new TBM_LOCATION_STORE() { });
                 if (lstData != null && lstData.Any())
                 {
                     foreach (var item in lstData)
@@ -112,13 +135,22 @@ namespace StoreManagement.Controllers
                         item.LOCATION_ID_ENCRYPT = Encrypt_UrlEncrypt(item.LOCATION_ID);
                     }
                 }
-                return Json(lstData);
+                result.data = lstData;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
         }
 
         [HttpPost]
@@ -130,11 +162,17 @@ namespace StoreManagement.Controllers
                 item.ID = SysFunctions.Decrypt_UrlDecode(item.ID);
             }
             CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("TERMINATE_TBM_LOCATION_STORE", Method.POST);
-
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
@@ -145,13 +183,29 @@ namespace StoreManagement.Controllers
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);

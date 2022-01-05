@@ -25,7 +25,7 @@ namespace StoreManagement.Controllers
 
         public IActionResult Index()
         {
-            return View();
+                return View();
         }
 
         public IActionResult CreateJob()
@@ -91,7 +91,12 @@ namespace StoreManagement.Controllers
 
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("CREATEJOB", Method.POST);
-
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);
@@ -209,7 +214,12 @@ namespace StoreManagement.Controllers
 
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("CLOSEJOB", Method.POST);
-
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
                 IRestResponse response = client.Execute(request);

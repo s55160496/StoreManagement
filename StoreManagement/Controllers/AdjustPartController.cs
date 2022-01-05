@@ -21,6 +21,7 @@ namespace StoreManagement.Controllers
             HttpStatusCode code = HttpStatusCode.OK;
             try
             {
+
                 List<TBT_ADJ_SPAREPART> Model = new List<TBT_ADJ_SPAREPART>();
                 
                 Model = GET_TBT_ADJ_SPAREPART(out code);

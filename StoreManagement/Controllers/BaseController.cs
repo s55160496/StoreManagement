@@ -32,30 +32,30 @@ namespace StoreManagement.Controllers
             URL_API = _configuration.GetValue<string>("URL_API");
         }
 
-        public JsonResult VerifyUserLogin(LOGIN data)
-        {
-            CResutlWebMethod result = new CResutlWebMethod();
-            HttpStatusCode code = HttpStatusCode.OK;
-            try
-            {
-                VerifyUser(out code,data);
-                //return Json(new { IsSuccess = false, data = "" });
-            }
-            catch (Exception ex)
-            {
-                result.Msg = ex.Message;
-                if (code == HttpStatusCode.Unauthorized)
-                {
-                    result.Status = SysFunctions.process_SessionExpired;
-                }
-                else
-                {
-                    result.Status = SysFunctions.process_Failed;
-                }
-            }
+        //public JsonResult VerifyUserLogin(LOGIN data)
+        //{
+        //    CResutlWebMethod result = new CResutlWebMethod();
+        //    HttpStatusCode code = HttpStatusCode.OK;
+        //    try
+        //    {
+        //        VerifyUser(out code,data);
+        //        //return Json(new { IsSuccess = false, data = "" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        result.Msg = ex.Message;
+        //        if (code == HttpStatusCode.Unauthorized)
+        //        {
+        //            result.Status = SysFunctions.process_SessionExpired;
+        //        }
+        //        else
+        //        {
+        //            result.Status = SysFunctions.process_Failed;
+        //        }
+        //    }
 
-            return Json(result);
-        }
+        //    return Json(result);
+        //}
 
         public void VerifyUser(out HttpStatusCode code, LOGIN data)
         {
@@ -64,7 +64,8 @@ namespace StoreManagement.Controllers
                 throw new Exception("Username or Password is null");
             }
             code = HttpStatusCode.OK;
-            var dataLogin = LOGIN(out code, data);
+            var dataLogin = VerifyUserLogin(out code, data);
+
             //data.nUserID = 1;
             //data.Name = "Phongsawat";
             //data.SurName = "Pipatpholchailkul";
@@ -86,7 +87,7 @@ namespace StoreManagement.Controllers
             return HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount) == null;
         }
 
-        public TM_User LOGIN(out HttpStatusCode code, LOGIN req)
+        public TM_User VerifyUserLogin(out HttpStatusCode code, LOGIN req)
         {
             try
             {
@@ -105,6 +106,10 @@ namespace StoreManagement.Controllers
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
                     }
                     else
                     {
@@ -127,6 +132,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_PROVINCE", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<PROVINCE>>(request);
                 if (response.IsSuccessful)
                 {
@@ -160,6 +170,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_DISTRICT/" + PROVINCE_CODE, Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<DISTRICT>>(request);
                 if (response.IsSuccessful)
                 {
@@ -193,6 +208,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_SUB_DISTRICT/" + DISTRICT_CODE, Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<SUB_DISTRICT>>(request);
                 if (response.IsSuccessful)
                 {
@@ -226,6 +246,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_EMPLOYEE_POSITION", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<EMPLOYEE_POSITION>>(request);
                 if (response.IsSuccessful)
                 {
@@ -259,6 +284,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_JOBTYPE", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<JOBTYPE>>(request);
                 if (response.IsSuccessful)
                 {
@@ -292,6 +322,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_UNIT", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<UNIT>>(request);
                 if (response.IsSuccessful)
                 {
@@ -325,6 +360,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_EMPLOYEE", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(req);
                 var response = client.Execute<List<TBM_EMPLOYEE>>(request);
                 if (response.IsSuccessful)
@@ -360,6 +400,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_VEHICLE", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(req);
                 var response = client.Execute<List<TBM_VEHICLE>>(request);
                 if (response.IsSuccessful)
@@ -394,6 +439,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_CUSTOMER", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(req);
                 var response = client.Execute<List<TBM_CUSTOMER>>(request);
                 if (response.IsSuccessful)
@@ -428,6 +478,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_CUSTOMER_BY_JOB?license_no=" + license_no, Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<TBM_CUSTOMER>>(request);
                 if (response.IsSuccessful)
                 {
@@ -461,6 +516,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_LOCATION_STORE", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(req);
                 var response = client.Execute<List<TBM_LOCATION_STORE>>(request);
                 if (response.IsSuccessful)
@@ -495,6 +555,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_SERVICES", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(req);
                 var response = client.Execute<List<TBM_SERVICES>>(request);
                 if (response.IsSuccessful)
@@ -529,6 +594,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_SPAREPART", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(req);
                 var response = client.Execute<List<TBM_SPAREPART>>(request);
                 if (response.IsSuccessful)
@@ -563,6 +633,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_BRAND", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<TBM_BRAND>>(request);
                 if (response.IsSuccessful)
                 {
@@ -598,6 +673,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_JOBDETAIL_LIST/" + user_id, Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<JOBDETAIL_LIST>>(request);
                 if (response.IsSuccessful)
                 {
@@ -631,6 +711,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_JOBDETAIL?job_id=" + job_id, Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<CLOSEJOB>(request);
                 if (response.IsSuccessful)
                 {
@@ -663,6 +748,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("CHECKLIST", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<CHECKLIST>>(request);
                 if (response.IsSuccessful)
                 {
@@ -698,6 +788,11 @@ namespace StoreManagement.Controllers
                 string r = string.Empty;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("TERMINATE_TBT_JOB_IMAGE?ijob_id=" + ijob_id + "&seq=" + seq, Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute(request);
                 if (response.IsSuccessful)
                 {
@@ -730,6 +825,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_FILE/" + ijob_id + "/" + seq, Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<job_file>(request);
                 if (response.IsSuccessful)
                 {
@@ -762,6 +862,11 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBT_ADJ_SPAREPART", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 var response = client.Execute<List<TBT_ADJ_SPAREPART>>(request);
                 if (response.IsSuccessful)
                 {

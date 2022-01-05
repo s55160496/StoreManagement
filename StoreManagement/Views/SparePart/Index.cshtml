@@ -82,7 +82,6 @@ var urlSearchData = "@Url.Action("GetData", "SparePart")";
     });
 
     function Delete() {
-        debugger
         let table = $('#tbSearchData').DataTable();
         let arr = [];
         let checkedvalues = table.$('input:checked').each(function () {
@@ -132,7 +131,13 @@ var urlSearchData = "@Url.Action("GetData", "SparePart")";
             data: { 'data': obj },
             success: function (response) {
                 UnblockUI();
-                BindDataTable(response);
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    BindDataTable(response.data);
+                }
             },
             error: function () {
             }

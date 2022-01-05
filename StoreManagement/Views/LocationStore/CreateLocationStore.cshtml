@@ -76,7 +76,7 @@
                     success: function (response) {
                         UnblockUI();
                         if (response.Status == SysProcess.SessionExpired) {
-                            PopupSessionTimeOut();
+                           PopupSessionTimeOut('@Url.Action("Index","Login")');
                         } else if (response.Status == SysProcess.Duplicate) {
                             DialogDuplicate();
                         } else if (response.Status == SysProcess.Failed) {

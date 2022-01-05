@@ -68,7 +68,14 @@ var urlSearchData = "@Url.Action("GetData", "Employee")";
             data: { 'data': obj },
             success: function (response) {
                 UnblockUI();
-                BindDataTable(response);
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    BindDataTable(response.data);
+                }
+
             },
             error: function () {
             }
@@ -170,11 +177,8 @@ var urlSearchData = "@Url.Action("GetData", "Employee")";
                 success: function (response) {
                     UnblockUI();
                     if (response.Status == SysProcess.SessionExpired) {
-                        PopupSessionTimeOut();
-                    } else if (response.Status == SysProcess.Duplicate) {
-                        DialogDuplicate();
+                        PopupSessionTimeOut('@Url.Action("Index","Login")');
                     } else if (response.Status == SysProcess.Failed) {
-                        //DialogSaveFail(response.Msg);
                         DialogWarning(response.Msg);
                     } else {
                         DialogSucessRedirect('@Url.Action("Index","Employee")');
