@@ -16,6 +16,7 @@ namespace StoreManagement.App_Extension
         public static string process_Duplicate { get { return "DUP"; } }
         public static string process_SaveFail { get { return "SaveFail"; } }
 
+
         public class CResutlWebMethod
         {
             public int ID { get; set; }

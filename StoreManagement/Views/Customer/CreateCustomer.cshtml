@@ -177,13 +177,13 @@
                     success: function (response) {
                         UnblockUI();
                         if (response.Status == SysProcess.SessionExpired) {
-                            PopupSessionTimeOut();
+                            PopupSessionTimeOut('@Url.Action("Index","Login")');
                         } else if (response.Status == SysProcess.Duplicate) {
                             DialogDuplicate();
                         } else if (response.Status == SysProcess.Failed) {
                             //DialogSaveFail(response.Msg);
                             DialogWarning(response.Msg);
-                        } else {
+                        }else {
                             DialogSucessRedirect('@Url.Action("Index","Customer")');
                         }
                     },
@@ -225,20 +225,24 @@
             data: { 'PROVINCE_CODE': province_code },
             success: function (response) {
                 UnblockUI();
-                $('#ddlDistrict').html("");
-                if (response != undefined && response != null) {
-                    $("#ddlDistrict").append("<option value='' selected>Choose...</option>");
-                    $.each(response, function (i, el) {
-                        if (district_code != undefined && district_code != "" && district_code != null) {
-                            if (district_code == el.DISTRICT_CODE) {
-                                $("#ddlDistrict").append("<option selected data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else {
+                    $('#ddlDistrict').html("");
+                    if (response.data != undefined && response.data != null) {
+                        $("#ddlDistrict").append("<option value='' selected>Choose...</option>");
+                        $.each(response.data, function (i, el) {
+                            if (district_code != undefined && district_code != "" && district_code != null) {
+                                if (district_code == el.DISTRICT_CODE) {
+                                    $("#ddlDistrict").append("<option selected data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
+                                } else {
+                                    $("#ddlDistrict").append("<option data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
+                                }
                             } else {
                                 $("#ddlDistrict").append("<option data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
                             }
-                        } else {
-                            $("#ddlDistrict").append("<option data-zip=\"" + el.ZIP_CODE + "\" value=\"" + el.DISTRICT_CODE + "\">" + el.DISTRICT_NAME_THA + "</option>");
-                        }
-                    });
+                        });
+                    }
                 }
             },
             error: function () {
@@ -255,21 +259,24 @@
             data: { 'district_code': district_code },
             success: function (response) {
                 UnblockUI();
-                $('#ddlSub_District').html("");
-                debugger
-                if (response != undefined && response != null) {
-                    $("#ddlSub_District").append("<option value='' selected>Choose...</option>");
-                    $.each(response, function (i, el) {
-                        if (sub_district_code != undefined && sub_district_code != "" && sub_district_code != null) {
-                            if (sub_district_code == el.SUB_DISTRICT_CODE) {
-                                $("#ddlSub_District").append("<option selected value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else {
+                    $('#ddlSub_District').html("");
+                    if (response.data != undefined && response.data != null) {
+                        $("#ddlSub_District").append("<option value='' selected>Choose...</option>");
+                        $.each(response.data, function (i, el) {
+                            if (sub_district_code != undefined && sub_district_code != "" && sub_district_code != null) {
+                                if (sub_district_code == el.SUB_DISTRICT_CODE) {
+                                    $("#ddlSub_District").append("<option selected value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
+                                } else {
+                                    $("#ddlSub_District").append("<option value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
+                                }
                             } else {
                                 $("#ddlSub_District").append("<option value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
                             }
-                        } else {
-                            $("#ddlSub_District").append("<option value=\"" + el.SUB_DISTRICT_CODE + "\">" + el.SUB_DISTRICT_NAME_THA + "</option>");
-                        }
-                    });
+                        });
+                    }
                 }
             },
             error: function () {

@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RestSharp;
+using StoreManagement.App_Extension;
 using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
@@ -29,35 +32,47 @@ namespace StoreManagement.Controllers
             URL_API = _configuration.GetValue<string>("URL_API");
         }
 
-        public JsonResult VerifyUserLogin(TM_User data)
+        public JsonResult VerifyUserLogin(LOGIN data)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                VerifyUser(data);
-                return Json(new { IsSuccess = false, data = "" });
+                VerifyUser(out code,data);
+                //return Json(new { IsSuccess = false, data = "" });
             }
             catch (Exception ex)
             {
-
-                return Json(new { IsSuccess = false, ErrorMsg = ex.Message });
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
         }
 
-        public void VerifyUser(TM_User data)
+        public void VerifyUser(out HttpStatusCode code, LOGIN data)
         {
-            if (string.IsNullOrWhiteSpace(data.Username) || string.IsNullOrWhiteSpace(data.Password))
+            if (string.IsNullOrWhiteSpace(data.USERNAME) || string.IsNullOrWhiteSpace(data.PASSWORD))
             {
                 throw new Exception("Username or Password is null");
             }
-
-            data.nUserID = 1;
-            data.Name = "Phongsawat";
-            data.SurName = "Pipatpholchailkul";
-            data.Position = "Administrator";
-            data.FullName = data.Name + " " + data.SurName;
+            code = HttpStatusCode.OK;
+            var dataLogin = LOGIN(out code, data);
+            //data.nUserID = 1;
+            //data.Name = "Phongsawat";
+            //data.SurName = "Pipatpholchailkul";
+            //data.Position = "Administrator";
+            //data.FullName = data.Name + " " + data.SurName;
 
             HttpContext.Session.Remove(UserAccount);
-            HttpContext.Session.SetObjectAsJson(UserAccount, data);
+            HttpContext.Session.SetObjectAsJson(UserAccount, dataLogin);
 
         }
 
@@ -71,13 +86,65 @@ namespace StoreManagement.Controllers
             return HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount) == null;
         }
 
-        public List<PROVINCE> GET_PROVINCE()
+        public TM_User LOGIN(out HttpStatusCode code, LOGIN req)
         {
             try
             {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("Login", Method.POST);
+                request.AddJsonBody(req);
+                var response = client.Execute<TM_User>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public List<PROVINCE> GET_PROVINCE(out HttpStatusCode code)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_PROVINCE", Method.GET);
-                return client.Execute<List<PROVINCE>>(request).Data;
+                var response = client.Execute<List<PROVINCE>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -86,13 +153,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<DISTRICT> GET_DISTRICT(string PROVINCE_CODE)
+        public List<DISTRICT> GET_DISTRICT(out HttpStatusCode code, string PROVINCE_CODE)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_DISTRICT/" + PROVINCE_CODE, Method.GET);
-                return client.Execute<List<DISTRICT>>(request).Data;
+                var response = client.Execute<List<DISTRICT>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -101,13 +186,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<SUB_DISTRICT> GET_SUB_DISTRICT(string DISTRICT_CODE)
+        public List<SUB_DISTRICT> GET_SUB_DISTRICT(out HttpStatusCode code, string DISTRICT_CODE)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_SUB_DISTRICT/" + DISTRICT_CODE, Method.GET);
-                return client.Execute<List<SUB_DISTRICT>>(request).Data;
+                var response = client.Execute<List<SUB_DISTRICT>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -116,13 +219,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<EMPLOYEE_POSITION> GET_EMPLOYEE_POSITION()
+        public List<EMPLOYEE_POSITION> GET_EMPLOYEE_POSITION(out HttpStatusCode code)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_EMPLOYEE_POSITION", Method.GET);
-                return client.Execute<List<EMPLOYEE_POSITION>>(request).Data;
+                var response = client.Execute<List<EMPLOYEE_POSITION>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -131,13 +252,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<JOBTYPE> GET_JOBTYPE()
+        public List<JOBTYPE> GET_JOBTYPE(out HttpStatusCode code)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_JOBTYPE", Method.GET);
-                return client.Execute<List<JOBTYPE>>(request).Data;
+                var response = client.Execute<List<JOBTYPE>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -146,13 +285,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<UNIT> GET_UNIT()
+        public List<UNIT> GET_UNIT(out HttpStatusCode code)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_UNIT", Method.GET);
-                return client.Execute<List<UNIT>>(request).Data;
+                var response = client.Execute<List<UNIT>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -161,14 +318,32 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBM_EMPLOYEE> GET_TBM_EMPLOYEE(TBM_EMPLOYEE req)
+        public List<TBM_EMPLOYEE> GET_TBM_EMPLOYEE(out HttpStatusCode code, TBM_EMPLOYEE req)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_EMPLOYEE", Method.POST);
                 request.AddJsonBody(req);
-                return client.Execute<List<TBM_EMPLOYEE>>(request).Data;
+                var response = client.Execute<List<TBM_EMPLOYEE>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -178,14 +353,32 @@ namespace StoreManagement.Controllers
 
         }
 
-        public List<TBM_VEHICLE> GET_TBM_VEHICLE(TBM_VEHICLE req)
+        public List<TBM_VEHICLE> GET_TBM_VEHICLE(out HttpStatusCode code, TBM_VEHICLE req)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_VEHICLE", Method.POST);
                 request.AddJsonBody(req);
-                return client.Execute<List<TBM_VEHICLE>>(request).Data;
+                var response = client.Execute<List<TBM_VEHICLE>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -194,14 +387,32 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBM_CUSTOMER> GET_TBM_CUSTOMER(TBM_CUSTOMER req)
+        public List<TBM_CUSTOMER> GET_TBM_CUSTOMER(out HttpStatusCode code, TBM_CUSTOMER req)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_CUSTOMER", Method.POST);
                 request.AddJsonBody(req);
-                return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+                var response = client.Execute<List<TBM_CUSTOMER>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -210,13 +421,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBM_CUSTOMER> GET_CUSTOMER_BY_JOB(string license_no)
+        public List<TBM_CUSTOMER> GET_CUSTOMER_BY_JOB(out HttpStatusCode code, string license_no)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_CUSTOMER_BY_JOB?license_no=" + license_no, Method.POST);
-                return client.Execute<List<TBM_CUSTOMER>>(request).Data;
+                var response = client.Execute<List<TBM_CUSTOMER>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -225,14 +454,32 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBM_LOCATION_STORE> GET_TBM_LOCATION_STORE(TBM_LOCATION_STORE req)
+        public List<TBM_LOCATION_STORE> GET_TBM_LOCATION_STORE(out HttpStatusCode code, TBM_LOCATION_STORE req)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_LOCATION_STORE", Method.POST);
                 request.AddJsonBody(req);
-                return client.Execute<List<TBM_LOCATION_STORE>>(request).Data;
+                var response = client.Execute<List<TBM_LOCATION_STORE>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -241,14 +488,32 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBM_SERVICES> GET_TBM_SERVICES(TBM_SERVICES req)
+        public List<TBM_SERVICES> GET_TBM_SERVICES(out HttpStatusCode code, TBM_SERVICES req)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_SERVICES", Method.POST);
                 request.AddJsonBody(req);
-                return client.Execute<List<TBM_SERVICES>>(request).Data;
+                var response = client.Execute<List<TBM_SERVICES>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -257,14 +522,32 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBM_SPAREPART> GET_TBM_SPAREPART(TBM_SPAREPART req)
+        public List<TBM_SPAREPART> GET_TBM_SPAREPART(out HttpStatusCode code, TBM_SPAREPART req)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_SPAREPART", Method.POST);
                 request.AddJsonBody(req);
-                return client.Execute<List<TBM_SPAREPART>>(request).Data;
+                var response = client.Execute<List<TBM_SPAREPART>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -273,13 +556,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBM_BRAND> GET_TBM_BRAND()
+        public List<TBM_BRAND> GET_TBM_BRAND(out HttpStatusCode code)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBM_BRAND", Method.GET);
-                return client.Execute<List<TBM_BRAND>>(request).Data;
+                var response = client.Execute<List<TBM_BRAND>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -289,14 +590,32 @@ namespace StoreManagement.Controllers
         }
 
         #region JOB
-        public List<JOBDETAIL_LIST> GET_JOBDETAIL_LIST(string user_id)
+        public List<JOBDETAIL_LIST> GET_JOBDETAIL_LIST(out HttpStatusCode code, string user_id)
         {
 
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_JOBDETAIL_LIST/" + user_id, Method.GET);
-                return client.Execute<List<JOBDETAIL_LIST>>(request).Data;
+                var response = client.Execute<List<JOBDETAIL_LIST>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -304,14 +623,32 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
-        public CLOSEJOB GET_CLOSE_JOB_DETAIL(string job_id)
+        public CLOSEJOB GET_CLOSE_JOB_DETAIL(out HttpStatusCode code, string job_id)
         {
 
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_JOBDETAIL?job_id=" + job_id, Method.POST);
-                return client.Execute<CLOSEJOB>(request).Data;
+                var response = client.Execute<CLOSEJOB>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -319,13 +656,31 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
-        public List<CHECKLIST> GET_CHECKLIST()
+        public List<CHECKLIST> GET_CHECKLIST(out HttpStatusCode code)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("CHECKLIST", Method.GET);
-                return client.Execute<List<CHECKLIST>>(request).Data;
+                var response = client.Execute<List<CHECKLIST>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -335,19 +690,32 @@ namespace StoreManagement.Controllers
         }
         #endregion
 
-        public string TERMINATE_TBT_JOB_IMAGE(string ijob_id,string seq)
+        public string TERMINATE_TBT_JOB_IMAGE(out HttpStatusCode code, string ijob_id, string seq)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 string r = string.Empty;
                 var client = new RestClient(URL_API);
-                var request = new RestRequest("TERMINATE_TBT_JOB_IMAGE?ijob_id=" + ijob_id+ "&seq=" + seq, Method.POST);
-                var respone = client.Execute(request);
-                if (respone.StatusCode == System.Net.HttpStatusCode.OK)
+                var request = new RestRequest("TERMINATE_TBT_JOB_IMAGE?ijob_id=" + ijob_id + "&seq=" + seq, Method.POST);
+                var response = client.Execute(request);
+                if (response.IsSuccessful)
                 {
-                    r = respone.Content;
+                    return response.Content;
                 }
-                return r;
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -355,20 +723,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public job_file GET_FILE(string ijob_id, string seq)
+        public job_file GET_FILE(out HttpStatusCode code, string ijob_id, string seq)
         {
             try
             {
-                job_file file = new job_file();
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_FILE/" + ijob_id + "/" + seq, Method.GET);
-                var respone = client.Execute<job_file>(request);
-                if(respone.StatusCode == System.Net.HttpStatusCode.OK)
+                var response = client.Execute<job_file>(request);
+                if (response.IsSuccessful)
                 {
-                    file = respone.Data;
+                    return response.Data;
                 }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
 
-                return file;
+                }
             }
             catch (Exception ex)
             {
@@ -376,13 +755,31 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBT_ADJ_SPAREPART> GET_TBT_ADJ_SPAREPART()
+        public List<TBT_ADJ_SPAREPART> GET_TBT_ADJ_SPAREPART(out HttpStatusCode code)
         {
             try
             {
+                code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_TBT_ADJ_SPAREPART", Method.GET);
-                return client.Execute<List<TBT_ADJ_SPAREPART>>(request).Data;
+                var response = client.Execute<List<TBT_ADJ_SPAREPART>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
             }
             catch (Exception ex)
             {
@@ -391,24 +788,33 @@ namespace StoreManagement.Controllers
             }
         }
 
-        //public string INSERT_TBT_ADJ_SPAREPART(TBT_ADJ_SPAREPART req)
+        //public string INSERT_TBT_ADJ_SPAREPART(out HttpStatusCode code,TBT_ADJ_SPAREPART req)
         //{
         //    try
         //    {
+        //code = HttpStatusCode.OK;
         //        var client = new RestClient(URL_API);
         //        var request = new RestRequest("INSERT_TBT_ADJ_SPAREPART", Method.POST);
         //        request.AddJsonBody(req);
 
         //        IRestResponse response = client.Execute(request);
-        //        if (response.IsSuccessful)
-        //        {
-        //            var content = response.Content;
+        //                if (response.IsSuccessful)
+        //                {
+        //                    return response.Data;
+        //                }
+        //                else
+        //                {
+        //                    code = response.StatusCode;
+        //                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+        //                    {
+        //                        throw new Exception(response.StatusDescription);
+        //}
+        //                    else
+        //{
+        //    throw new Exception(response.ErrorMessage);
+        //}
 
-        //        }
-        //        else
-        //        {
-        //            throw new Exception(response.Content);
-        //        }
+        //                }
         //    }
         //    catch (Exception ex)
         //    {

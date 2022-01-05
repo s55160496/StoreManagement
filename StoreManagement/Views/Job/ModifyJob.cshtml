@@ -718,7 +718,7 @@
     </script>
 
     @* TAB JOB DETAIL *@
-    <script type="text/javascript">
+<script type="text/javascript">
     var arrJobParts = @Html.Raw(Json.Serialize(Model.JOB_PARTS)) == null ? [] : @Html.Raw(Json.Serialize(Model.JOB_PARTS));
     var arrImage_Detail = @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL)) == null ? [] : @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL));
 
@@ -876,7 +876,7 @@
                 success: function (response) {
                     UnblockUI();
                     if (response.Status == SysProcess.SessionExpired) {
-                        PopupSessionTimeOut();
+                        PopupSessionTimeOut('@Url.Action("Index","Login")');
                     } else if (response.Status == SysProcess.Duplicate) {
                         DialogDuplicate();
                     } else if (response.Status == SysProcess.Failed) {
@@ -891,7 +891,7 @@
         });
     }
 
-    </script>
+</script>
 
     @* TAB CHECK LIST *@
     <script type="text/javascript">
@@ -941,7 +941,7 @@
     </script>
 
     @* SAVE DATA *@
-    <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
@@ -1024,7 +1024,7 @@
                 success: function (response) {
                     UnblockUI();
                     if (response.Status == SysProcess.SessionExpired) {
-                        PopupSessionTimeOut();
+                        PopupSessionTimeOut('@Url.Action("Index", "Login")');
                     } else if (response.Status == SysProcess.Duplicate) {
                         DialogDuplicate();
                     } else if (response.Status == SysProcess.Failed) {
@@ -1040,7 +1040,7 @@
     }
 
 
-    </script>
+</script>
 
     @* Signature *@
     <script type="text/javascript">

@@ -144,7 +144,7 @@ var SysProcess = {
     Success: "Success",
     SessionExpired: "SSEXP",
     Duplicate: "DUP",
-    SaveFail: "SaveFail"
+    SaveFail: "SaveFail",
 }
 
 function GetElementName(sElement, objType) {

@@ -29,28 +29,36 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateEmployee(string str)
         {
-            string sUser_ID = string.Empty;
-            if (!string.IsNullOrWhiteSpace(str))
+            try
             {
-                sUser_ID = STCrypt.Decrypt(str);
+                string sUser_ID = string.Empty;
+                if (!string.IsNullOrWhiteSpace(str))
+                {
+                    sUser_ID = STCrypt.Decrypt(str);
+                }
+
+                TBM_EMPLOYEE model = new TBM_EMPLOYEE();
+
+                var lstData = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+                string EDIT_FLG = "N";
+                if (lstData != null && !string.IsNullOrEmpty(sUser_ID))
+                {
+                    model = lstData.Where(w => w.USER_ID == sUser_ID).FirstOrDefault();
+                    EDIT_FLG = "Y";
+                }
+
+                ViewData["EDIT_FLG"] = EDIT_FLG;
+
+                var POSITION = GET_EMPLOYEE_POSITION();
+                ViewData["POSITION"] = POSITION.ToArray();
+
+                return View(model);
             }
-
-            TBM_EMPLOYEE model = new TBM_EMPLOYEE();
-
-            var lstData = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
-            string EDIT_FLG = "N";
-            if (lstData != null && !string.IsNullOrEmpty(sUser_ID))
+            catch (Exception ex)
             {
-                model = lstData.Where(w => w.USER_ID == sUser_ID).FirstOrDefault();
-                EDIT_FLG = "Y";
+
+                throw;
             }
-
-            ViewData["EDIT_FLG"] = EDIT_FLG;
-
-            var POSITION = GET_EMPLOYEE_POSITION();
-            ViewData["POSITION"] = POSITION.ToArray();
-
-            return View(model);
         }
 
         [HttpPost]

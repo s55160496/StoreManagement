@@ -6,6 +6,7 @@ using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using static StoreManagement.App_Extension.SysFunctions;
 
@@ -24,30 +25,46 @@ namespace StoreManagement.Controllers
         }
         public IActionResult CreateLocationStore(string str)
         {
-            #region Edit
-            string ID = string.Empty;
-            if (!string.IsNullOrWhiteSpace(str))
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
             {
-                ID = STCrypt.Decrypt(str);
+                #region Edit
+                string ID = string.Empty;
+                if (!string.IsNullOrWhiteSpace(str))
+                {
+                    ID = STCrypt.Decrypt(str);
+                }
+
+                TBM_LOCATION_STORE model = new TBM_LOCATION_STORE();
+
+                string EDIT_FLG = "N";
+                var lstData = GET_TBM_LOCATION_STORE(out code, new TBM_LOCATION_STORE() { LOCATION_ID = ID });
+                if (lstData != null && !string.IsNullOrEmpty(ID))
+                {
+                    model = lstData.Where(w => w.LOCATION_ID == ID).FirstOrDefault();
+                    EDIT_FLG = "Y";
+                }
+
+                ViewData["EDIT_FLG"] = EDIT_FLG;
+
+                #endregion
+
+                var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
+                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+                return View(model);
             }
-
-            TBM_LOCATION_STORE model = new TBM_LOCATION_STORE();
-
-            string EDIT_FLG = "N";
-            var lstData = GET_TBM_LOCATION_STORE(new TBM_LOCATION_STORE() { LOCATION_ID = ID });
-            if (lstData != null && !string.IsNullOrEmpty(ID))
+            catch (Exception ex)
             {
-                model = lstData.Where(w => w.LOCATION_ID == ID).FirstOrDefault();
-                EDIT_FLG = "Y";
+
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
             }
-
-            ViewData["EDIT_FLG"] = EDIT_FLG;
-
-            #endregion
-
-            var EMPLOYEE = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
-            ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
-            return View(model);
         }
 
         [HttpPost]

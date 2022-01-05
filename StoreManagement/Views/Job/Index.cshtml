@@ -53,7 +53,7 @@
 
 @section Scripts{
 
-<script>
+    <script>
 var urlSearchData = "@Url.Action("GetData", "Job")";
 
     $(document).ready(function () {
@@ -69,7 +69,13 @@ var urlSearchData = "@Url.Action("GetData", "Job")";
             data: { "USER_ID": "1" },
             success: function (response) {
                 UnblockUI();
-                BindDataTable(response);
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    BindDataTable(response.data);
+                }
             },
             error: function () {
             }

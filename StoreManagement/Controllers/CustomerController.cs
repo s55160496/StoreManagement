@@ -6,6 +6,7 @@ using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using static StoreManagement.App_Extension.SysFunctions;
 
@@ -25,34 +26,51 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateCustomer(string str)
         {
-            string ID = string.Empty;
-            if (!string.IsNullOrWhiteSpace(str))
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
             {
-                ID = STCrypt.Decrypt(str);
+                string ID = string.Empty;
+                if (!string.IsNullOrWhiteSpace(str))
+                {
+                    ID = STCrypt.Decrypt(str);
+                }
+
+                TBM_CUSTOMER model = new TBM_CUSTOMER();
+
+                string EDIT_FLG = "N";
+                var lstData = GET_TBM_CUSTOMER(out code,new TBM_CUSTOMER() { });
+                if (lstData != null && !string.IsNullOrEmpty(ID))
+                {
+                    model = lstData.Where(w => w.CUSTOMER_ID == ID).FirstOrDefault();
+                    EDIT_FLG = "Y";
+                }
+
+                ViewData["EDIT_FLG"] = EDIT_FLG;
+
+                var PROVINCE = GET_PROVINCE(out code);
+                ViewData["PROVINCE"] = PROVINCE.ToArray();
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                if(code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
             }
 
-            TBM_CUSTOMER model = new TBM_CUSTOMER();
-
-            string EDIT_FLG = "N";
-            var lstData = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
-            if (lstData != null && !string.IsNullOrEmpty(ID))
-            {
-                model = lstData.Where(w => w.CUSTOMER_ID == ID).FirstOrDefault();
-                EDIT_FLG = "Y";
-            }
-
-            ViewData["EDIT_FLG"] = EDIT_FLG;
-
-            var PROVINCE = GET_PROVINCE();
-            ViewData["PROVINCE"] = PROVINCE.ToArray();
-
-            return View(model);
         }
 
         [HttpPost]
         public IActionResult SaveData(TBM_CUSTOMER data)
         {
             CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 var client = new RestClient(URL_API);
@@ -64,17 +82,32 @@ namespace StoreManagement.Controllers
                 if (response.IsSuccessful)
                 {
                     var content = response.Content;
-
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);
@@ -83,9 +116,11 @@ namespace StoreManagement.Controllers
         [HttpPost]
         public IActionResult GetData(TBM_CUSTOMER data)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_TBM_CUSTOMER(new TBM_CUSTOMER() { });
+                var lstData = GET_TBM_CUSTOMER(out code,new TBM_CUSTOMER() { });
                 if (lstData != null && lstData.Any())
                 {
                     foreach (var item in lstData)
@@ -93,43 +128,94 @@ namespace StoreManagement.Controllers
                         item.CUSTOMER_ID_ENCRYPT = Encrypt_UrlEncrypt(item.CUSTOMER_ID);
                     }
                 }
-                return Json(lstData);
+                result.data = lstData;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
         }
 
         [HttpPost]
         public IActionResult GET_DISTRICT_BY_PROVINCE_CODE(string province_code)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_DISTRICT(province_code);
-                return Json(lstData);
+                var lstData = GET_DISTRICT(out code, province_code);
+                result.data = lstData;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
+            //try
+            //{
+            //    var lstData = GET_DISTRICT(province_code);
+            //    return Json(lstData);
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw ex;
+            //}
         }
 
         [HttpPost]
         public IActionResult GET_SUB_DISTRICT_BY_DISTRICT_CODE(string district_code)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_SUB_DISTRICT(district_code);
-                return Json(lstData);
+                var lstData = GET_SUB_DISTRICT(out code, district_code);
+                result.data = lstData;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
+            //try
+            //{
+            //    var lstData = GET_SUB_DISTRICT(district_code);
+            //    return Json(lstData);
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw ex;
+            //}
         }
 
         [HttpPost]
@@ -141,6 +227,7 @@ namespace StoreManagement.Controllers
                 item.ID = SysFunctions.Decrypt_UrlDecode(item.ID);
             }
             CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 var client = new RestClient(URL_API);
@@ -152,17 +239,32 @@ namespace StoreManagement.Controllers
                 if (response.IsSuccessful)
                 {
                     var content = response.Content;
-
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);

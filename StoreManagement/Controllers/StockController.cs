@@ -16,7 +16,7 @@ namespace StoreManagement.Controllers
         }
         public IActionResult Index()
         {
-            VerifyUserLogin(new TM_User() { Username = "admin", Password = "1234" });
+            VerifyUserLogin(new LOGIN() { USERNAME = "admin", PASSWORD = "1234" });
 
             return View();
         }

@@ -8,12 +8,22 @@ namespace StoreManagement.Models
 {
     public class TM_User
     {
-        public int nUserID { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Name { get; set; }
-        public string SurName { get; set; }
-        public string Position { get; set; }
-        public string FullName { get; set; }
+        public string token { get; set; }
+        public string user_id { get; set; }
+        public string user_name { get; set; }
+        public string password { get; set; }
+        public string fullname { get; set; }
+        public string lastname { get; set; }
+        public string position { get; set; }
+        public string position_description { get; set; }
+        public List<tbm_menu> menu { get; set; }
+    }
+    public class tbm_menu
+    {
+        public string menu_id { get; set; }
+        public string menu_description { get; set; }
+        public string status { get; set; }
+        public string icon { get; set; }
+        public string menu_controller { get; set; }
     }
 }

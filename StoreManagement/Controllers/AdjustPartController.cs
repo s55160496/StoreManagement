@@ -4,6 +4,7 @@ using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace StoreManagement.Controllers
@@ -17,17 +18,24 @@ namespace StoreManagement.Controllers
 
         public IActionResult Index()
         {
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 List<TBT_ADJ_SPAREPART> Model = new List<TBT_ADJ_SPAREPART>();
-                Model = GET_TBT_ADJ_SPAREPART();
+                
+                Model = GET_TBT_ADJ_SPAREPART(out code);
                 return View(Model);
             }
             catch (Exception ex)
             {
-
-                return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
-
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
             }
 
         }

@@ -112,7 +112,7 @@
                         success: function (response) {
                             UnblockUI();
                             if (response.Status == SysProcess.SessionExpired) {
-                                PopupSessionTimeOut();
+                                PopupSessionTimeOut('@Url.Action("Index", "Login")');
                             } else if (response.Status == SysProcess.Duplicate) {
                                 DialogDuplicate();
                             } else if (response.Status == SysProcess.Failed) {
@@ -161,16 +161,20 @@
                             data: { 'License_No': request.term },
                             success: function (data) {
                                 UnblockUI();
-                                response($.map(data, function (item) {
-                                    return {
-                                        value: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
-                                        label: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
-                                        CUSTOMER_ID: item.CUSTOMER_ID,
-                                        EMAIL: item.EMAIL,
-                                        LICENSE_NO: item.LICENSE_NO,
+                                if (data.Status == SysProcess.SessionExpired) {
+                                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                                } else {
+                                    response($.map(data.data, function (item) {
+                                        return {
+                                            value: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
+                                            label: item.LICENSE_NO + " - " + item.CUSTOMER_ID,
+                                            CUSTOMER_ID: item.CUSTOMER_ID,
+                                            EMAIL: item.EMAIL,
+                                            LICENSE_NO: item.LICENSE_NO,
 
-                                    }
-                                }));
+                                        }
+                                    }));
+                                }
                             },
                             error: function () {
                             }

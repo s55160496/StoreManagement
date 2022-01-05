@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using static StoreManagement.App_Extension.SysFunctions;
 using static StoreManagement.Controllers.UploadFileController;
@@ -29,33 +30,60 @@ namespace StoreManagement.Controllers
 
         public IActionResult CreateJob()
         {
-            var JOBTYPE = GET_JOBTYPE();
-            ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                var JOBTYPE = GET_JOBTYPE(out code);
+                ViewData["JOBTYPE"] = JOBTYPE.ToArray();
 
-            var EMPLOYEE = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
-            ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+                var EMPLOYEE = GET_TBM_EMPLOYEE(out code,new TBM_EMPLOYEE() { });
+                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
 
-            return View();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
+            }
         }
 
         [HttpPost]
         public IActionResult GET_CUSTOMER_BY_LICENSE_NO(string License_No)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_CUSTOMER_BY_JOB(License_No);
-                return Json(lstData);
+                var lstData = GET_CUSTOMER_BY_JOB(out code ,License_No);
+                result.data = lstData;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
         }
 
         [HttpPost]
         public IActionResult SaveData(CREATEJOB data)
         {
+            HttpStatusCode code = HttpStatusCode.OK;
             CResutlWebMethod result = new CResutlWebMethod();
             try
             {
@@ -70,17 +98,32 @@ namespace StoreManagement.Controllers
                 if (response.IsSuccessful)
                 {
                     var content = response.Content;
-
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);
@@ -89,6 +132,7 @@ namespace StoreManagement.Controllers
         [HttpPost]
         public IActionResult CloseJob(CLOSEJOB data, FileUpLoad[] arr_file, string SIGNNATURE)
         {
+            HttpStatusCode code = HttpStatusCode.OK;
             CResutlWebMethod result = new CResutlWebMethod();
             try
             {
@@ -172,17 +216,32 @@ namespace StoreManagement.Controllers
                 if (response.IsSuccessful)
                 {
                     var content = response.Content;
-
                 }
                 else
                 {
-                    throw new Exception(response.Content);
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);
@@ -192,9 +251,11 @@ namespace StoreManagement.Controllers
         [HttpPost]
         public IActionResult GetData(string USER_ID)
         {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_JOBDETAIL_LIST(USER_ID);
+                var lstData = GET_JOBDETAIL_LIST(out code, USER_ID);
                 if (lstData != null)
                 {
                     foreach (var item in lstData)
@@ -202,17 +263,27 @@ namespace StoreManagement.Controllers
                         item.JOB_ID_ENCRYPT = Encrypt_UrlEncrypt(item.JOB_ID);
                     }
                 }
-                return Json(lstData);
+                result.data = lstData;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
+
+            return Json(result);
         }
 
         public IActionResult ModifyJob(string str)
         {
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 if (string.IsNullOrEmpty(str))
@@ -224,7 +295,7 @@ namespace StoreManagement.Controllers
 
                 CLOSEJOB Model = new CLOSEJOB();
 
-                var CLOSE_JOB_DETAIL = GET_CLOSE_JOB_DETAIL(str);
+                var CLOSE_JOB_DETAIL = GET_CLOSE_JOB_DETAIL(out code,str);
                 if (CLOSE_JOB_DETAIL != null)
                 {
                     Model = CLOSE_JOB_DETAIL;
@@ -245,16 +316,16 @@ namespace StoreManagement.Controllers
                     item.SEQ_ENCRYPT = Encrypt_UrlEncrypt(item.SEQ);
                 }
 
-                var CHECK_LIST_MASTER = GET_CHECKLIST();
+                var CHECK_LIST_MASTER = GET_CHECKLIST(out code);
                 ViewData["CHECK_LIST_MASTER"] = CHECK_LIST_MASTER.ToArray();
 
-                var JOBTYPE = GET_JOBTYPE();
+                var JOBTYPE = GET_JOBTYPE(out code);
                 ViewData["JOBTYPE"] = JOBTYPE.ToArray();
 
-                var EMPLOYEE = GET_TBM_EMPLOYEE(new TBM_EMPLOYEE() { });
+                var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
                 ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
 
-                var SPAREPART = GET_TBM_SPAREPART(new TBM_SPAREPART() { });
+                var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { });
                 ViewData["SPAREPART"] = SPAREPART.ToArray();
 
                 ViewBag.UserID = "1";
@@ -263,7 +334,14 @@ namespace StoreManagement.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
             }
         }
 
@@ -345,6 +423,7 @@ namespace StoreManagement.Controllers
 
         public IActionResult ViewImage(string IJOB_ID, string SEQ)
         {
+            HttpStatusCode code = HttpStatusCode.OK;
             try
             {
                 if (string.IsNullOrWhiteSpace(IJOB_ID) && string.IsNullOrWhiteSpace(SEQ))
@@ -355,7 +434,7 @@ namespace StoreManagement.Controllers
                 IJOB_ID = Decrypt_UrlDecode(IJOB_ID);
                 SEQ = Decrypt_UrlDecode(SEQ);
 
-                var file = GET_FILE(IJOB_ID, SEQ);
+                var file = GET_FILE(out code,IJOB_ID, SEQ);
                 if (file == null)
                 {
                     throw new Exception("ไม่พบ ไฟล์");
@@ -366,7 +445,14 @@ namespace StoreManagement.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToAction("_Error", "Home",new { msg  = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
             }
 
         }
@@ -374,6 +460,7 @@ namespace StoreManagement.Controllers
         [HttpPost]
         public IActionResult DeleteImageDetail(string IJOB_ID, string SEQ)
         {
+            HttpStatusCode code = HttpStatusCode.OK;
             CResutlWebMethod result = new CResutlWebMethod();
             try
             {
@@ -384,12 +471,19 @@ namespace StoreManagement.Controllers
 
                 IJOB_ID = Decrypt_UrlDecode(IJOB_ID);
                 SEQ = Decrypt_UrlDecode(SEQ);
-                result.Msg = TERMINATE_TBT_JOB_IMAGE(IJOB_ID, SEQ);
+                result.Msg = TERMINATE_TBT_JOB_IMAGE(out code,IJOB_ID, SEQ);
             }
             catch (Exception ex)
             {
                 result.Msg = ex.Message;
-                result.Status = SysFunctions.process_Failed;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
             }
 
             return Json(result);
