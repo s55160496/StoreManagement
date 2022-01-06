@@ -13,10 +13,13 @@
     <div>
         <div id="divForm">
             <div class="container">
-
+                @if(SessionUserInfo.MENU.Where(a=>a.MENU_DESCRIPTION == "CreateJob").Any())
+            {
                 <div class="form-group">
                     <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateJob","Job")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
                 </div>
+            }
+                
                 <div id="divSearch">
                 </div>
             </div>
