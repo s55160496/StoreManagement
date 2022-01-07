@@ -149,11 +149,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -187,11 +190,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -225,11 +231,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -263,11 +272,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -301,11 +313,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -339,11 +354,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -378,11 +396,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -418,11 +439,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -457,11 +481,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -495,11 +522,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -534,11 +564,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -573,11 +606,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -612,11 +648,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -650,11 +689,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -690,11 +732,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -728,11 +773,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -765,11 +813,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -805,11 +856,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -842,11 +896,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -870,6 +927,15 @@ namespace StoreManagement.Controllers
                 var response = client.Execute<List<TBT_ADJ_SPAREPART>>(request);
                 if (response.IsSuccessful)
                 {
+                    if(response.Data != null && response.Data.Any())
+                    {
+                        foreach (var item in response.Data)
+                        {
+                            item.ADJ_ID_ENCRYPT = Encrypt_UrlEncrypt(item.ADJ_ID);
+                            item.PART_ID_ENCRYPT = Encrypt_UrlEncrypt(item.PART_ID);
+                            item.PART_NO_ENCRYPT = Encrypt_UrlEncrypt(item.PART_NO);
+                        }
+                    }
                     return response.Data;
                 }
                 else
@@ -879,11 +945,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -893,39 +962,81 @@ namespace StoreManagement.Controllers
             }
         }
 
-        //public string INSERT_TBT_ADJ_SPAREPART(out HttpStatusCode code,TBT_ADJ_SPAREPART req)
-        //{
-        //    try
-        //    {
-        //code = HttpStatusCode.OK;
-        //        var client = new RestClient(URL_API);
-        //        var request = new RestRequest("INSERT_TBT_ADJ_SPAREPART", Method.POST);
-        //        request.AddJsonBody(req);
+        public string INSERT_TBT_ADJ_SPAREPART(out HttpStatusCode code, TBT_ADJ_SPAREPART req)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("INSERT_TBT_ADJ_SPAREPART", Method.POST);
+                request.AddJsonBody(req);
 
-        //        IRestResponse response = client.Execute(request);
-        //                if (response.IsSuccessful)
-        //                {
-        //                    return response.Data;
-        //                }
-        //                else
-        //                {
-        //                    code = response.StatusCode;
-        //                    if (response.StatusCode == HttpStatusCode.Unauthorized)
-        //                    {
-        //                        throw new Exception(response.StatusDescription);
-        //}
-        //                    else
-        //{
-        //    throw new Exception(response.ErrorMessage);
-        //}
+                IRestResponse response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Content;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
 
-        //                }
-        //    }
-        //    catch (Exception ex)
-        //    {
+                throw ex;
+            }
+        }
 
-        //        throw ex;
-        //    }
-        //}
+        public string TERMINATE_TBT_ADJ_SPAREPART(out HttpStatusCode code, TBT_ADJ_SPAREPART req)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("TERMINATE_TBT_ADJ_SPAREPART", Method.POST);
+                request.AddJsonBody(req);
+
+                IRestResponse response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Content;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
     }
 }

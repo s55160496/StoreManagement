@@ -1546,6 +1546,54 @@ function SetTxtNumber_INT($txt) {
     });
 }
 
+function SetTxtNumber_INT_NAME(name) {
+    $('#' + name).css('text-align', 'right');
+    //เหตุผลที่ keypress คือพิมพ์ไทยติดเข้ามาได้ เลยต้องใช้ keypress
+    $('#' + name).keypress(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+            // Allow: Ctrl/cmd+A
+            (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+            // Allow: Ctrl/cmd+C
+            (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+            // Allow: Ctrl/cmd+X
+            (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+        }
+
+        var index = $('#' + name).val().indexOf('.');
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+
+    //เหตุผลที่ keydown คือพิมพ์ En ติดเข้ามาได้บางตัว เลยต้องใช้ keydown
+    $('#' + name).keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter
+        // Not Allow : dot(.)[keyCode : 110, 190]
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13]) !== -1 ||
+            // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+        //else {
+        //    // Not Allow key 0 at the first char
+        //    if ($(this).val().length == 0 && (e.keyCode == 48 || e.keyCode == 96)) e.preventDefault();
+        //}
+    });
+}
+
 function GetValueMultiSelect(ID) {
     var sValue = "";
     var chkArray = $('select[id$=' + ID + ']').val();
@@ -1689,6 +1737,20 @@ function SetScrollTopValidate() {
 function InputMaskDecimal(objCtrl, integerDigits, digits, allowPlus, allowMinus) {
     //Inputmask
     $(objCtrl).inputmask("decimal", {
+        integerDigits: integerDigits, //จำนวนหลักของของค่าจำนวนเต็ม
+        digits: digits, //จำนวนหลักของค่าทศนิยม
+        radixPoint: '.', //จุดทศนิยม
+        groupSeparator: ',', //สัญลักษณ์แบ่งหลัก
+        autoGroup: true, //การจัดกลุ่มอัตโนมัตื
+        allowPlus: Boolean(allowPlus), //อนุญาตใส่เครื่องหมายบวก
+        allowMinus: Boolean(allowMinus), //อนุญาตใส่เครื่องหมายลบ,
+        rightAlign: true,
+    });
+}
+
+function InputMaskDecimal_Name(objCtrl, integerDigits, digits, allowPlus, allowMinus) {
+    //Inputmask
+    $('#'+objCtrl).inputmask("decimal", {
         integerDigits: integerDigits, //จำนวนหลักของของค่าจำนวนเต็ม
         digits: digits, //จำนวนหลักของค่าทศนิยม
         radixPoint: '.', //จุดทศนิยม

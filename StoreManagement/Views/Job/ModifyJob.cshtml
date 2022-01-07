@@ -568,11 +568,11 @@
                                                             <img id="ItemPreviewSignature" src="" width="500">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    @*<div class="form-group col-md-2">
                                                         <button id="btnConfirmSignature" type="button" class="btn-md btn-outline-info" title="Confirm" data-toggle="tooltip"><i class="fa fa-check"></i>&nbsp;Confrim Signature</button>
                                                         <button id="btnClearSignature" type="button" class="btn-md btn-outline-dark" title="Confirm" data-toggle="tooltip"><i class="fas fa-undo"></i>&nbsp;Clear</button>
 
-                                                    </div>
+                                                    </div>*@
                                                 </div>
 
                                                 <div class="form-group col-md-12">
@@ -1045,7 +1045,7 @@
     @* Signature *@
     <script type="text/javascript">
 
-    $(document).ready(function () {
+    @*$(document).ready(function () {
         $('#btnConfirmSignature').on('click', function () {
             DialogConfirmSignature(function () {
                     swal.disableButtons();
@@ -1079,18 +1079,18 @@
         $('#btnClearSignature').on('click', function () {
             ControlSignature(false);
         });
-    });
+    });*@
 
-        function ControlSignature(IsHas) {
-            if (IsHas === true) {
-                $('#signatureparent').hide();
-                $('#PreviewSignature').show();
-            } else {
-                $('#signatureparent').show();
-                $('#PreviewSignature').hide();
-                $('#signature').jSignature("reset");
-            }
-        }
+        //function ControlSignature(IsHas) {
+        //    if (IsHas === true) {
+        //        $('#signatureparent').hide();
+        //        $('#PreviewSignature').show();
+        //    } else {
+        //        $('#signatureparent').show();
+        //        $('#PreviewSignature').hide();
+        //        $('#signature').jSignature("reset");
+        //    }
+        //}
 
     </script>
 

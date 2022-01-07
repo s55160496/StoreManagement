@@ -111,11 +111,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -234,11 +237,14 @@ namespace StoreManagement.Controllers
                     {
                         throw new Exception(response.StatusDescription);
                     }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
                     else
                     {
                         throw new Exception(response.ErrorMessage);
                     }
-
                 }
             }
             catch (Exception ex)

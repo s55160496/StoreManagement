@@ -12,21 +12,49 @@
                     <thead class="thead-HMCPO darkCustom">
                         <tr>
                             <th style="width: 11%"></th>
-                            <th class="text-center">PART_NO</th>
-                            <th class="text-center">PART_NAME</th>
-                            <th class="text-center">CUS_FULLNAME</th>
-                            <th class="text-center">EMAIL_CUSTOMER</th>
-                            <th class="text-center">INVOICE_NO</th>
-                            <th class="text-center">EMP_FULLNAME</th>
-                            <th class="text-center">CREATE_DATE</th>
-                            <th class="text-center">MODIFY / DETAIL</th>
+                            <th class="text-center">PART_NO / PART_NAME</th>
+                            <th class="text-center">PART_DESC</th>
+                            <th class="text-center">PART VALUE</th>
+                            <th class="text-center">TOTAL</th>
+                            <th class="text-center">ADJUST PART VALUE</th>
+                            @*<th class="text-center">CREATE_DATE</th>
+                                <th class="text-center">CREATE_BY</th>
+                                <th class="text-center">UPDATE_DATE</th>
+                                <th class="text-center">UPDATE_BY</th>
+                                <th class="text-center">CANCEL_DATE</th>
+                                <th class="text-center">CANCEL_BY</th>
+                                <th class="text-center">CANCEL_REASON</th>*@
+                            <th class="text-center">MODIFY / DELETE</th>
                         </tr>
                     </thead>
                     <tbody>
                         @{
                             if (Model != null && Model.Length > 0)
                             {
-
+                                int i = 1;
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">@i</td>
+                                        <td class="text-left">@item.PART_NO - @item.PART_NAME</td>
+                                        <td class="text-left">@item.PART_DESC</td>
+                                        <td class="text-center">@item.PART_VALUE</td>
+                                        <td class="text-center">@(int.Parse(@item.PART_VALUE)+ (string.IsNullOrEmpty(item.ADJ_PART_VALUE) ? 0 : int.Parse(item.ADJ_PART_VALUE)))</td>
+                                        <td class="text-center"><input type="text" class="form-control" id="txtAdj_value_@item.PART_ID" name="txtAdj_value_@item.PART_ID" value="@item.ADJ_PART_VALUE"></td>
+                                        @*<td class="text-center">@item.CREATE_DATE</td>
+                                            <td class="text-center">@item.CREATE_BY</td>
+                                            <td class="text-center">@item.UPDATE_DATE</td>
+                                            <td class="text-center">@item.UPDATE_BY</td>
+                                            <td class="text-center">@item.CANCEL_DATE</td>
+                                            <td class="text-center">@item.CANCEL_BY</td>
+                                            <td class="text-left">@item.CANCEL_REASON</td>*@
+                                        <td class="text-center">
+                                            <a href="javascript:function() { return false; }" onclick="EditAdjust_Part('@item.ADJ_ID','@item.PART_ID','@item.PART_NO')" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                            <a href="javascript:function() { return false; }" onclick="DeleteAdjust_Part('@item.ADJ_ID','@item.PART_ID','@item.PART_NO')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
                             }
                         }
                     </tbody>
@@ -38,4 +66,73 @@
 </div>
 <div class="card-footer bg-light">
 </div>
+
+@section Scripts{
+    <script defer>
+        $(document).ready(function () {
+            var table = $('#tbSearchData').removeAttr('width').DataTable({
+                scrollY: "300px",
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                columnDefs: [
+                    { width: 350, targets: 2 }
+                ],
+            });
+
+            $.each($('input[id^=txtAdj_value_]'), function (i, el) {
+                InputMaskDecimal_Name($(this).attr("id"), 100000, 0, true, true);
+            });
+
+        });
+
+        function EditAdjust_Part(adj_id, part_id, part_no) {
+            var txt = 'txtAdj_value_' + part_id;
+            console.log(txt);
+           // alert(val);
+            if (GetValTextBox(txt) == "" || GetValTextBox(txt) == undefined) {
+                DialogWarning("Adjust value is null");
+            } else {
+                DialogConfirmSubmit(function () {
+                    swal.disableButtons();
+                    var obj = {
+                        "ADJ_ID": adj_id,
+                        "PART_ID": part_id,
+                        "PART_NO": part_no,
+                        "ADJ_PART_VALUE": GetValTextBox(txt),
+                    };
+
+                    BlockUI();
+                    $.ajax({
+                        url: '@Url.Action("SaveData", "AdjustPart")',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { 'data': obj},
+                        success: function (response) {
+                            UnblockUI();
+                            if (response.Status == SysProcess.SessionExpired) {
+                                PopupSessionTimeOut('@Url.Action("Index", "Login")');
+                            } else if (response.Status == SysProcess.Duplicate) {
+                                DialogDuplicate();
+                            } else if (response.Status == SysProcess.Failed) {
+                                DialogWarning(response.Msg);
+                            } else {
+                                DialogSucessRedirect('@Url.Action("Index", "AdjustPart")');
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+            }
+        }
+
+        function DeleteAdjust_Part(adj_id, part_id, part_no) {
+            alert(val);
+        }
+    </script>
+
+}
+
+
 

@@ -8,8 +8,11 @@ namespace StoreManagement.Models
     public class TBT_ADJ_SPAREPART
     {
         public string ADJ_ID { get; set; }
+        public string ADJ_ID_ENCRYPT { get; set; }
         public string PART_ID { get; set; }
+        public string PART_ID_ENCRYPT { get; set; }
         public string PART_NO { get; set; }
+        public string PART_NO_ENCRYPT { get; set; }
         public string ADJ_PART_VALUE { get; set; }
         public string CREATE_DATE { get; set; }
         public string CREATE_BY { get; set; }
@@ -20,5 +23,6 @@ namespace StoreManagement.Models
         public string CANCEL_REASON { get; set; }
         public string PART_NAME { get; set; }
         public string PART_DESC { get; set; }
+        public string PART_VALUE { get; set; }
     }
 }
