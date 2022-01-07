@@ -87,7 +87,7 @@ namespace StoreManagement.Controllers
             CResutlWebMethod result = new CResutlWebMethod();
             try
             {
-                data.USER_ID = "1";
+                //data.USER_ID = "1";
 
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("CREATEJOB", Method.POST);
@@ -96,6 +96,7 @@ namespace StoreManagement.Controllers
                     code = HttpStatusCode.Unauthorized;
                     throw new Exception("Session time out");
                 }
+                data.USER_ID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
                 request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(data);
 
@@ -144,7 +145,13 @@ namespace StoreManagement.Controllers
             CResutlWebMethod result = new CResutlWebMethod();
             try
             {
-                data.USERID = "1";
+                //data.USERID = "1";
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                data.USERID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
                 if (!string.IsNullOrEmpty(SIGNNATURE))
                 {
                     string path = @"UploadFile\Temp\";
@@ -344,7 +351,7 @@ namespace StoreManagement.Controllers
                 var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { });
                 ViewData["SPAREPART"] = SPAREPART.ToArray();
 
-                ViewBag.UserID = "1";
+                ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID; ;
 
                 return View(Model);
             }

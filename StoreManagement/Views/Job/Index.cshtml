@@ -69,7 +69,7 @@ var urlSearchData = "@Url.Action("GetData", "Job")";
             url: urlSearchData,
             type: 'POST',
             dataType: 'json',
-            data: { "USER_ID": "1" },
+            data: { "USER_ID": '@SessionUserInfo.USER_ID' },
             success: function (response) {
                 UnblockUI();
                 if (response.Status == SysProcess.SessionExpired) {
