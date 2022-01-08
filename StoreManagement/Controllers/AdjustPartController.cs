@@ -26,9 +26,12 @@ namespace StoreManagement.Controllers
             {
 
                 List<TBT_ADJ_SPAREPART> Model = new List<TBT_ADJ_SPAREPART>();
-                
+
                 Model = GET_TBT_ADJ_SPAREPART(out code);
-                
+
+                var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { });
+                ViewData["SPAREPART"] = SPAREPART.ToArray();
+
                 return View((Model != null ? Model.ToArray() : new TBT_ADJ_SPAREPART[] { }));
             }
             catch (Exception ex)
@@ -45,6 +48,34 @@ namespace StoreManagement.Controllers
 
         }
 
+        public IActionResult ViewDetailAdjustPart(string str)
+        {
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                List<TBT_ADJ_SPAREPART> Model = new List<TBT_ADJ_SPAREPART>();
+                string ID = string.Empty;
+                if (!string.IsNullOrWhiteSpace(str))
+                {
+                    ID = STCrypt.Decrypt(str);
+                }
+                Model = GET_TBT_ADJ_SPAREPART_DETAIL(out code, ID);
+
+                return View((Model != null ? Model.ToArray() : new TBT_ADJ_SPAREPART[] { }));
+            }
+            catch (Exception ex)
+            {
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
+            }
+
+        }
 
         [HttpPost]
         public IActionResult SaveData(TBT_ADJ_SPAREPART data)

@@ -25,7 +25,8 @@ var AlertMsg = {
     NoPermission: "Access denied",
     SessionTimeOut: "Session time out",
     DeleteFail: 'Please select <i class="far fa-check-square"></i>',
-    Desc_Warning_Duplicate: 'Data can not be duplicated. </br> Please re-enter the information.'
+    Desc_Warning_Duplicate: 'Data can not be duplicated. </br> Please re-enter the information.',
+    ConfirmLogout: "Do you want to log out?",
 };
 
 function PopupNoPermission(sPathRedirect) {
@@ -50,6 +51,11 @@ function PopupSessionTimeOut(url) {
 function DialogConfirmSubmit(funcYes, funcNo) {
     SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmSave, funcYes, funcNo);
 }
+
+function DialogConfirmLogout(funcYes, funcNo) {
+    SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmLogout, funcYes, funcNo);
+}
+
 function DialogConfirmSignature(funcYes, funcNo) {
     SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmSignature, funcYes, funcNo);
 }

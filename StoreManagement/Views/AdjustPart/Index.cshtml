@@ -1,14 +1,101 @@
 ﻿@model StoreManagement.Models.TBT_ADJ_SPAREPART[]
 @{
+    var SPAREPART = (TBM_SPAREPART[])ViewData["SPAREPART"];
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
 }
 
+<style>
+    /*    body {
+        padding: 50px;
+        background: #fff;
+    }*/
+
+    .wrapper {
+        width: 100%;
+    }
+
+    @@media(max-width:992px) {
+        .wrapper {
+            width: 100%;
+        }
+    }
+
+    .panel-heading {
+        padding: 0;
+        border: 0;
+        background-color: #000000a6;
+    }
+
+    .panel-title > a, .panel-title > a:active {
+        display: block;
+        padding: 15px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        word-spacing: 3px;
+        text-decoration: none;
+    }
+
+    .panel-heading a:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        float: right;
+        transition: all 0.5s;
+    }
+
+    .panel-heading.active a:before {
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+
+    .tbody th {
+        color: #fff;
+        border: 1px solid #FFFFFF !important;
+        background-color: #29abe2 !important;
+    }
+
+    /* Large rounded green border */
+    hr.lineBlue {
+        border: 1px solid #000000;
+        border-radius: 5px;
+    }
+</style>
+
 <div class="card-body">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="ddlSparePart">Type Job</label>
+            <select id="ddlSparePart" class="form-control">
+                <option value="" selected>Choose...</option>
+                @{
+                    if (SPAREPART != null && SPAREPART.Any())
+                    {
+                        foreach (var item in SPAREPART)
+                        {
+                            <option value="@item.PART_ID" data-item="@item.PART_NO">@item.PART_NO - @item.PART_NAME</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+        <div class=" form-group col-md-6">
+            <label for="txtInvoice_No">Adjust part</label>
+            <input type="text" class="form-control" id="txtAdj_Part" name="txtAdj_Part" placeholder="" value="" />
+        </div>
+    </div>
+    <div class="col-sm-12 text-center">
+        <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Submit</button>
+        <button id="btnClear" type="button" class="btn btn-dark" title="Clear" data-toggle="tooltip"><i class="fa fa-undo"></i>&nbsp;Clear</button>
+    </div>
+    <hr class="lineBlue">
     <div class="row">
         <div id="divData" class="col-sm-12">
             <div class="table-responsive">
-                <table id="tbSearchData" class="table tableData">
+                <table id="tbSearchData" class="table tableData" style="min-width:1200px">
                     <thead class="thead-HMCPO darkCustom">
                         <tr>
                             <th style="width: 11%"></th>
@@ -17,14 +104,7 @@
                             <th class="text-center">PART VALUE</th>
                             <th class="text-center">TOTAL</th>
                             <th class="text-center">ADJUST PART VALUE</th>
-                            @*<th class="text-center">CREATE_DATE</th>
-                                <th class="text-center">CREATE_BY</th>
-                                <th class="text-center">UPDATE_DATE</th>
-                                <th class="text-center">UPDATE_BY</th>
-                                <th class="text-center">CANCEL_DATE</th>
-                                <th class="text-center">CANCEL_BY</th>
-                                <th class="text-center">CANCEL_REASON</th>*@
-                            <th class="text-center">MODIFY / DELETE</th>
+                            <th class="text-center">DETAIL</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,17 +120,10 @@
                                         <td class="text-left">@item.PART_DESC</td>
                                         <td class="text-center">@item.PART_VALUE</td>
                                         <td class="text-center">@(int.Parse(@item.PART_VALUE)+ (string.IsNullOrEmpty(item.ADJ_PART_VALUE) ? 0 : int.Parse(item.ADJ_PART_VALUE)))</td>
-                                        <td class="text-center"><input type="text" class="form-control" id="txtAdj_value_@item.PART_ID" name="txtAdj_value_@item.PART_ID" value="@item.ADJ_PART_VALUE"></td>
-                                        @*<td class="text-center">@item.CREATE_DATE</td>
-                                            <td class="text-center">@item.CREATE_BY</td>
-                                            <td class="text-center">@item.UPDATE_DATE</td>
-                                            <td class="text-center">@item.UPDATE_BY</td>
-                                            <td class="text-center">@item.CANCEL_DATE</td>
-                                            <td class="text-center">@item.CANCEL_BY</td>
-                                            <td class="text-left">@item.CANCEL_REASON</td>*@
+                                        <td class="text-center">@item.ADJ_PART_VALUE</td>
                                         <td class="text-center">
-                                            <a href="javascript:function() { return false; }" onclick="EditAdjust_Part('@item.ADJ_ID','@item.PART_ID','@item.PART_NO')" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                            <a href="javascript:function() { return false; }" onclick="DeleteAdjust_Part('@item.ADJ_ID','@item.PART_ID','@item.PART_NO')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                            <a href="javascript:function() { return false; }" onclick="ViewDetail('@item.PART_ID_ENCRYPT')" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                            @*<a href="@Url.Action("ViewDetailAdjustPart", "AdjustPart")?str=@item.PART_ID_ENCRYPT" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>*@
                                         </td>
                                     </tr>
                                     i++;
@@ -70,18 +143,58 @@
 @section Scripts{
     <script defer>
         $(document).ready(function () {
-            var table = $('#tbSearchData').removeAttr('width').DataTable({
+            
+            InputMaskDecimal_Name('txtAdj_Part', 100000, 0, true, true);
+            var table = $('#tbSearchData').DataTable({
                // scrollY: "300px",
-                scrollX: true,
-                scrollCollapse: true,
+                //scrollX: true,
+                //scrollCollapse: true,
                 paging: true,
                 columnDefs: [
                     { width: 350, targets: 2 }
                 ],
             });
 
-            $.each($('input[id^=txtAdj_value_]'), function (i, el) {
-                InputMaskDecimal_Name($(this).attr("id"), 100000, 0, true, true);
+            $('#btnSubmit').on('click', function () {
+                if (GetValDropdown('ddlSparePart') == "" || GetValTextBox('txtAdj_Part') == "") {
+                    DialogWarning("Adjust value is null");
+                } else {
+                    DialogConfirmSubmit(function () {
+                        swal.disableButtons();
+                    var obj = {
+                        "PART_ID": GetValDropdown('ddlSparePart'),
+                        "PART_NO": $('#ddlSparePart').find('option:selected').attr('data-item'),
+                        "ADJ_PART_VALUE": GetValTextBox('txtAdj_Part'),
+                    };
+
+                    BlockUI();
+                    $.ajax({
+                        url: '@Url.Action("SaveData", "AdjustPart")',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { 'data': obj},
+                        success: function (response) {
+                            UnblockUI();
+                            if (response.Status == SysProcess.SessionExpired) {
+                                PopupSessionTimeOut('@Url.Action("Index", "Login")');
+                            } else if (response.Status == SysProcess.Duplicate) {
+                                DialogDuplicate();
+                            } else if (response.Status == SysProcess.Failed) {
+                                DialogWarning(response.Msg);
+                            } else {
+                                DialogSucessRedirect('@Url.Action("Index", "AdjustPart")');
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+                }
+            });
+
+            $('#btnClear').on('click', function () {
+                $('#ddlSparePart').val('');
+                $('#txtAdj_Part').val('');
             });
 
         });
@@ -130,8 +243,13 @@
         function DeleteAdjust_Part(adj_id, part_id, part_no) {
             alert(val);
         }
-    </script>
 
+        function ViewDetail(str) {
+            var url = '@Url.Action("ViewDetailAdjustPart", "AdjustPart")' + '?str=' + str;
+            FancyBox_OpenIframe_Url(url,'80%','100%')
+        }
+
+    </script>
 }
 
 

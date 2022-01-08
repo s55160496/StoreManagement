@@ -1,0 +1,67 @@
+﻿@model StoreManagement.Models.TBT_ADJ_SPAREPART[]
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout_Single.cshtml";
+}
+
+<div class="card-body">
+    <div class="row">
+        <div id="divData" class="col-sm-12">
+            <div class="table-responsive">
+                <table id="tbSearchData" class="table tableData">
+                    <thead class="thead-HMCPO darkCustom">
+                        <tr>
+                            <th style="width: 11%"></th>
+                            <th class="text-center">PART_NO / PART_NAME</th>
+                            <th class="text-center">PART_DESC</th>
+                            <th class="text-center">PART VALUE</th>
+                            <th class="text-center">TOTAL</th>
+                            <th class="text-center">ADJUST PART VALUE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (Model != null && Model.Length > 0)
+                            {
+                                int i = 1;
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">@i</td>
+                                        <td class="text-left">@item.PART_NO - @item.PART_NAME</td>
+                                        <td class="text-left">@item.PART_DESC</td>
+                                        <td class="text-center">@item.PART_VALUE</td>
+                                        <td class="text-center">@(int.Parse(@item.PART_VALUE)+ (string.IsNullOrEmpty(item.ADJ_PART_VALUE) ? 0 : int.Parse(item.ADJ_PART_VALUE)))</td>
+                                        <td class="text-center">@item.ADJ_PART_VALUE</td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+</div>
+
+@section Scripts{
+    <script defer>
+        $(document).ready(function () {
+            var table = $('#tbSearchData').removeAttr('width').DataTable({
+                // scrollY: "300px",
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                columnDefs: [
+                    { width: 350, targets: 2 }
+                ],
+            });
+        });
+    </script>
+
+}

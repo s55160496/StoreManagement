@@ -3,6 +3,7 @@
 @{
     bool SessionUserInfoIsExpired = Context.Session.GetObjectFromJson<TM_User>("UserAccount") == null;
     var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
+    var url_login = Url.Action("Index", "Login");
 }
 
 <!DOCTYPE html>
@@ -261,14 +262,14 @@
                 <div class="head-content">
                     <div class="head-content-upper">
                         @*<a href="@Url.Action("Index","Home")" class="weblogo" style="display: flex;">
-            <div class="logo-img">
-                <img src="~/Images/logo/I_SEE.png" width="100px" />
-            </div>
-            <div class="logo-title">
-                    <div class="logo-title-main">I.SEE Equipment and Engineering</div>
-                    <div class="logo-title-sub">SYSTEM</div>
-                </div>
-        </a>*@
+                                <div class="logo-img">
+                                    <img src="~/Images/logo/I_SEE.png" width="100px" />
+                                </div>
+                                <div class="logo-title">
+                                        <div class="logo-title-main">I.SEE Equipment and Engineering</div>
+                                        <div class="logo-title-sub">SYSTEM</div>
+                                    </div>
+                            </a>*@
                         @* @Url.Action("Index","Home") *@
                         <a href="javascript:function() { return false; }" class="weblogo" style="display: flex;">
                             <div class="logo-img">
@@ -330,6 +331,15 @@
 
 </body>
 </html>
+
+<script type="text/javascript">
+    function Logout() {
+        DialogConfirmLogout(function () {
+              window.open('@url_login', "_self");
+        });
+    }
+</script>
+
 
 @if (SessionUserInfoIsExpired)
 {

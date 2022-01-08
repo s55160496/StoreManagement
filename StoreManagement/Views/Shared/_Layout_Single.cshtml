@@ -9,26 +9,89 @@
 </style>
 <html>
 <head>
-    <!-- ICONS -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Images/ico/icon-114.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/Images/ico/icon-114.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Images/ico/icon-72.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="~/Images/ico/icon-57.png" />
-    <link rel="shortcut icon" href="~/Images/ico/icon-fav.png" />
-
+    @* fontawesome-5 *@
     <link href="~/lib/fontawesome-5.0.13/css/fontawesome-all.css" rel="stylesheet" />
-    <script src="~/lib/jquery/dist/jquery.js"></script>
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    @*  jquery-3.6.0 *@
+    <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/jquery-ui-1.13.0/jquery-ui.min.js"></script>
+    <link href="~/lib/jquery-ui-1.13.0/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/lib/jquery-ui-1.13.0/jquery-ui.theme.css" rel="stylesheet" />
 
-    <link href="~/css/_MP_Front.css" rel="stylesheet" />
-    <link href="~/css/_MP_Front-form.css" rel="stylesheet" />
-    <script src="~/js/_MP_Front.js"></script>
+    <script src="~/js/jquery.reDefaultTools.js"></script>
+
+    @* jquery-inputmask *@
+    <script src="~/js/jquery-inputmask/jquery.inputmask.bundle.js"></script>
+    <script src="~/js/jquery-inputmask/inputmask/inputmask.extensions.js"></script>
+    <script src="~/js/jquery-inputmask/inputmask/jquery.inputmask.js"></script>
+
+    @* Bootstrap *@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/css/icon.css" rel="stylesheet" />
+
+    @*datepicker*@
+    <link href="~/lib/bootstrap-datepicker-thai/css/datepicker.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap-datepicker-thai/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js"></script>
+    <script src="~/lib/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js"></script>
+
+    @* linqjs *@
+    <script src="~/lib/linqjs-v2.2.0.2/linq.min.js"></script>
+    <script src="~/lib/linqjs-v2.2.0.2/jquery.linq.min.js"></script>
+
+    @* sweetalert2 *@
+    <script src="~/lib/sweetalert2/promise-polyfill.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2-common.js"></script>
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+
+    @*  tooltipster *@
+    <script src="~/lib/tooltipster/tooltipster.bundle.min.js"></script>
+    <link href="~/lib/tooltipster/tooltipster.bundle.css" rel="stylesheet" />
+    <link href="~/lib/tooltipster/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" rel="stylesheet" />
+
+    @* ThaiSansNeue *@
+    <link href="~/Fonts/ThaiSansNeue/css/fontface.css" rel="stylesheet" />
+
+    @* BlockUI *@
+    <link href="~/css/BlockUI-Loading.css" rel="stylesheet" />
+    <script src="~/js/jquery.blockUI.js"></script>
+
+    @* fancybox3  *@
+    <link href="~/lib/fancybox3/dist/jquery.fancybox.css" rel="stylesheet" />
+    <script src="~/lib/fancybox3/dist/jquery.fancybox.js"></script>
+
+    @* DataTables *@
+    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+
+    @* System *@
+    <link href="~/css/Customs.css" rel="stylesheet" />
+    <link href="~/css/easy.css" rel="stylesheet" />
+    <script src="~/js/System/sysFunction.js"></script>
+    <script src="~/js/CommonScript.js"></script>
+
+    @* Form Validation  *@
+    <link href="~/lib/FormValidation/formValidation.min.css" rel="stylesheet" />
+    <script src="~/lib/FormValidation/formValidation.min.js"></script>
+    <script src="~/lib/FormValidation/bootstrap.min.js"></script>
+    <script src="~/lib/FormValidation/CustomFormValidation.js"></script>
+
+    @*File Upload*@
+    <link href="~/lib/Fileupload/src/jquery.fileuploader.css" rel="stylesheet" />
+    <script src="~/lib/Fileupload/src/jquery.fileuploader.js"></script>
+    <script src="~/lib/Fileupload/AsyncUploadFile.js"></script>
+
+    <script src="~/js/_MP_Back.js"></script>
+    <link href="~/css/_MP_Back.css" rel="stylesheet" />
 
 
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    @RenderSection("scripts", required: false);
 </head>
 <body>
     <div class="container">

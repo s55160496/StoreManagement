@@ -1038,5 +1038,47 @@ namespace StoreManagement.Controllers
             }
         }
 
+        public List<TBT_ADJ_SPAREPART> GET_TBT_ADJ_SPAREPART_DETAIL(out HttpStatusCode code, string id)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_TBT_ADJ_SPAREPART_DETAIL/" + id, Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                var response = client.Execute<List<TBT_ADJ_SPAREPART>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
     }
 }
