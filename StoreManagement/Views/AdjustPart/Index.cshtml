@@ -104,6 +104,8 @@
                             <th class="text-center">PART VALUE</th>
                             <th class="text-center">TOTAL</th>
                             <th class="text-center">ADJUST PART VALUE</th>
+                            <th class="text-center">CREATE_DATE</th>
+                            <th class="text-center">CREATE_BY</th>
                             <th class="text-center">DETAIL</th>
                         </tr>
                     </thead>
@@ -121,6 +123,8 @@
                                         <td class="text-center">@item.PART_VALUE</td>
                                         <td class="text-center">@(int.Parse(@item.PART_VALUE)+ (string.IsNullOrEmpty(item.ADJ_PART_VALUE) ? 0 : int.Parse(item.ADJ_PART_VALUE)))</td>
                                         <td class="text-center">@item.ADJ_PART_VALUE</td>
+                                        <td class="text-center">@item.CREATE_DATE</td>
+                                        <td class="text-center">@item.CREATE_BY</td>
                                         <td class="text-center">
                                             <a href="javascript:function() { return false; }" onclick="ViewDetail('@item.PART_ID_ENCRYPT')" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
                                             @*<a href="@Url.Action("ViewDetailAdjustPart", "AdjustPart")?str=@item.PART_ID_ENCRYPT" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>*@
@@ -143,7 +147,7 @@
 @section Scripts{
     <script defer>
         $(document).ready(function () {
-            
+
             InputMaskDecimal_Name('txtAdj_Part', 100000, 0, true, true);
             var table = $('#tbSearchData').DataTable({
                // scrollY: "300px",
