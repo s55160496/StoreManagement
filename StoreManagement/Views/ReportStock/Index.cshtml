@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+    var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
+    var LOCATION = (TBM_LOCATION_STORE[])ViewData["LOCATION"];
+}
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtModel_no">Part Create from</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="txtPartCreateFrom" name="txtPartCreateFrom">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtChassis_no">To</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="txtPartCreateTo" name="txtPartCreateTo">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtPartNo">Part No</label>
+                        <input type="text" class="form-control" id="txtPartNo" value="">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlPartName">Part Name</label>
+                        <select id="ddlPartName" name="ddlPartName" class="form-control">
+                            <option value="" selected>Choose...</option>
+                            @{
+                                if (EMPLOYEE != null)
+                                {
+                                    foreach (var item in EMPLOYEE)
+                                    {
+                                        <option value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlLocation">Location</label>
+                        <select id="ddlLocation" name="ddlLocation" class="form-control">
+                            <option value="" selected>Choose...</option>
+                            @{
+                                if (LOCATION != null && LOCATION.Any())
+                                {
+                                    foreach (var item in LOCATION)
+                                    {
+                                        <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 text-center">
+                    <button id="btnSearch" type="button" style="margin:0!important" class="btn btn-info" title="Search" data-toggle="tooltip"><i class="fa fa-search"></i>&nbsp;Search</button>
+                    <button id="btnPDF" type="button" class="btn btn-success" title="PDF" data-toggle="tooltip"><i class="fa fa-file-pdf"></i>&nbsp;Print</button>
+                    <button id="btnExcel" type="button" class="btn btn-dark" title="Excel" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        SetDateRangePicker($('#txtPartCreateFrom'), $('#txtPartCreateTo'));
+
+    });
+</script>
