@@ -4,6 +4,11 @@
     Layout = "~/Views/Shared/_MP_Back.cshtml";
     var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
     var LOCATION = (TBM_LOCATION_STORE[])ViewData["LOCATION"];
+
+
+    bool SessionUserInfoIsExpired = Context.Session.GetObjectFromJson<TM_User>("UserAccount") == null;
+    var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
+
 }
 <div class="card-body">
     <div>
@@ -78,15 +83,121 @@
 
                 </div>
 
+
+                <div class="row mt-5">
+                    <div id="divData" class="col-sm-12">
+                        <div class="table-responsive">
+                            <table id="tbSearchData" class="table tableData" style="min-width:1500px">
+                                <thead class="thead-HMCPO darkCustom">
+                                    <tr>
+                                        <th class="text-center">part no </th>
+                                        <th class="text-center">part  name</th>
+                                        <th class="text-center">part-create</th>
+                                        <th class="text-center">cost-price</th>
+                                        <th class="text-center">sale-price</th>
+                                        <th class="text-center">unit</th>
+                                        <th class="text-center">adj unit</th>
+                                        <th class="text-center">min</th>
+                                        <th class="text-center">max</th>
+                                        <th class="text-center">location</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
+    var urlSearchData = "@Url.Action("GetData", "ReportStock")";
 
     $(document).ready(function () {
         SetDateRangePicker($('#txtPartCreateFrom'), $('#txtPartCreateTo'));
 
+        SearchData();
+
+        $('#btnSearch').on('click', function () {
+            SearchData();
+        });
     });
+
+    function SearchData() {
+        BlockUI();
+
+        var obj = {
+            PARTNO: "",
+            PARTID: "",
+            LOCATIONID: "",
+            PART_CREATE_FROM: "",
+            PART_CREATE_TO: "",
+            USERNAME: "",
+            REPORT_TYPE:"search"
+        };
+
+        $.ajax({
+            url: urlSearchData,
+            type: 'POST',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    BindDataTable(response.data.SUMMARY_STOCK_LIST);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        var table = $('#tbSearchData').DataTable();
+        table.destroy();
+
+        $("#tbSearchData tbody").html("");
+        let html = '';
+        $.each(arrData_, function (i, el) {
+            let td = '';
+
+            td = '<td class="text-center">' + (el.PART_NO || '') + '</td>';
+            td += '<td class="text-left">' + (el.PART_NAME || '') + '</td>';
+            td += '<td class="text-center">' + (el.CREATE_DATE || '') + '</td>';
+            td += '<td class="text-right">' + (el.COST_PRICE || '') + '</td>';
+            td += '<td class="text-right">' + (el.SALE_PRICE || '') + '</td>';
+            td += '<td class="text-right">' + (el.PART_VALUE || '') + '</td>';
+            td += '<td class="text-right">' + (el.ADJ_PART_VALUE || '') + '</td>';
+            td += '<td class="text-right">' + (el.MINIMUM_VALUE || '') + '</td>';
+            td += '<td class="text-right">' + (el.MAXIMUM_VALUE || '') + '</td>';
+            td += '<td class="text-left">' + (el.LOCATION_NAME || '') + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+
+        $("table[id$=tbSearchData] tbody").html(html);
+
+        table.DataTable({
+            //scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            //columnDefs: [
+            //    {
+            //        orderable: false,
+            //        className: 'select-checkbox',
+            //        targets: 0
+            //    }
+            //    , { width: 35, targets: 0 }
+            //    , { width: 70, targets: 1 }
+            //    , { width: 350, targets: 3 }
+            //],
+        });
+    }
 </script>

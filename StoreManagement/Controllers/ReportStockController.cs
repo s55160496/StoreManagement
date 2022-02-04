@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using StoreManagement.App_Extension;
 using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
@@ -30,6 +32,44 @@ namespace StoreManagement.Controllers
             ViewData["LOCATION"] = LOCATION.ToArray();
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetData(REPORT_STOCK data)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                var Data = GET_SUMMARY_STOCK_LIST(out code,data);
+                if (Data != null)
+                {
+                    if (Data.SUMMARY_STOCK_LIST.Any())
+                    {
+                        foreach (var item in Data.SUMMARY_STOCK_LIST)
+                        {
+                            item.PART_ID_ENCRYPT = Encrypt_UrlEncrypt(item.PART_ID);
+                            item.PART_NO_ENCRYPT = Encrypt_UrlEncrypt(item.PART_NO);
+                        }
+                    }
+
+                }
+                result.data = Data;
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
         }
     }
 }

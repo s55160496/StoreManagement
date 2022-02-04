@@ -105,17 +105,126 @@
 
                 </div>
 
+
+                <div class="row mt-5">
+                    <div id="divData" class="col-sm-12">
+                        <div class="table-responsive">
+                            <table id="tbSearchData" class="table tableData" style="min-width:1500px">
+                                <thead class="thead-HMCPO darkCustom">
+                                    <tr>
+                                        <th class="text-center">job no</th>
+                                        <th class="text-center">job create</th>
+                                        <th class="text-center">license no</th>
+                                        <th class="text-center">emp name</th>
+                                        <th class="text-center">summary</th>
+                                        <th class="text-center">fix date</th>
+                                        <th class="text-center">close date</th>
+                                        <th class="text-center">customer name</th>
+                                        <th class="text-center">invoice no</th>
+                                        <th class="text-center">type job</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
+    var urlSearchData = "@Url.Action("GetData", "ReportJob")";
 
     $(document).ready(function () {
         SetDateRangePicker($('#txtJobDateFrom'), $('#txtJobDateTo'));
         SetDateRangePicker($('#txtFixDateFrom'), $('#txtFixDateTo'));
         SetDateRangePicker($('#txtCloseJobDateFrom'), $('#txtCloseJobDateTo'));
 
+        SearchData();
+
+        $('#btnSearch').on('click', function () {
+            SearchData();
+        });
     });
+
+    function SearchData() {
+        var obj = {
+            JOB_DATE_FROM: "",
+            JOB_DATE_TO: "",
+            CUSTOMER_NAME: "",
+            FIX_DATE_FROM: "",
+            FIX_DATE_TO: "",
+            CLOSE_DT_FROM: "",
+            CLOSE_DT_TO: "",
+            LICENSE_NO: "",
+            USER_PRINT: "",
+            TYPE_JOB: "",
+            TEACHNICIAL: "",
+            REPORT_TYPE: "search",
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlSearchData,
+            type: 'POST',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    BindDataTable(response.data.SUMMARY_JOB_LIST);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        var table = $('#tbSearchData').DataTable();
+        table.destroy();
+
+        $("#tbSearchData tbody").html("");
+            let html = '';
+            $.each(arrData_, function (i, el) {
+                let td = '';
+                td = '<td class="text-center">' + (el.JOB_ID || '') + '</td>';
+                td += '<td class="text-center">' + (el.CREATE_DATE || '') + '</td>';
+                td += '<td class="text-left">' + (el.LICENSE_NO || '') + '</td>';
+                td += '<td class="text-center">' + (el.EMPLOYEENAME || '') + '</td>';
+                td += '<td class="text-right">' + (el.SUMMARY || '') + '</td>';
+                td += '<td class="text-right">' + (el.FIX_DATE || '') + '</td>';
+                td += '<td class="text-right">' + (el.CLOSE_DATE || '') + '</td>';
+                td += '<td class="text-center">' + (el.CUSTOMERNAME || '') + '</td>';
+                td += '<td class="text-right">' + (el.INVOICE_NO || '') + '</td>';
+                td += '<td class="text-right">' + (el.JOBDESCRIPTION || '') + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+
+        $("table[id$=tbSearchData] tbody").html(html);
+
+        table.DataTable({
+            //scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            //columnDefs: [
+            //    {
+            //        orderable: false,
+            //        className: 'select-checkbox',
+            //        targets: 0
+            //    }
+            //    , { width: 35, targets: 0 }
+            //    , { width: 70, targets: 1 }
+            //    , { width: 350, targets: 3 }
+            //],
+        });
+    }
 </script>

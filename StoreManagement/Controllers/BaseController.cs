@@ -1080,5 +1080,93 @@ namespace StoreManagement.Controllers
             }
         }
 
+        #region REPORT
+        public REPORT_RESPONSE_STOCK GET_SUMMARY_STOCK_LIST(out HttpStatusCode code, REPORT_STOCK req)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_Summary_stock_list", Method.POST);
+                request.AddJsonBody(req);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                var response = client.Execute<REPORT_RESPONSE_STOCK>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public REPORT_RESPONSE_JOB GET_SUMMARY_JOB_LIST(out HttpStatusCode code, REPORT_JOB req)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("GET_Summary_job_list", Method.POST);
+                request.AddJsonBody(req);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                var response = client.Execute<REPORT_RESPONSE_JOB>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        #endregion
+
     }
 }
