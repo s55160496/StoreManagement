@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
+    var JOBTYPE = (JOBTYPE[])ViewData["JOBTYPE"];
+    var TEACHNICIAL = (TBM_CUSTOMER[])ViewData["TEACHNICIAL"];
 }
 <div class="card-body">
     <div>
@@ -31,27 +33,45 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="txtPartNo">Customer Name</label>
-                        <input type="text" class="form-control" id="txtPartNo" value="">
+                        <label for="txtCustomer">Customer Name</label>
+                        <input type="text" class="form-control" id="txtCustomer" name="txtCustomer" value="">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="ddlPartName">Part Name</label>
-                        <select id="ddlPartName" name="ddlPartName" class="form-control">
+                        <label for="ddlJobType">Job Type</label>
+                        <select id="ddlJobType" name="ddlJobType" class="form-control">
                             <option value="" selected>Choose...</option>
+                            @{
+                                if (JOBTYPE != null)
+                                {
+                                    foreach (var item in JOBTYPE)
+                                    {
+                                        <option value="@item.JOBCODE">@item.JOBCODE -@item.JOBDESCRIPTION</option>
+                                    }
+                                }
+                            }
                         </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="ddlLocation">Location</label>
-                        <select id="ddlLocation" name="ddlLocation" class="form-control">
+                        <label for="ddlTeachnicial">Teachnicial</label>
+                        <select id="ddlTeachnicial" name="ddlTeachnicial" class="form-control">
                             <option value="" selected>Choose...</option>
+                            @{
+                                if (TEACHNICIAL != null)
+                                {
+                                    foreach (var item in TEACHNICIAL)
+                                    {
+                                        <option value="@item.CUSTOMER_ID">@item.FNAME @item.LNAME</option>
+                                    }
+                                }
+                            }
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="ddlPartName">License No</label>
-                        <input type="text" class="form-control" id="txtLicenseNo" value="">
+                        <label for="txtLicenseNo">License No</label>
+                        <input type="text" class="form-control" id="txtLicenseNo" name="txtLicenseNo" value="">
                     </div>
                 </div>
 
@@ -122,6 +142,7 @@
                                         <th class="text-center">customer name</th>
                                         <th class="text-center">invoice no</th>
                                         <th class="text-center">type job</th>
+                                        <th style="text-align:center"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,27 +164,33 @@
         SetDateRangePicker($('#txtFixDateFrom'), $('#txtFixDateTo'));
         SetDateRangePicker($('#txtCloseJobDateFrom'), $('#txtCloseJobDateTo'));
 
-        SearchData();
+        SearchData('SEARCH');
 
         $('#btnSearch').on('click', function () {
-            SearchData();
+            SearchData('SEARCH');
+        });
+        $('#btnPDF').on('click', function () {
+            SearchData('PDF');
+        });
+        $('#btnExcel').on('click', function () {
+            SearchData('EXCEL');
         });
     });
 
-    function SearchData() {
+    function SearchData(type) {
         var obj = {
-            JOB_DATE_FROM: "",
-            JOB_DATE_TO: "",
-            CUSTOMER_NAME: "",
-            FIX_DATE_FROM: "",
-            FIX_DATE_TO: "",
-            CLOSE_DT_FROM: "",
-            CLOSE_DT_TO: "",
-            LICENSE_NO: "",
+            JOB_DATE_FROM: GetValTextBox('txtJobDateFrom'),
+            JOB_DATE_TO: GetValTextBox('txtJobDateTo'),
+            CUSTOMER_NAME: GetValTextBox('txtCustomer'),
+            FIX_DATE_FROM: GetValTextBox('txtFixDateFrom'),
+            FIX_DATE_TO: GetValTextBox('txtFixDateTo'),
+            CLOSE_DT_FROM: GetValTextBox('txtCloseJobDateFrom'),
+            CLOSE_DT_TO: GetValTextBox('txtCloseJobDateTo'),
+            LICENSE_NO: GetValTextBox('txtLicenseNo'),
             USER_PRINT: "",
-            TYPE_JOB: "",
-            TEACHNICIAL: "",
-            REPORT_TYPE: "search",
+            TYPE_JOB: GetValDropdown('ddlJobType'),
+            TEACHNICIAL: GetValDropdown('ddlTeachnicial'),
+            REPORT_TYPE: type,
         }
 
         BlockUI();
@@ -179,7 +206,16 @@
                 } else if (response.Status == SysProcess.Failed) {
                     DialogWarning(response.Msg);
                 } else {
-                    BindDataTable(response.data.SUMMARY_JOB_LIST);
+                    if (TypeReport.SEARCH == type) {
+                        BindDataTable(response.data.SUMMARY_JOB_LIST);
+                    } else if (TypeReport.EXCEL == type) {
+                        var url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                                window.open(url, '_blank');
+                    } else if (TypeReport.PDF == type) {
+                        var url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                                window.open(url, '_blank');
+                    }
+
                 }
             },
             error: function () {
@@ -205,12 +241,14 @@
                 td += '<td class="text-center">' + (el.CUSTOMERNAME || '') + '</td>';
                 td += '<td class="text-right">' + (el.INVOICE_NO || '') + '</td>';
                 td += '<td class="text-right">' + (el.JOBDESCRIPTION || '') + '</td>';
+                td += '<td class="text-center">' + '<a href="@Url.Action("ViewImage", "Job")' + '?IJOB_ID=' + el.JOB_ID_ENCRYPT + '&&SEQ=' + el.SEQ_ENCRYPT + '" target="_blank" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>' + '</td>';
+
                 html += "<tr>" + td + "</tr>";
             });
 
         $("table[id$=tbSearchData] tbody").html(html);
 
-        table.DataTable({
+        var table = $('#tbSearchData').DataTable({
             //scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,

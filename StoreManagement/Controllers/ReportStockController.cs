@@ -22,16 +22,29 @@ namespace StoreManagement.Controllers
         public IActionResult Index()
         {
             HttpStatusCode code = HttpStatusCode.OK;
-            var CUSTOMER = GET_TBM_CUSTOMER(out code, new TBM_CUSTOMER() { });
-            ViewData["CUSTOMER"] = CUSTOMER == null ? null : CUSTOMER.ToArray();
+            try
+            {
+                var CUSTOMER = GET_TBM_CUSTOMER(out code, new TBM_CUSTOMER() { });
+                ViewData["CUSTOMER"] = CUSTOMER == null ? null : CUSTOMER.ToArray();
 
-            var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
-            ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+                var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
+                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
 
-            var LOCATION = GET_TBM_LOCATION_STORE(out code, new TBM_LOCATION_STORE() { });
-            ViewData["LOCATION"] = LOCATION.ToArray();
-
-            return View();
+                var LOCATION = GET_TBM_LOCATION_STORE(out code, new TBM_LOCATION_STORE() { });
+                ViewData["LOCATION"] = LOCATION.ToArray();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
+            }
         }
 
         [HttpPost]
@@ -41,20 +54,36 @@ namespace StoreManagement.Controllers
             HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var Data = GET_SUMMARY_STOCK_LIST(out code,data);
-                if (Data != null)
+                if (SessionUserInfoIsExpired())
                 {
-                    if (Data.SUMMARY_STOCK_LIST.Any())
-                    {
-                        foreach (var item in Data.SUMMARY_STOCK_LIST)
-                        {
-                            item.PART_ID_ENCRYPT = Encrypt_UrlEncrypt(item.PART_ID);
-                            item.PART_NO_ENCRYPT = Encrypt_UrlEncrypt(item.PART_NO);
-                        }
-                    }
-
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
                 }
-                result.data = Data;
+                data.USERNAME = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
+
+                if (REPORT_TYPE.SEARCH == data.REPORT_TYPE)
+                {
+                    var Data = GET_SUMMARY_STOCK_LIST(out code, data);
+                    if (Data != null)
+                    {
+                        if (Data.SUMMARY_STOCK_LIST.Any())
+                        {
+                            foreach (var item in Data.SUMMARY_STOCK_LIST)
+                            {
+                                item.PART_ID_ENCRYPT = Encrypt_UrlEncrypt(item.PART_ID);
+                                item.PART_NO_ENCRYPT = Encrypt_UrlEncrypt(item.PART_NO);
+                            }
+                        }
+                        result.data = Data;
+                    }
+                }
+                else
+                {
+                    var Data = GET_SUMMARY_STOCK_LIST_FILE(out code, data);
+                    string tempLeter = "Report" + Guid.NewGuid().ToString();
+                    SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
+                    result.data = tempLeter;
+                }
             }
             catch (Exception ex)
             {

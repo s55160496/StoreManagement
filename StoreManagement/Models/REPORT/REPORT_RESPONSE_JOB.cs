@@ -40,6 +40,7 @@ namespace StoreManagement.Models
         public string OWNER_ID { get; set; }
         public string TYPE_JOB { get; set; }
         public string SEQ { get; set; }
+        public string SEQ_ENCRYPT { get; set; }
     }
 
 

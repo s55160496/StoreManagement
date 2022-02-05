@@ -12,6 +12,12 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
+    public static class REPORT_TYPE
+    {
+        public const string SEARCH = "SEARCH";
+        public const string EXCEL = "EXCEL";
+        public const string PDF = "PDF";
+    }
     public class ReportJobController : BaseController
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -21,7 +27,32 @@ namespace StoreManagement.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+
+                var CUSTOMER = GET_TBM_CUSTOMER(out code, new TBM_CUSTOMER() { });
+                ViewData["CUSTOMER"] = CUSTOMER == null ? null : CUSTOMER.ToArray();
+
+                var TEACHNICIAL = GET_TBM_CUSTOMER(out code, new TBM_CUSTOMER() { });
+                ViewData["TEACHNICIAL"] = TEACHNICIAL == null ? null : TEACHNICIAL.ToArray();
+
+                var JOBTYPE = GET_JOBTYPE(out code);
+                ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+                }
+            }
         }
 
         [HttpPost]
@@ -31,18 +62,36 @@ namespace StoreManagement.Controllers
             HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var Data = GET_SUMMARY_JOB_LIST(out code, data);
-                if (Data != null)
+                if (SessionUserInfoIsExpired())
                 {
-                    if (Data.SUMMARY_JOB_LIST.Any())
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                data.USER_PRINT = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
+
+                if (REPORT_TYPE.SEARCH == data.REPORT_TYPE)
+                {
+                    var Data = GET_SUMMARY_JOB_LIST(out code, data);
+                    if (Data != null)
                     {
-                        foreach (var item in Data.SUMMARY_JOB_LIST)
+                        if (Data.SUMMARY_JOB_LIST.Any())
                         {
-                            item.JOB_ID_ENCRYPT = Encrypt_UrlEncrypt(item.JOB_ID);
+                            foreach (var item in Data.SUMMARY_JOB_LIST)
+                            {
+                                item.JOB_ID_ENCRYPT = Encrypt_UrlEncrypt(item.JOB_ID);
+                                item.SEQ_ENCRYPT = Encrypt_UrlEncrypt(item.SEQ);
+                            }
                         }
+                        result.data = Data;
                     }
                 }
-                result.data = Data;
+                else
+                {
+                    var Data = GET_SUMMARY_JOB_LIST_FILE(out code, data);
+                    string tempLeter = "Report" + Guid.NewGuid().ToString();
+                    SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
+                    result.data = tempLeter;
+                }
             }
             catch (Exception ex)
             {
@@ -58,6 +107,26 @@ namespace StoreManagement.Controllers
             }
 
             return Json(result);
+        }
+
+        public IActionResult PreviewFile(string SessionRpt)
+        {
+            try
+            {
+                DataFile data_file = SessionExtensions.Get<DataFile>(HttpContext.Session, SessionRpt);
+                if (data_file == null)
+                {
+                    throw new Exception("ไม่พบข้อมูล ทำการค้นหาข้อมูลอีกครั้ง");
+                }
+
+                return File(data_file.FileData, data_file.ContentType);
+
+
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+            }
         }
     }
 }

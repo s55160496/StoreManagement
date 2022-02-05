@@ -153,6 +153,12 @@ var SysProcess = {
     SaveFail: "SaveFail",
 }
 
+var TypeReport = {
+    SEARCH: "SEARCH",
+    PDF: "PDF",
+    EXCEL: "EXCEL",
+}
+
 function GetElementName(sElement, objType) {
     return $(objType + "[id$=" + sElement + "]").attr("name");
 }
@@ -1756,7 +1762,7 @@ function InputMaskDecimal(objCtrl, integerDigits, digits, allowPlus, allowMinus)
 
 function InputMaskDecimal_Name(objCtrl, integerDigits, digits, allowPlus, allowMinus) {
     //Inputmask
-    $('#'+objCtrl).inputmask("decimal", {
+    $('#' + objCtrl).inputmask("decimal", {
         integerDigits: integerDigits, //จำนวนหลักของของค่าจำนวนเต็ม
         digits: digits, //จำนวนหลักของค่าทศนิยม
         radixPoint: '.', //จุดทศนิยม

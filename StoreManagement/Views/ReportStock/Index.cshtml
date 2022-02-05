@@ -119,24 +119,30 @@
     $(document).ready(function () {
         SetDateRangePicker($('#txtPartCreateFrom'), $('#txtPartCreateTo'));
 
-        SearchData();
+        SearchData('SEARCH');
 
         $('#btnSearch').on('click', function () {
-            SearchData();
+            SearchData('SEARCH');
+        });
+        $('#btnPDF').on('click', function () {
+            SearchData('PDF');
+        });
+        $('#btnExcel').on('click', function () {
+            SearchData('EXCEL');
         });
     });
 
-    function SearchData() {
+    function SearchData(type) {
         BlockUI();
 
         var obj = {
-            PARTNO: "",
-            PARTID: "",
-            LOCATIONID: "",
-            PART_CREATE_FROM: "",
-            PART_CREATE_TO: "",
+            PARTNO: GetValTextBox('txtPartNo'),
+            PARTID: GetValDropdown('ddlPartName'),
+            LOCATIONID: GetValDropdown('ddlLocation'),
+            PART_CREATE_FROM: GetValTextBox('txtPartCreateFrom'),
+            PART_CREATE_TO: GetValTextBox('txtPartCreateTo'),
             USERNAME: "",
-            REPORT_TYPE:"search"
+            REPORT_TYPE: type
         };
 
         $.ajax({
@@ -151,7 +157,15 @@
                 } else if (response.Status == SysProcess.Failed) {
                     DialogWarning(response.Msg);
                 } else {
-                    BindDataTable(response.data.SUMMARY_STOCK_LIST);
+                    if (TypeReport.SEARCH == type) {
+                        BindDataTable(response.data.SUMMARY_STOCK_LIST);
+                    } else if (TypeReport.EXCEL == type) {
+                        var url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                                window.open(url, '_blank');
+                    } else if (TypeReport.PDF == type) {
+                        var url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                                window.open(url, '_blank');
+                    }
                 }
             },
             error: function () {
