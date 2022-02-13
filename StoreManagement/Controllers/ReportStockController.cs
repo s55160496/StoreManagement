@@ -28,6 +28,10 @@ namespace StoreManagement.Controllers
                 ViewData["CUSTOMER"] = CUSTOMER == null ? null : CUSTOMER.ToArray();
 
                 var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
+                if (EMPLOYEE.Any())
+                {
+                    EMPLOYEE = EMPLOYEE.Where(w => w.POSITION == "MN").ToList();
+                }
                 ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
 
                 var LOCATION = GET_TBM_LOCATION_STORE(out code, new TBM_LOCATION_STORE() { });
@@ -66,7 +70,7 @@ namespace StoreManagement.Controllers
                     var Data = GET_SUMMARY_STOCK_LIST(out code, data);
                     if (Data != null)
                     {
-                        if (Data.SUMMARY_STOCK_LIST.Any())
+                        if (Data.SUMMARY_STOCK_LIST != null && Data.SUMMARY_STOCK_LIST.Any())
                         {
                             foreach (var item in Data.SUMMARY_STOCK_LIST)
                             {

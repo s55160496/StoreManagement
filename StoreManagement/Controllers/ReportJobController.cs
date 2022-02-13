@@ -34,8 +34,12 @@ namespace StoreManagement.Controllers
                 var CUSTOMER = GET_TBM_CUSTOMER(out code, new TBM_CUSTOMER() { });
                 ViewData["CUSTOMER"] = CUSTOMER == null ? null : CUSTOMER.ToArray();
 
-                var TEACHNICIAL = GET_TBM_CUSTOMER(out code, new TBM_CUSTOMER() { });
-                ViewData["TEACHNICIAL"] = TEACHNICIAL == null ? null : TEACHNICIAL.ToArray();
+                var TEACHNICIAL = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
+                if (TEACHNICIAL.Any())
+                {
+                    TEACHNICIAL = TEACHNICIAL.Where(w => w.POSITION == "MN").ToList();
+                }
+                ViewData["TEACHNICIAL"] = TEACHNICIAL.ToArray();
 
                 var JOBTYPE = GET_JOBTYPE(out code);
                 ViewData["JOBTYPE"] = JOBTYPE.ToArray();
