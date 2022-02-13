@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="wrap-input100 validate-input" data-validate="Enter password">
-                            <input class="input100" type="password" id="txtPassword" name="txtPassword" required placeholder="Password">
+                            <input class="input100" type="password" id="txtPassword" name="txtPassword" required placeholder="Password" onkeyup="entlogin(event)">
                             <span class="focus-input100" data-placeholder="&#xf191;"></span>
                         </div>
 
@@ -81,6 +81,15 @@
             }
         });
     });
+
+    const entlogin = (e) => {
+        if (e.keyCode === 13) {
+            // Cancel the default action, if needed
+            e.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("btnLogin").click();
+        }
+    }
 </script>
 
 

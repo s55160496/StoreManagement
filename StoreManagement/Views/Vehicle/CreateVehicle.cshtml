@@ -126,17 +126,31 @@
                             <select id="ddlCustomer_ID" name="ddlCustomer_ID" class="form-control">
                                 <option value="" selected>Choose...</option>
                                 @{
+                                    @*if (CUSTOMER != null && CUSTOMER.Any())
+            {
+                foreach (var item in CUSTOMER)
+                {
+                    if (item.CUSTOMER_ID == Model.CUSTOMER_ID)
+                    {
+                        <option value="@item.CUSTOMER_ID" selected>@item.DISTRICT_CODE</option>
+                    }
+                    else
+                    {
+                        <option value="@item.CUSTOMER_ID">@item.DISTRICT_CODE</option>
+                    }
+                }
+            }*@
                                     if (CUSTOMER != null && CUSTOMER.Any())
                                     {
                                         foreach (var item in CUSTOMER)
                                         {
                                             if (item.CUSTOMER_ID == Model.CUSTOMER_ID)
                                             {
-                                                <option value="@item.CUSTOMER_ID" selected>@item.DISTRICT_CODE</option>
+                            <option value="@item.CUSTOMER_ID" selected>@item.FNAME  @item.LNAME</option>
                                             }
                                             else
                                             {
-                                                <option value="@item.CUSTOMER_ID">@item.DISTRICT_CODE</option>
+                            <option value="@item.CUSTOMER_ID">@item.FNAME   @item.LNAME</option>
                                             }
                                         }
                                     }

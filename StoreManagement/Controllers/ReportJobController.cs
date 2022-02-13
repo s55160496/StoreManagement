@@ -74,7 +74,7 @@ namespace StoreManagement.Controllers
                     var Data = GET_SUMMARY_JOB_LIST(out code, data);
                     if (Data != null)
                     {
-                        if (Data.SUMMARY_JOB_LIST.Any())
+                        if (Data.SUMMARY_JOB_LIST != null && Data.SUMMARY_JOB_LIST.Any())
                         {
                             foreach (var item in Data.SUMMARY_JOB_LIST)
                             {
