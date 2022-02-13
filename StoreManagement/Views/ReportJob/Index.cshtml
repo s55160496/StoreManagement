@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "ISEE: ReportJob";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
     var JOBTYPE = (JOBTYPE[])ViewData["JOBTYPE"];
-    var TEACHNICIAL = (TBM_CUSTOMER[])ViewData["TEACHNICIAL"];
+    var TEACHNICIAL = (TBM_EMPLOYEE[])ViewData["TEACHNICIAL"];
 }
 <div class="card-body">
     <div>
@@ -63,7 +63,7 @@
                                 {
                                     foreach (var item in TEACHNICIAL)
                                     {
-                                        <option value="@item.CUSTOMER_ID">@item.FNAME @item.LNAME</option>
+                                        <option value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
                                     }
                                 }
                             }
