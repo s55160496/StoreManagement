@@ -30,7 +30,7 @@ namespace StoreManagement.Controllers
                 Model = GET_TBT_ADJ_SPAREPART(out code);
 
                 var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { });
-                ViewData["SPAREPART"] = SPAREPART.ToArray();
+                ViewData["SPAREPART"] = SPAREPART?.ToArray();
 
                 return View((Model != null ? Model.ToArray() : new TBT_ADJ_SPAREPART[] { }));
             }
