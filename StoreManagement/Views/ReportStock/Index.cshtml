@@ -42,8 +42,8 @@
                         <input type="text" class="form-control" id="txtPartNo" value="">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="ddlPartName">Part Name</label>
-                        <select id="ddlPartName" name="ddlPartName" class="form-control">
+                        <label for="ddlEmployee">Employee Name</label>
+                        <select id="ddlEmployee" name="ddlEmployee" class="form-control">
                             <option value="" selected>Choose...</option>
                             @{
                                 if (EMPLOYEE != null)
@@ -137,7 +137,7 @@
 
         var obj = {
             PARTNO: GetValTextBox('txtPartNo'),
-            PARTID: GetValDropdown('ddlPartName'),
+            PARTID: GetValDropdown('ddlEmployee'),
             LOCATIONID: GetValDropdown('ddlLocation'),
             PART_CREATE_FROM: GetValTextBox('txtPartCreateFrom'),
             PART_CREATE_TO: GetValTextBox('txtPartCreateTo'),
