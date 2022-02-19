@@ -20,6 +20,16 @@ namespace StoreManagement.Controllers
         }
         public IActionResult Index()
         {
+            var user = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount);
+            if (user.POSITION =="MN"|| user.POSITION == "OS")
+            {
+                ViewBag.noadd = "1";
+            }
+            else
+            {
+                ViewBag.noadd = "0";
+            }
+            
             return View();
         }
 
@@ -133,7 +143,8 @@ namespace StoreManagement.Controllers
             HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_TBM_SPAREPART(out code,new TBM_SPAREPART() { });
+                //var lstData = GET_TBM_SPAREPART(out code,new TBM_SPAREPART() { });
+                var lstData = GET_TBM_SPAREPART(out code, data);
                 if (lstData != null && lstData.Any())
                 {
                     foreach (var item in lstData)

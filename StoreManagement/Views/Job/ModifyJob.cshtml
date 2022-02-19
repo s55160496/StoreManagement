@@ -768,10 +768,10 @@
         html = `<select onchange="Jobpart_Sparepart_Change('${seq}')" id='${id}' class="form-control">${option}</select>`;
         return html;
     }
-
+    
     @* JOB PARTS CHANGE *@
     function Jobpart_Sparepart_Change(seq) {
-
+        debugger
         let id_select = 'ddlJobpart_Sparepart_' + seq;
         let id_desc = 'txtJobParts_Desc_' + seq;
         let val = GetValDropdown(id_select);
@@ -781,7 +781,8 @@
         if (Data) {
             $('#' + id_desc).val("");
             $('#' + id_desc).val(Data.PART_DESC);
-
+            console.log(Data.PART_VALUE)
+            $('#txtJobParts_QTY_' + seq).attr('max', Data.PART_VALUE);
             Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_DESC = Data.PART_DESC;
             Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_ID = val;
             Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_NO = part_no;
@@ -789,6 +790,10 @@
     }
 
     function JobParts_QTY_Change(seq) {
+        if ($('#txtJobParts_QTY_' + seq).val() > $('#txtJobParts_QTY_' + seq).attr('max')) {
+            $('#txtJobParts_QTY_' + seq).val($('#txtJobParts_QTY_' + seq).attr('max'))
+        }
+
         let id_txt = 'txtJobParts_QTY_' + seq;
         let val = GetValTextBox(id_txt);
         Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().TOTAL = val;
@@ -806,7 +811,7 @@
             el.SEQ = i + 1;
             td = '<td class="text-center">' + BindDropdownSparePart(el.SEQ, el.PART_ID) + '</td>';
             td += '<td class="text-center"><textarea disabled type="text" rows="2" class="form-control" id="txtJobParts_Desc_' + el.SEQ + '" name="txtJobParts_Desc_' + el.SEQ + '">'+(el.PART_DESC || '')+'</textarea></td>';
-            td += '<td class="text-center"><input onchange="JobParts_QTY_Change(' + el.SEQ + ')" type="text" class="form-control"  id="txtJobParts_QTY_' + el.SEQ + '" name="txtJobParts_QTY_' + el.SEQ + '" value="' + (el.TOTAL || '') + '"></textarea></td>';
+            td += '<td class="text-center"><input onchange="JobParts_QTY_Change(' + el.SEQ + ')" type="number" class="form-control"  id="txtJobParts_QTY_' + el.SEQ + '" name="txtJobParts_QTY_' + el.SEQ + '" value="' + (el.TOTAL || '') + '"></textarea></td>';
             td += '<td class="text-center"><a href="javascript:function() { return false; }" onclick="DelJobParts(' + el.SEQ + ')" id="btnJobParts_Del_' + el.SEQ + '" href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i></a></td>';
             html += "<tr>" + td + "</tr>";
 

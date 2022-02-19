@@ -24,7 +24,7 @@
                                 <th class="text-center">Service Price</th>
                                 <th class="text-center">Service No</th>
                                 <th class="text-center">Contract No</th>
-                                <th class="text-center">Customer ID</th>
+                                <th class="text-center">Customer Name</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -102,7 +102,7 @@ var urlSearchData = "@Url.Action("GetData", "Vehicle")";
                 td += '<td>' + (el.SERVICE_PRICE || '') + '</td>';
                 td += '<td>' + (el.SERVICE_NO || '') + '</td>';
                 td += '<td>' + (el.CONTRACT_NO || '') + '</td>';
-                td += '<td>' + (el.CUSTOMER_ID || '') + '</td>';
+                td += '<td>' + (el.CUSTOMER_NAME || '') + '</td>';
                 td += '<td class="text-center">' + '<a href="@Url.Action("CreateVehicle", "Vehicle")' + '?str=' + el.LICENSE_NO_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
                 html += "<tr>" + td + "</tr>";
             });

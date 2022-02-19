@@ -348,10 +348,10 @@ namespace StoreManagement.Controllers
                 var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
                 ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
 
-                var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { });
+                var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() {PAGE="JOB" });
                 ViewData["SPAREPART"] = SPAREPART.ToArray();
 
-                ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID; ;
+                ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID; 
 
                 return View(Model);
             }

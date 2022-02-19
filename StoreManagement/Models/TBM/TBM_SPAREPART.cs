@@ -31,5 +31,6 @@ namespace StoreManagement.Models
         public string CANCEL_REASON { get; set; }
         public string UPDATE_DATE { get; set; }
         public string UPDATE_BY { get; set; }
+        public string PAGE { get; set; }
     }
 }

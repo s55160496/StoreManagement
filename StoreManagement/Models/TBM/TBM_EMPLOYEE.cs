@@ -21,5 +21,6 @@ namespace StoreManagement.Models
         public string UPDATE_DATE { get; set; }
         public string UPDATE_BY { get; set; }
         public string USER_ID_ENCRYPT { get; set; }
+        public string SHOWSTOCK { get; set; }
     }
 }

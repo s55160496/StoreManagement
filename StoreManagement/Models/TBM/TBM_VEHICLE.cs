@@ -21,5 +21,6 @@ namespace StoreManagement.Models
         public string SERVICE_NO { get; set; }
         public string CONTRACT_NO { get; set; }
         public string CUSTOMER_ID { get; set; }
+        public string CUSTOMER_NAME { get; set; }
     }
 }
