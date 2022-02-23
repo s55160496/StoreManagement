@@ -5,6 +5,7 @@
 
     var POSITION = (EMPLOYEE_POSITION[])ViewData["POSITION"];
     var EDIT_FLG = (string)ViewData["EDIT_FLG"];
+    var STORE = (TBM_LOCATION_STORE[])ViewData["STORE"];
 }
 <div class="card-body">
     <div>
@@ -15,11 +16,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtUsername">Username</label>
-                            <input @(EDIT_FLG == "Y" ? "disabled": "") type="text" class="form-control" id="txtUsername" placeholder="Username" value="@Model.USER_NAME">
+                            <input @(EDIT_FLG == "Y" ? "disabled" : "") type="text" class="form-control" id="txtUsername" placeholder="Username" value="@Model.USER_NAME">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtPassword">Password</label>
-                            <input @(EDIT_FLG == "Y" ? "disabled": "") type="password" class="form-control" id="txtPassword" placeholder="Password" value="@Model.PASSWORD">
+                            <input @(EDIT_FLG == "Y" ? "disabled" : "") type="password" class="form-control" id="txtPassword" placeholder="Password" value="@Model.PASSWORD">
                         </div>
                     </div>
 
@@ -62,6 +63,30 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputState">LocationStore</label>
+                            <select id="ddlLocationstore" class="form-control">
+                                <option value="" selected>Choose...</option>
+                                @{
+                                    if (STORE != null && STORE.Any())
+                                    {
+                                        foreach (var item in STORE)
+                                        {
+                                            if (item.LOCATION_ID == Model.LOCATIONSTORE)
+                                            {
+                                                <option value="@item.LOCATION_ID" selected>@item.LOCATION_NAME</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -97,7 +122,8 @@
                     'FULLNAME':  GetValTextBox('txtFirstname'),
                     'LASTNAME': GetValTextBox('txtLastname'),
                     'IDCARD': GetValTextBox('txtIDCard').replace(/-/g, ''),
-                    'POSITION': GetValDropdown('ddlPosition')
+                    'POSITION': GetValDropdown('ddlPosition'),
+                    'LOCATIONSTORE': GetValDropdown('ddlLocationstore')
                 }
                 BlockUI();
                 $.ajax({

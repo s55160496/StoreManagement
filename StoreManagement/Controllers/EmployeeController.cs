@@ -52,8 +52,10 @@ namespace StoreManagement.Controllers
                 ViewData["EDIT_FLG"] = EDIT_FLG;
 
                 var POSITION = GET_EMPLOYEE_POSITION(out code);
-                ViewData["POSITION"] = POSITION.ToArray();
+                ViewData["POSITION"] = POSITION?.ToArray();
 
+                var STORE = GET_TBM_LOCATION_STORE(out code,new TBM_LOCATION_STORE());
+                ViewData["STORE"] = STORE?.ToArray();
                 return View(model);
             }
             catch (Exception ex)
