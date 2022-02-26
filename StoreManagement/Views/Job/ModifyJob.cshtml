@@ -763,7 +763,7 @@
             if (el.PART_ID == sVal) {
                 selected = 'selected';
             }
-            option += '<option ' + selected + ' value="' + el.PART_ID + '" data-item="' + el.PART_NO+'">' + el.PART_NO + ' - ' + el.PART_NAME+'</option>';
+            option += '<option ' + selected + ' value="' + el.PART_ID + '" data-item="' + el.PART_NO + '">' + el.PART_NO + ' - ' + el.PART_NAME + ' - ' + el.LOCATION_NAME + ' (' + el.PART_ID +')</option>';
         });
         html = `<select onchange="Jobpart_Sparepart_Change('${seq}')" id='${id}' class="form-control">${option}</select>`;
         return html;
@@ -771,7 +771,6 @@
     
     @* JOB PARTS CHANGE *@
     function Jobpart_Sparepart_Change(seq) {
-        debugger
         let id_select = 'ddlJobpart_Sparepart_' + seq;
         let id_desc = 'txtJobParts_Desc_' + seq;
         let val = GetValDropdown(id_select);

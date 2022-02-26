@@ -64,29 +64,81 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="inputState">LocationStore</label>
-                            <select id="ddlLocationstore" class="form-control">
-                                <option value="" selected>Choose...</option>
+                        <div class="form-group row col-lg-6">
+                            <label class="col-3 col-form-label">Stock Flg</label>
+                            <div class="col-9">
                                 @{
-                                    if (STORE != null && STORE.Any())
+                                    if (Model != null && !string.IsNullOrEmpty(Model.SHOWSTOCK))
                                     {
-                                        foreach (var item in STORE)
+                                        if (Model.SHOWSTOCK == "1")
                                         {
-                                            if (item.LOCATION_ID == Model.LOCATIONSTORE)
+                                            <label class="custom-control custom-radio">
+                                                <input checked id="rdlShowStore1" name="rdlStore" type="radio" class="custom-control-input" value="1">
+                                                <span class="custom-control-indicator"></span>
+                                                <label class="custom-control-label" for="rdlShowStore1">All Store</label>
+                                            </label>
+                                            <label class="custom-control custom-radio">
+                                                <input id="rdlShowStore0" name="rdlStore" type="radio" class="custom-control-input" value="0">
+                                                <span class="custom-control-indicator"></span>
+                                                <label class="custom-control-label" for="rdlShowStore0">Store</label>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="custom-control custom-radio">
+                                                <input  id="rdlShowStore1" name="rdlStore" type="radio" class="custom-control-input" value="1">
+                                                <span class="custom-control-indicator"></span>
+                                                <label class="custom-control-label" for="rdlShowStore1">All Store</label>
+                                            </label>
+                                            <label class="custom-control custom-radio">
+                                                <input checked id="rdlShowStore0" name="rdlStore" type="radio" class="custom-control-input" value="0">
+                                                <span class="custom-control-indicator"></span>
+                                                <label class="custom-control-label" for="rdlShowStore0">Store</label>
+                                            </label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <label class="custom-control custom-radio">
+                                            <input checked id="rdlShowStore1" name="rdlStore" type="radio" class="custom-control-input" value="1">
+                                            <span class="custom-control-indicator"></span>
+                                            <label class="custom-control-label" for="rdlShowStore1">All Store</label>
+                                        </label>
+                                        <label class="custom-control custom-radio">
+                                            <input id="rdlShowStore0" name="rdlStore" type="radio" class="custom-control-input" value="0">
+                                            <span class="custom-control-indicator"></span>
+                                            <label class="custom-control-label" for="rdlShowStore0">Store</label>
+                                        </label>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputState">LocationStore</label>
+                                <select id="ddlLocationstore" class="form-control">
+                                    <option value="" selected>Choose...</option>
+                                    @{
+                                        if (STORE != null && STORE.Any())
+                                        {
+                                            foreach (var item in STORE)
                                             {
-                                                <option value="@item.LOCATION_ID" selected>@item.LOCATION_NAME</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
+                                                if (item.LOCATION_ID == Model.LOCATIONSTORE)
+                                                {
+                                                    <option value="@item.LOCATION_ID" selected>@item.LOCATION_NAME</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.LOCATION_ID">@item.LOCATION_NAME</option>
+                                                }
                                             }
                                         }
                                     }
-                                }
-                            </select>
-                        </div>
-                    </div>
+                                </select>
+                            </div>
+                        </div>*@
                 </form>
             </div>
         </div>
@@ -123,7 +175,8 @@
                     'LASTNAME': GetValTextBox('txtLastname'),
                     'IDCARD': GetValTextBox('txtIDCard').replace(/-/g, ''),
                     'POSITION': GetValDropdown('ddlPosition'),
-                    'LOCATIONSTORE': GetValDropdown('ddlLocationstore')
+                    'SHOWSTOCK': $("input[name='rdlStore']:checked").val(),
+                    //'LOCATIONSTORE': GetValDropdown('ddlLocationstore')
                 }
                 BlockUI();
                 $.ajax({

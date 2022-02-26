@@ -38,7 +38,7 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="txtPartNo">Part No</label>
+                        <label for="txtPartNo">Part No / Part Name</label>
                         <input type="text" class="form-control" id="txtPartNo" value="">
                     </div>
                     <div class="form-group col-md-6">
@@ -78,38 +78,40 @@
 
                 <div class="col-sm-12 text-center">
                     <button id="btnSearch" type="button" style="margin:0!important" class="btn btn-info" title="Search" data-toggle="tooltip"><i class="fa fa-search"></i>&nbsp;Search</button>
-                    <button id="btnPDF" type="button" class="btn btn-success" title="PDF" data-toggle="tooltip"><i class="fa fa-file-pdf"></i>&nbsp;Print</button>
-                    <button id="btnExcel" type="button" class="btn btn-dark" title="Excel" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
-
+                    <button id="btnClear" type="button" class="btn btn-dark" title="Clear" data-toggle="tooltip"><i class="fa fa-undo"></i>&nbsp;Clear</button>
                 </div>
 
 
                 <div class="row mt-5">
-                    <div id="divData" class="col-sm-12">
-                        <div class="table-responsive">
-                            <table id="tbSearchData" class="table tableData" style="min-width:1500px">
-                                <thead class="thead-HMCPO darkCustom">
-                                    <tr>
-                                        <th class="text-center">part no </th>
-                                        <th class="text-center">part  name</th>
-                                        <th class="text-center">part-create</th>
-                                        <th class="text-center">cost-price</th>
-                                        <th class="text-center">sale-price</th>
-                                        <th class="text-center">unit</th>
-                                        <th class="text-center">adj unit</th>
-                                        <th class="text-center">min</th>
-                                        <th class="text-center">max</th>
-                                        <th class="text-center">location</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                    <div class="col-sm-12 text-left">
+                        <button id="btnPDF" type="button" class="btn btn-success" title="PDF" data-toggle="tooltip"><i class="fa fa-file-pdf"></i>&nbsp;Print</button>
+                        <button id="btnExcel" type="button" class="btn btn-warning" title="Excel" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
+                    </div>
+                        <div id="divData" class="col-sm-12">
+                            <div class="table-responsive">
+                                <table id="tbSearchData" class="table tableData" style="min-width:1500px">
+                                    <thead class="thead-HMCPO darkCustom">
+                                        <tr>
+                                            <th class="text-center">part no </th>
+                                            <th class="text-center">part  name</th>
+                                            <th class="text-center">location</th>
+                                            <th class="text-center">cost-price</th>
+                                            <th class="text-center">sale-price</th>
+                                            <th class="text-center">unit</th>
+                                            <th class="text-center">adj unit</th>
+                                            <th class="text-center">min</th>
+                                            <th class="text-center">max</th>
+                                            <th class="text-center">part-create</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
+                </div>
         </div>
     </div>
 </div>
@@ -117,6 +119,9 @@
     var urlSearchData = "@Url.Action("GetData", "ReportStock")";
 
     $(document).ready(function () {
+        $('#ddlEmployee').select2();
+        $('#ddlLocation').select2();
+
         SetDateRangePicker($('#txtPartCreateFrom'), $('#txtPartCreateTo'));
 
         SearchData('SEARCH');
@@ -129,6 +134,13 @@
         });
         $('#btnExcel').on('click', function () {
             SearchData('EXCEL');
+        });
+        $('#btnClear').on('click', function () {
+            $('#txtPartCreateFrom').val('');
+            $('#txtPartCreateTo').val('');
+            $('#txtPartNo').val('');
+            $('#ddlEmployee').val('');
+            $('#ddlLocation').val('');
         });
     });
 
@@ -184,20 +196,20 @@
 
             td = '<td class="text-center">' + (el.PART_NO || '') + '</td>';
             td += '<td class="text-left">' + (el.PART_NAME || '') + '</td>';
-            td += '<td class="text-center">' + (el.CREATE_DATE || '') + '</td>';
+            td += '<td class="text-left">' + (el.LOCATION_NAME || '') + '</td>';
             td += '<td class="text-right">' + (el.COST_PRICE || '') + '</td>';
             td += '<td class="text-right">' + (el.SALE_PRICE || '') + '</td>';
             td += '<td class="text-right">' + (el.PART_VALUE || '') + '</td>';
             td += '<td class="text-right">' + (el.ADJ_PART_VALUE || '') + '</td>';
             td += '<td class="text-right">' + (el.MINIMUM_VALUE || '') + '</td>';
             td += '<td class="text-right">' + (el.MAXIMUM_VALUE || '') + '</td>';
-            td += '<td class="text-left">' + (el.LOCATION_NAME || '') + '</td>';
+            td += '<td class="text-center">' + (el.CREATE_DATE || '') + '</td>';
                 html += "<tr>" + td + "</tr>";
             });
 
         $("table[id$=tbSearchData] tbody").html(html);
 
-        table.DataTable({
+        var table = $('#tbSearchData').DataTable({
             //scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,

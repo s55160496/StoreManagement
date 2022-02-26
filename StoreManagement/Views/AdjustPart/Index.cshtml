@@ -76,7 +76,7 @@
                     {
                         foreach (var item in SPAREPART)
                         {
-                            <option value="@item.PART_ID" data-item="@item.PART_NO">@item.PART_NO - @item.PART_NAME</option>
+                            <option value="@item.PART_ID" data-item="@item.PART_NO">@item.PART_NO - @item.PART_NAME - @item.LOCATION_NAME (@item.PART_ID)</option>
                         }
                     }
                 }
@@ -95,7 +95,7 @@
     <div class="row">
         <div id="divData" class="col-sm-12">
             <div class="table-responsive">
-                <table id="tbSearchData" class="table tableData" style="min-width:1200px">
+                <table id="tbSearchData" class="table tableData" style="min-width:1500px">
                     <thead class="thead-HMCPO darkCustom">
                         <tr>
                             <th style="width: 11%"></th>
@@ -147,6 +147,7 @@
 @section Scripts{
     <script defer>
         $(document).ready(function () {
+            $('#ddlSparePart').select2();
 
             InputMaskDecimal_Name('txtAdj_Part', 100000, 0, true, true);
             var table = $('#tbSearchData').DataTable({

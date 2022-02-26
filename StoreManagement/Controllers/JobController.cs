@@ -25,7 +25,7 @@ namespace StoreManagement.Controllers
 
         public IActionResult Index()
         {
-                return View();
+            return View();
         }
 
         public IActionResult CreateJob()
@@ -36,7 +36,7 @@ namespace StoreManagement.Controllers
                 var JOBTYPE = GET_JOBTYPE(out code);
                 ViewData["JOBTYPE"] = JOBTYPE.ToArray();
 
-                var EMPLOYEE = GET_TBM_EMPLOYEE(out code,new TBM_EMPLOYEE() { });
+                var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
                 ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
 
                 return View();
@@ -61,7 +61,7 @@ namespace StoreManagement.Controllers
             HttpStatusCode code = HttpStatusCode.OK;
             try
             {
-                var lstData = GET_CUSTOMER_BY_JOB(out code ,License_No);
+                var lstData = GET_CUSTOMER_BY_JOB(out code, License_No);
                 result.data = lstData;
             }
             catch (Exception ex)
@@ -152,6 +152,7 @@ namespace StoreManagement.Controllers
                     throw new Exception("Session time out");
                 }
                 data.USERID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
+
                 if (!string.IsNullOrEmpty(SIGNNATURE))
                 {
                     string path = @"UploadFile\Temp\";
@@ -172,32 +173,41 @@ namespace StoreManagement.Controllers
 
                     var arr = SIGNNATURE.Split(',');
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
-                    
-                    if(data.FLG_CLOSE == "Y")
+                    bool Ispass = true;
+                    if (data.FLG_CLOSE == "Y")
                     {
                         if (imageBytes.Length == 3416)
                         {
+                            Ispass = false;
                             throw new Exception("ระบุ ลายเช็นต์");
                         }
                     }
-  
-                    System.IO.File.WriteAllBytes(imgPath, imageBytes);
-
-                    if (data.JOB_IMAGES == null)
+                    else
                     {
-                        data.JOB_IMAGES = new List<job_file>();
+                        if (imageBytes.Length == 3416)
+                        {
+                            Ispass = false;
+                        }
                     }
 
-                    //path = Path.Combine(_hostingEnvironment.ContentRootPath + "\\wwwroot\\", path.Replace("/", "\\"), imageName);
+                    if (Ispass)
+                    {
+                        if (data.JOB_IMAGES == null)
+                        {
+                            data.JOB_IMAGES = new List<job_file>();
+                        }
 
-                    DataFile df = new DataFile(imgPath);
-                    job_file jt = new job_file();
-                    jt.ContentType = df.ContentType;
-                    jt.FileName = df.FileName;
-                    jt.FileData = Convert.ToBase64String(df.FileData);
-                    jt.IMAGE_TYPE = "sig";
-                    data.JOB_IMAGES.Add(jt);
+                        System.IO.File.WriteAllBytes(imgPath, imageBytes);
+                        //path = Path.Combine(_hostingEnvironment.ContentRootPath + "\\wwwroot\\", path.Replace("/", "\\"), imageName);
 
+                        DataFile df = new DataFile(imgPath);
+                        job_file jt = new job_file();
+                        jt.ContentType = df.ContentType;
+                        jt.FileName = df.FileName;
+                        jt.FileData = Convert.ToBase64String(df.FileData);
+                        jt.IMAGE_TYPE = "sig";
+                        data.JOB_IMAGES.Add(jt);
+                    }
                 }
 
                 if (arr_file != null && arr_file.Any())
@@ -318,7 +328,7 @@ namespace StoreManagement.Controllers
 
                 CLOSEJOB Model = new CLOSEJOB();
 
-                var CLOSE_JOB_DETAIL = GET_CLOSE_JOB_DETAIL(out code,str);
+                var CLOSE_JOB_DETAIL = GET_CLOSE_JOB_DETAIL(out code, str);
                 if (CLOSE_JOB_DETAIL != null)
                 {
                     Model = CLOSE_JOB_DETAIL;
@@ -348,10 +358,10 @@ namespace StoreManagement.Controllers
                 var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
                 ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
 
-                var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() {PAGE="JOB" });
+                var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { PAGE = "JOB" });
                 ViewData["SPAREPART"] = SPAREPART.ToArray();
 
-                ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID; 
+                ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
 
                 return View(Model);
             }
@@ -457,12 +467,12 @@ namespace StoreManagement.Controllers
                 IJOB_ID = Decrypt_UrlDecode(IJOB_ID);
                 SEQ = Decrypt_UrlDecode(SEQ);
 
-                var file = GET_FILE(out code,IJOB_ID, SEQ);
+                var file = GET_FILE(out code, IJOB_ID, SEQ);
                 if (file == null)
                 {
                     throw new Exception("ไม่พบ ไฟล์");
                 }
-                
+
                 return File(Convert.FromBase64String(file.FileData), file.ContentType);
                 //return View(file);
             }
@@ -494,7 +504,7 @@ namespace StoreManagement.Controllers
 
                 IJOB_ID = Decrypt_UrlDecode(IJOB_ID);
                 SEQ = Decrypt_UrlDecode(SEQ);
-                result.Msg = TERMINATE_TBT_JOB_IMAGE(out code,IJOB_ID, SEQ);
+                result.Msg = TERMINATE_TBT_JOB_IMAGE(out code, IJOB_ID, SEQ);
             }
             catch (Exception ex)
             {

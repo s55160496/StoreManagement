@@ -124,6 +124,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#ddlProvince').select2();
+        $('#ddlDistrict').select2();
+        $('#ddlSub_District').select2();
 
         SetTxtNumber($('#txtID_Card'));
         $("#txtID_Card").on('input blur', cardFormat);
