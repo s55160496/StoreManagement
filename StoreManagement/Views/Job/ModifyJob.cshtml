@@ -7,6 +7,8 @@
     var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
     var SPAREPART = (TBM_SPAREPART[])ViewData["SPAREPART"];
     var CHECKLIST = (CHECKLIST[])ViewData["CHECK_LIST_MASTER"];
+
+    var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
 }
 <script src="~/lib/jSignature/flashcanvas.js"></script>
 <script src="~/lib/jSignature/jSignature.min.js"></script>
@@ -569,10 +571,10 @@
                                                         </div>
                                                     </div>
                                                     @*<div class="form-group col-md-2">
-                                                        <button id="btnConfirmSignature" type="button" class="btn-md btn-outline-info" title="Confirm" data-toggle="tooltip"><i class="fa fa-check"></i>&nbsp;Confrim Signature</button>
-                                                        <button id="btnClearSignature" type="button" class="btn-md btn-outline-dark" title="Confirm" data-toggle="tooltip"><i class="fas fa-undo"></i>&nbsp;Clear</button>
+                                                            <button id="btnConfirmSignature" type="button" class="btn-md btn-outline-info" title="Confirm" data-toggle="tooltip"><i class="fa fa-check"></i>&nbsp;Confrim Signature</button>
+                                                            <button id="btnClearSignature" type="button" class="btn-md btn-outline-dark" title="Confirm" data-toggle="tooltip"><i class="fas fa-undo"></i>&nbsp;Clear</button>
 
-                                                    </div>*@
+                                                        </div>*@
                                                 </div>
 
                                                 <div class="form-group col-md-12">
@@ -621,15 +623,28 @@
 </div>
 <div class="card-footer bg-light">
     <div class="col-sm-12 text-center">
-        <button id="btnDraft" type="button" class="btn btn-info" title="Draft" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Save Draft</button>
-        <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
+        @{
+            if (Model != null && (Model.JOB_STATUS == "D" || string.IsNullOrEmpty(Model.JOB_STATUS)))
+            {
+                <button id="btnDraft" type="button" class="btn btn-info" title="Draft" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Save Draft</button>
+            }
+        }
+        @{
+            if (SessionUserInfo.POSITION == "CK" || SessionUserInfo.POSITION == "MG")
+            {
+                <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
+            }
+            else if (SessionUserInfo.POSITION == "CK" && Model != null && (Model.JOB_STATUS == "D" || string.IsNullOrEmpty(Model.JOB_STATUS)))
+            {
+                <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
+            }
+        }
         <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
     </div>
 </div>
 <input type="hidden" id="hddID" value="@Model.JOB_ID" />
 <input type="hidden" id="hddUserID" value="@ViewBag.UserID" />
-<input type="hidden" id="hddPermission" value="1" />
-
+<input type="hidden" id="hddPermission" value="@SessionUserInfo.POSITION" />
 @section Scripts{
 
     @* jSignature *@
@@ -718,7 +733,7 @@
     </script>
 
     @* TAB JOB DETAIL *@
-<script type="text/javascript">
+    <script type="text/javascript">
     var arrJobParts = @Html.Raw(Json.Serialize(Model.JOB_PARTS)) == null ? [] : @Html.Raw(Json.Serialize(Model.JOB_PARTS));
     var arrImage_Detail = @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL)) == null ? [] : @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL));
 
@@ -768,7 +783,7 @@
         html = `<select onchange="Jobpart_Sparepart_Change('${seq}')" id='${id}' class="form-control">${option}</select>`;
         return html;
     }
-    
+
     @* JOB PARTS CHANGE *@
     function Jobpart_Sparepart_Change(seq) {
         let id_select = 'ddlJobpart_Sparepart_' + seq;
@@ -895,7 +910,7 @@
         });
     }
 
-</script>
+    </script>
 
     @* TAB CHECK LIST *@
     <script type="text/javascript">
@@ -945,22 +960,30 @@
     </script>
 
     @* SAVE DATA *@
-<script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function () {
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
 
         $('#btnSubmit').on('click', function () {
-            SAVEDATA('Y');
+            var prm = GetValTextBox('hddPermission');
+            if (prm == 'MN') {
+                SAVEDATA('F','');
+            } else if (prm == 'CK' || prm == 'MG') {
+                SAVEDATA('C','');
+            } else {
+                DialogWarning('No Permission!');
+            }
+
         });
 
         $('#btnDraft').on('click', function () {
-            SAVEDATA('N');
+            SAVEDATA('D','');
         });
     });
 
-    function SAVEDATA(flg) {
+    function SAVEDATA(JOB_STATUS, FLG_CLOSE) {
 
         DialogConfirmSubmit(function () {
             swal.disableButtons();
@@ -1016,7 +1039,8 @@
                 //   }
                 //],
                 'JOB_PARTS': arrJobParts,
-                'FLG_CLOSE': flg
+                'JOB_STATUS': JOB_STATUS,
+                'FLG_CLOSE': FLG_CLOSE,
             };
             BlockUI();
             $.ajax({
@@ -1034,7 +1058,16 @@
                     } else if (response.Status == SysProcess.Failed) {
                         DialogWarning(response.Msg);
                     } else {
-                        DialogSucessRedirect('@Url.Action("Index", "Job")');
+                        if (response.Msg != '') {
+                            SwAlert.Confirm(AlertTitle.Confirm, response.Msg, function () {
+                                SAVEDATA(JOB_STATUS, 'Y');
+                            }, function () {
+                                UnblockUI();
+                                swal.close();
+                            });
+                        } else {
+                             DialogSucessRedirect('@Url.Action("Index", "Job")');
+                        }
                     }
                 },
                 error: function () {
@@ -1044,7 +1077,7 @@
     }
 
 
-</script>
+    </script>
 
     @* Signature *@
     <script type="text/javascript">

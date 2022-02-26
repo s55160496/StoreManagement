@@ -22,6 +22,7 @@
                                 <th class="text-center">LastName</th>
                                 <th class="text-center">ID Card</th>
                                 <th class="text-center">Position</th>
+                                <th class="text-center">Location</th>
                                 <th class="text-center">Create Date</th>
                                 <th class="text-center">Create By</th>
                                 <th class="text-center">Update Date</th>
@@ -92,6 +93,7 @@ var urlSearchData = "@Url.Action("GetData", "Employee")";
                 td += '<td>' + (el.LASTNAME || '') + '</td>';
                 td += '<td>' + (el.IDCARD || '') + '</td>';
                 td += '<td>' + (el.POSITION_DESCRIPTION || '') + '</td>';
+                td += '<td>' + (el.LOCATION_NAME || '') + '</td>';
                 td += '<td>' + (el.CREATE_DATE || '') + '</td>';
                 td += '<td>' + (el.CREATE_BY || '') + '</td>';
                 td += '<td>' + (el.UPDATE_DATE || '') + '</td>';

@@ -28,7 +28,8 @@ namespace StoreManagement.Models
         public List<job_file> JOB_IMAGES { get; set; }
         public List<tbt_job_image> IMAGE_DETAIL { get; set; }
         public List<tbt_job_part> JOB_PARTS { get; set; }
-        public string FLG_CLOSE { get; set; } // Y : close , N : draft
+        public string FLG_CLOSE { get; set; } // Y : comfirm , N : no comfirm
+        public string JOB_STATUS { get; set; } // F : Fix , D : draft , C : Close
     }
     public class job_file /*: DataFile*/
     {

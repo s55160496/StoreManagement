@@ -174,7 +174,7 @@ namespace StoreManagement.Controllers
                     var arr = SIGNNATURE.Split(',');
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
                     bool Ispass = true;
-                    if (data.FLG_CLOSE == "Y")
+                    if (data.JOB_STATUS == "Y")
                     {
                         if (imageBytes.Length == 3416)
                         {
