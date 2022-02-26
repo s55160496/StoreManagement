@@ -969,9 +969,9 @@
         $('#btnSubmit').on('click', function () {
             var prm = GetValTextBox('hddPermission');
             if (prm == 'MN') {
-                SAVEDATA('F','');
+                SAVEDATA('F','N');
             } else if (prm == 'CK' || prm == 'MG') {
-                SAVEDATA('C','');
+                SAVEDATA('C','N');
             } else {
                 DialogWarning('No Permission!');
             }
@@ -1058,7 +1058,7 @@
                     } else if (response.Status == SysProcess.Failed) {
                         DialogWarning(response.Msg);
                     } else {
-                        if (response.Msg != '') {
+                        if (response.Msg != undefined && response.Msg != '') {
                             SwAlert.Confirm(AlertTitle.Confirm, response.Msg, function () {
                                 SAVEDATA(JOB_STATUS, 'Y');
                             }, function () {

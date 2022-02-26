@@ -246,6 +246,7 @@ namespace StoreManagement.Controllers
                 if (response.IsSuccessful)
                 {
                     var content = response.Content;
+                    result.Msg = response.Content;
                 }
                 else
                 {
