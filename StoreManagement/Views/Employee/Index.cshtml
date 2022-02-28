@@ -14,7 +14,7 @@
                         <a id="btnDel" onclick="DeleteData()" class="btn btn-danger" title="Delete" data-toggle="tooltip"><i class="fa fa-trash-alt" aria-hidden="true"></i>&nbsp;</a>
                         <a id="btnAdd" style="float:right" class="btn btn-success" href="@Url.Action("CreateEmployee","Employee")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
                     </div>
-                    <table id="tbSearchData" class="table tableData" style="min-width:1200px">
+                    <table id="tbSearchData" class="table tableData" style="min-width:1500px">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th><input type="checkbox" name="select_all" value="1" id="select-all"></th>
@@ -23,10 +23,11 @@
                                 <th class="text-center">ID Card</th>
                                 <th class="text-center">Position</th>
                                 <th class="text-center">Location</th>
-                                <th class="text-center">Create Date</th>
                                 <th class="text-center">Create By</th>
-                                <th class="text-center">Update Date</th>
+                                <th class="text-center">Create Date</th>
                                 <th class="text-center">Update By</th>
+                                <th class="text-center">Update Date</th>
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -94,10 +95,10 @@ var urlSearchData = "@Url.Action("GetData", "Employee")";
                 td += '<td>' + (el.IDCARD || '') + '</td>';
                 td += '<td>' + (el.POSITION_DESCRIPTION || '') + '</td>';
                 td += '<td>' + (el.LOCATION_NAME || '') + '</td>';
-                td += '<td>' + (el.CREATE_DATE || '') + '</td>';
                 td += '<td>' + (el.CREATE_BY || '') + '</td>';
-                td += '<td>' + (el.UPDATE_DATE || '') + '</td>';
+                td += '<td>' + (el.CREATE_DATE || '') + '</td>';
                 td += '<td>' + (el.UPDATE_BY || '') + '</td>';
+                td += '<td>' + (el.UPDATE_DATE || '') + '</td>';
                 td += '<td class="text-center">' + '<a href="@Url.Action("CreateEmployee", "Employee")' + '?str=' + el.USER_ID_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
                 html += "<tr>" + td + "</tr>";
             });
