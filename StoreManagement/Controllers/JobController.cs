@@ -521,7 +521,6 @@ namespace StoreManagement.Controllers
             }
 
             return Json(result);
-        }
-
+        }        
     }
 }

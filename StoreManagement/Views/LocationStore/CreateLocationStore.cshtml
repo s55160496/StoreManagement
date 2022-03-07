@@ -59,8 +59,8 @@
            // if (CheckValidate("divForm")) {
                 DialogConfirmSubmit(function () {
                 swal.disableButtons();
-                BlockUI();
-
+                    BlockUI();
+                    console.log( GetValDropdown('ddlOwnerID'))
                 var obj = {
                     'LOCATION_ID': GetValTextBox('txtLocationID'),
                     'LOCATION_NAME': GetValTextBox('txtLocationName'),
