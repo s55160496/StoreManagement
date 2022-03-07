@@ -13,13 +13,13 @@
     <div>
         <div id="divForm">
             <div class="container">
-                @if(SessionUserInfo.MENU.Where(a=>a.MENU_DESCRIPTION == "CreateJob").Any())
-            {
-                <div class="form-group">
-                    <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateJob","Job")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
-                </div>
-            }
-                
+                @if (SessionUserInfo.MENU.Where(a => a.MENU_DESCRIPTION == "CreateJob").Any())
+                {
+                    <div class="form-group">
+                        <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateJob","Job")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
+                    </div>
+                }
+
                 <div id="divSearch">
                 </div>
             </div>
@@ -28,7 +28,7 @@
         <div class="row">
             <div id="divData" class="col-sm-12">
                 <div class="table-responsive">
-                    <table id="tbSearchData" class="table tableData">
+                    <table id="tbSearchData" class="table tableData" style="min-width:1500px">
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th style="width: 11%"></th>
@@ -95,7 +95,7 @@ var urlSearchData = "@Url.Action("GetData", "Job")";
                 td = '<td class="text-center">' + (i + 1) + '</td>';
                 td += '<td class="text-center">' + (el.JOB_ID || '') + '</td>';
                 td += '<td class="text-center">' + (el.LICENSE_NO || '') + '</td>';
-                td += '<td class="text-center">' + (el.CUS_FULLNAME || '') + '</td>';
+                td += '<td class="text-left">' + (el.CUS_FULLNAME || '') + '</td>';
                 td += '<td class="text-left">' + (el.EMAIL_CUSTOMER || '') + '</td>';
                 td += '<td class="text-center">' + (el.INVOICE_NO || '') + '</td>';
                 td += '<td class="text-left">' + (el.EMP_FULLNAME || '') + '</td>';
@@ -118,7 +118,9 @@ var urlSearchData = "@Url.Action("GetData", "Job")";
                 , { width: 70, targets: 1 }
                 , { width: 200, targets: 3 }
                 , { width: 200, targets: 4 }
-                , { width: 200, targets: 7 }
+                , { width: 150, targets: 7 }
+                , { width: 150, targets: 8 }
+                , { width: 150, targets: 9 }
             ],
         });
     }
