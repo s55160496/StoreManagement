@@ -18,6 +18,7 @@ var AlertMsg = {
     ConfirmDelete: "Do you want to delete data?",
     ConfirmExport: "Do you want to export data?",
     ConfirmApprove: "Do you want to approve data?",
+    ConfirmConfirmWarning: "Do you want to confirm data?",
     ConfirmRevisit: "Do you want to revisit data?",
     ConfirmCancel: "Do you want to cancel data?",
     ConfirmSendMail: "Do you want to send mail?",
@@ -108,6 +109,10 @@ function DialogShowDetail(sMsg) {
 
 function DialogWarning(sMsg) {
     SwAlert.Error(AlertTitle.Warning, sMsg);
+}
+
+function DialogConfirmWarning(funcYes, funcNo) {
+    SwAlert.Confirm(AlertTitle.Warning, AlertMsg.ConfirmConfirmWarning, funcYes, funcNo);
 }
 
 function DialogWarningRedirect(sMsg, sPath) {

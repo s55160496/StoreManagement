@@ -174,7 +174,7 @@ namespace StoreManagement.Controllers
                     var arr = SIGNNATURE.Split(',');
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
                     bool Ispass = true;
-                    if (data.JOB_STATUS == "Y")
+                    if (data.JOB_STATUS == "C" || data.JOB_STATUS == "F")
                     {
                         if (imageBytes.Length == 3416)
                         {
@@ -230,6 +230,20 @@ namespace StoreManagement.Controllers
                         data.JOB_IMAGES.Add(jt);
                     }
 
+                }
+
+                if (data.JOB_STATUS == "C" || data.JOB_STATUS == "F")
+                {
+                    if (data.JOB_PARTS.Any())
+                    {
+                        foreach (var item in data.JOB_PARTS)
+                        {
+                            if (string.IsNullOrWhiteSpace(item.TOTAL))
+                            {
+                                throw new Exception("ระบุ QTY ให้ครบถ้วน");
+                            }
+                        }
+                    }
                 }
 
                 var client = new RestClient(URL_API);
@@ -298,6 +312,32 @@ namespace StoreManagement.Controllers
                     }
                 }
                 result.data = lstData;
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult GET_CHECK_STOCK(string part_id, string location_id)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                var Data = CHECK_STOCK(out code, part_id, location_id);
+                result.data = Data;
             }
             catch (Exception ex)
             {

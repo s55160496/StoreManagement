@@ -785,27 +785,44 @@
     }
 
     @* JOB PARTS CHANGE *@
-    function Jobpart_Sparepart_Change(seq) {
-        let id_select = 'ddlJobpart_Sparepart_' + seq;
-        let id_desc = 'txtJobParts_Desc_' + seq;
-        let val = GetValDropdown(id_select);
-        let part_no = $('#' + id_select).find('option:selected').attr('data-item');
+        function Jobpart_Sparepart_Change(seq) {
+            let id_txtQTY = 'txtJobParts_QTY_' + seq;
+            let id_select = 'ddlJobpart_Sparepart_' + seq;
+            let id_desc = 'txtJobParts_Desc_' + seq;
+            let val = GetValDropdown(id_select);
+            let part_no = $('#' + id_select).find('option:selected').attr('data-item');
+            $('#' + id_txtQTY).val("");
 
-        var Data = Enumerable.From(arr_sparepart).Where(function (w) { return w.PART_ID == val }).FirstOrDefault();
-        if (Data) {
-            $('#' + id_desc).val("");
-            $('#' + id_desc).val(Data.PART_DESC);
-            console.log(Data.PART_VALUE)
-            $('#txtJobParts_QTY_' + seq).attr('max', Data.PART_VALUE);
-            Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_DESC = Data.PART_DESC;
-            Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_ID = val;
-            Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_NO = part_no;
+            var dup = Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ != seq && w.PART_ID == val }).ToArray();
+            if (dup.length > 0) {
+                DialogWarning(AlertMsg.Desc_Warning_Duplicate);
+                $('#' + id_select).val("");
+                $('#' + id_desc).val("");
+            } else {
+                var Data = Enumerable.From(arr_sparepart).Where(function (w) { return w.PART_ID == val }).FirstOrDefault();
+            if (Data) {
+                $('#' + id_desc).val("");
+                $('#' + id_desc).val(Data.PART_DESC);
+                console.log(Data.PART_VALUE)
+                $('#txtJobParts_QTY_' + seq).attr('max', Data.PART_VALUE);
+                Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_DESC = Data.PART_DESC;
+                Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_ID = val;
+                Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_NO = part_no;
+            }
         }
     }
 
-    function JobParts_QTY_Change(seq) {
-        if ($('#txtJobParts_QTY_' + seq).val() > $('#txtJobParts_QTY_' + seq).attr('max')) {
-            $('#txtJobParts_QTY_' + seq).val($('#txtJobParts_QTY_' + seq).attr('max'))
+        function JobParts_QTY_Change(seq) {
+        if (+$('#txtJobParts_QTY_' + seq).val() > +$('#txtJobParts_QTY_' + seq).attr('max')) {
+            SwAlert.Confirm(
+                AlertTitle.Warning,
+                "Max Value : " + $('#txtJobParts_QTY_' + seq).attr('max'), 
+                function () {
+                    $('#txtJobParts_QTY_' + seq).val($('#txtJobParts_QTY_' + seq).attr('max'));
+                    swal.close();
+                }, function () {
+                    $('#txtJobParts_QTY_' + seq).val("");
+            });
         }
 
         let id_txt = 'txtJobParts_QTY_' + seq;
@@ -841,8 +858,14 @@
     function SetTextInput_QTY() {
         $('input[id^=txtJobParts_QTY_]').each(function (i, el) {
             let id = $(this).attr('id');
-            InputMaskDecimal('#' + id+'', 12, 2, false, false);
+            InputMaskDecimal('#' + id + '', 12, 2, false, false);
         });
+
+        //$('input[id^=txtJobParts_QTY_]').blur(function () {
+        //    var seq = $(this).attr('id').replace('txtJobParts_QTY_', '');
+        //    //DialogWarning(seq);
+        //    JobParts_QTY_Change(seq);
+        //});
     }
 
     function DelJobParts(n) {

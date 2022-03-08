@@ -829,6 +829,47 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
+
+        public string CHECK_STOCK(out HttpStatusCode code,string part_id,string location_id)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("CHECK_STOCK/" + part_id + "/"+ location_id, Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                var response = client.Execute<string>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         #endregion
 
         public string TERMINATE_TBT_JOB_IMAGE(out HttpStatusCode code, string ijob_id, string seq)
