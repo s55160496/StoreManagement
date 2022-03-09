@@ -132,7 +132,7 @@
                                                                     {
                                                                         if (Model.JOB_DETAIL != null)
                                                                         {
-                                                                            if (Model.CUSTOMER_ID == item.USER_ID)
+                                                                            if (Model.OWNER_ID == item.USER_ID)
                                                                             {
                                                                                 <option selected value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
 
@@ -1008,7 +1008,7 @@
 
     function SAVEDATA(JOB_STATUS, FLG_CLOSE) {
 
-        DialogConfirmSubmit(function () {
+        DialogConfirmCloseJob(function () {
             swal.disableButtons();
 
             var obj = {

@@ -14,6 +14,7 @@ var AlertMsg = {
     Error: "Some thing went wrong",
     Info: "Info",
     ConfirmSave: "Do you want to save data?",
+    ConfirmCloseJob: "ยืนยัน Close Job?",
     ConfirmSaveDraft: "Do you want to save draft data?",
     ConfirmDelete: "Do you want to delete data?",
     ConfirmExport: "Do you want to export data?",
@@ -52,7 +53,9 @@ function PopupSessionTimeOut(url) {
 function DialogConfirmSubmit(funcYes, funcNo) {
     SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmSave, funcYes, funcNo);
 }
-
+function DialogConfirmCloseJob(funcYes, funcNo) {
+    SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmCloseJob, funcYes, funcNo);
+}
 function DialogConfirmLogout(funcYes, funcNo) {
     SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmLogout, funcYes, funcNo);
 }
