@@ -32,5 +32,6 @@ namespace StoreManagement.Models
         public string UPDATE_DATE { get; set; }
         public string UPDATE_BY { get; set; }
         public string PAGE { get; set; }
+        public string JOBID { get; set; }
     }
 }
