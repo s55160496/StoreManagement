@@ -234,7 +234,7 @@ namespace StoreManagement.Controllers
 
                 if (data.JOB_STATUS == "C" || data.JOB_STATUS == "F")
                 {
-                    if (data.JOB_PARTS.Any())
+                    if (data.JOB_PARTS !=null && data.JOB_PARTS.Any())
                     {
                         foreach (var item in data.JOB_PARTS)
                         {
