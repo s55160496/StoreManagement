@@ -48,7 +48,7 @@ namespace StoreManagement.Controllers
                 ViewData["EDIT_FLG"] = EDIT_FLG;
 
                 var PROVINCE = GET_PROVINCE(out code);
-                ViewData["PROVINCE"] = PROVINCE.ToArray();
+                ViewData["PROVINCE"] = PROVINCE?.ToArray();
 
                 return View(model);
             }

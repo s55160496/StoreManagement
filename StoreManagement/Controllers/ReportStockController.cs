@@ -32,10 +32,10 @@ namespace StoreManagement.Controllers
                 {
                     EMPLOYEE = EMPLOYEE.Where(w => w.POSITION == "MN").ToList();
                 }
-                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+                ViewData["EMPLOYEE"] = EMPLOYEE?.ToArray();
 
                 var LOCATION = GET_TBM_LOCATION_STORE(out code, new TBM_LOCATION_STORE() { });
-                ViewData["LOCATION"] = LOCATION.ToArray();
+                ViewData["LOCATION"] = LOCATION?.ToArray();
                 return View();
             }
             catch (Exception ex)

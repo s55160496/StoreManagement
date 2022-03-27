@@ -39,10 +39,10 @@ namespace StoreManagement.Controllers
                 {
                     TEACHNICIAL = TEACHNICIAL.Where(w => w.POSITION == "MN").ToList();
                 }
-                ViewData["TEACHNICIAL"] = TEACHNICIAL.ToArray();
+                ViewData["TEACHNICIAL"] = TEACHNICIAL?.ToArray();
 
                 var JOBTYPE = GET_JOBTYPE(out code);
-                ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+                ViewData["JOBTYPE"] = JOBTYPE?.ToArray();
 
                 return View();
             }

@@ -59,10 +59,10 @@ namespace StoreManagement.Controllers
                 #endregion
 
                 var LOCATION = GET_TBM_LOCATION_STORE(out code, new TBM_LOCATION_STORE() { });
-                ViewData["LOCATION"] = LOCATION.ToArray();
+                ViewData["LOCATION"] = LOCATION?.ToArray();
 
                 var UNIT = GET_UNIT(out code);
-                ViewData["UNIT"] = UNIT.ToArray();
+                ViewData["UNIT"] = UNIT?.ToArray();
 
                 return View(model);
             }

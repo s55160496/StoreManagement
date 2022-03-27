@@ -50,7 +50,7 @@ namespace StoreManagement.Controllers
                 #endregion
 
                 var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
-                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+                ViewData["EMPLOYEE"] = EMPLOYEE?.ToArray();
                 return View(model);
             }
             catch (Exception ex)

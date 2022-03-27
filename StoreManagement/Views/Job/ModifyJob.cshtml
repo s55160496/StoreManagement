@@ -634,7 +634,7 @@
             {
                 <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
             }
-            else if (SessionUserInfo.POSITION == "MN" && Model != null && (Model.JOB_STATUS == "D" || string.IsNullOrEmpty(Model.JOB_STATUS)))
+            else if ((SessionUserInfo.POSITION == "MN"|| SessionUserInfo.POSITION == "OS") && Model != null && (Model.JOB_STATUS == "D" || string.IsNullOrEmpty(Model.JOB_STATUS)))
             {
                 <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
             }
@@ -816,7 +816,7 @@
         if (+$('#txtJobParts_QTY_' + seq).val() > +$('#txtJobParts_QTY_' + seq).attr('max')) {
             SwAlert.Confirm(
                 AlertTitle.Warning,
-                "Max Value : " + $('#txtJobParts_QTY_' + seq).attr('max'), 
+                "Max Value : " + $('#txtJobParts_QTY_' + seq).attr('max'),
                 function () {
                     $('#txtJobParts_QTY_' + seq).val($('#txtJobParts_QTY_' + seq).attr('max'));
                     swal.close();
@@ -983,7 +983,7 @@
     </script>
 
     @* SAVE DATA *@
-<script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function () {
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
@@ -991,7 +991,7 @@
 
         $('#btnSubmit').on('click', function () {
             var prm = GetValTextBox('hddPermission');
-            if (prm == 'MN') {
+            if (prm == 'MN' || prm == 'OS') {
                 SAVEDATA('F','N');
             } else if (prm == 'CK' || prm == 'MG') {
                 SAVEDATA('C','N');
@@ -1006,14 +1006,7 @@
         });
     });
 
-    function SAVEDATA(JOB_STATUS, FLG_CLOSE) {
-
-        let msg = AlertMsg.ConfirmCloseJob;
-        if (JOB_STATUS == 'D') {
-            msg = AlertMsg.ConfirmSaveDraft;
-        }
-
-        SwAlert.Confirm(AlertTitle.Confirm, msg, function () {
+        const closejb = (JOB_STATUS, FLG_CLOSE) => {
             swal.disableButtons();
             var obj = {
                 'JOB_ID': GetValTextBox('hddID'),
@@ -1100,7 +1093,19 @@
                 error: function () {
                 }
             });
-        });
+    }
+
+    function SAVEDATA(JOB_STATUS, FLG_CLOSE) {
+
+        let msg = AlertMsg.ConfirmCloseJob;
+        if (JOB_STATUS == 'D') {
+            msg = AlertMsg.ConfirmSaveDraft;
+            SwAlert.Confirm(AlertTitle.Confirm, msg, closejb(JOB_STATUS, FLG_CLOSE));
+        } else {
+            closejb(JOB_STATUS, FLG_CLOSE)
+        }
+
+        
         @*DialogConfirmCloseJob(function () {
             swal.disableButtons();
 
@@ -1193,7 +1198,7 @@
     }
 
 
-</script>
+    </script>
 
     @* Signature *@
     <script type="text/javascript">

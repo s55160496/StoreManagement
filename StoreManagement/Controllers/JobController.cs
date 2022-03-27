@@ -34,10 +34,10 @@ namespace StoreManagement.Controllers
             try
             {
                 var JOBTYPE = GET_JOBTYPE(out code);
-                ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+                ViewData["JOBTYPE"] = JOBTYPE?.ToArray();
 
                 var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
-                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+                ViewData["EMPLOYEE"] = EMPLOYEE?.ToArray();
 
                 return View();
             }
@@ -174,9 +174,11 @@ namespace StoreManagement.Controllers
                     var arr = SIGNNATURE.Split(',');
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
                     bool Ispass = true;
-                    if (data.JOB_STATUS == "C" || data.JOB_STATUS == "F")
+                    var position = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).POSITION;
+
+                    if (/*data.JOB_STATUS == "C" ||*/ data.JOB_STATUS == "F")
                     {
-                        if (imageBytes.Length == 3416)
+                        if (imageBytes.Length == 3416 && mechanic.Contains(position))
                         {
                             Ispass = false;
                             throw new Exception("ระบุ ลายเช็นต์");
@@ -184,13 +186,13 @@ namespace StoreManagement.Controllers
                     }
                     else
                     {
-                        if (imageBytes.Length == 3416)
+                        if (imageBytes.Length == 3416 && mechanic.Contains(position))
                         {
                             Ispass = false;
                         }
                     }
 
-                    if (Ispass)
+                    if (Ispass && data.JOB_STATUS == "F")
                     {
                         if (data.JOB_IMAGES == null)
                         {
@@ -234,7 +236,7 @@ namespace StoreManagement.Controllers
 
                 if (data.JOB_STATUS == "C" || data.JOB_STATUS == "F")
                 {
-                    if (data.JOB_PARTS !=null && data.JOB_PARTS.Any())
+                    if (data.JOB_PARTS != null && data.JOB_PARTS.Any())
                     {
                         foreach (var item in data.JOB_PARTS)
                         {
@@ -391,16 +393,16 @@ namespace StoreManagement.Controllers
                 }
 
                 var CHECK_LIST_MASTER = GET_CHECKLIST(out code);
-                ViewData["CHECK_LIST_MASTER"] = CHECK_LIST_MASTER.ToArray();
+                ViewData["CHECK_LIST_MASTER"] = CHECK_LIST_MASTER?.ToArray();
 
                 var JOBTYPE = GET_JOBTYPE(out code);
-                ViewData["JOBTYPE"] = JOBTYPE.ToArray();
+                ViewData["JOBTYPE"] = JOBTYPE?.ToArray();
 
                 var EMPLOYEE = GET_TBM_EMPLOYEE(out code, new TBM_EMPLOYEE() { });
-                ViewData["EMPLOYEE"] = EMPLOYEE.ToArray();
+                ViewData["EMPLOYEE"] = EMPLOYEE?.ToArray();
 
                 var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { PAGE = "JOB", JOBID = str });
-                ViewData["SPAREPART"] = SPAREPART.ToArray();
+                ViewData["SPAREPART"] = SPAREPART?.ToArray();
 
                 ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
 
@@ -425,7 +427,10 @@ namespace StoreManagement.Controllers
             return View();
         }
 
-
+        private string[] mechanic = new string[2]
+        {
+            "MN","OS"
+        };
         [HttpPost]
         public IActionResult SaveSignature(string SIGNATURE)
         {
@@ -454,7 +459,8 @@ namespace StoreManagement.Controllers
                     var arr = SIGNATURE.Split(',');
 
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
-                    if (imageBytes.Length == 3416)
+                    var position = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).POSITION;
+                    if (imageBytes.Length == 3416 && mechanic.Contains(position))
                     {
                         throw new Exception("ระบุ ลายเช็นต์");
                     }
@@ -561,6 +567,6 @@ namespace StoreManagement.Controllers
             }
 
             return Json(result);
-        }        
+        }
     }
 }

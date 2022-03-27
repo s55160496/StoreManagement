@@ -31,8 +31,8 @@
                                     if (EMPLOYEE != null && EMPLOYEE.Any())
                                     {
                                         foreach (var item in EMPLOYEE)
-                                        {
-                                            <option value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
+                                        {                                          
+                                                <option value="@item.USER_ID">@item.FULLNAME @item.LASTNAME</option>
                                         }
                                     }
                                 }
@@ -101,7 +101,8 @@
 
         if ('@EDIT_FLG' == 'Y') {
             $('#ddlOwnerID').val('@Model.OWNER_ID');
-            $('#txtLocationID').attr('disabled',true);
+            $('#txtLocationID').attr('disabled', true);
+            $('#ddlOwnerID').select2();
         }
     });
 
