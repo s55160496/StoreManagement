@@ -115,6 +115,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="dvFile" id="lbProductCompany">
+                                แนบไฟล์ต่างๆ&nbsp;<span class="text-red dvDomesticCorporate dvNoneShortform">*</span>
+                                @* <br />(แนบได้ 5 ไฟล์) *@
+                            </label>
+                            <div class="col-sm-10">
+                                <div id="dvFile"></div>
+                            </div>
+                        </div>
+                    </div>
                     @*<div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="inputState">LocationStore</label>
@@ -154,6 +166,8 @@
 <input type="hidden" id="hddID" value="" />
 
 <script type="text/javascript">
+    var ArrFileTemp = [];
+    var SetUpFile = new UploadSetup();
 
     $(document).ready(function () {
 
@@ -207,7 +221,19 @@
         $('#btnBack').on('click', function () {
             window.Redirect('@(Url.Action("Index",@ViewContext.RouteData.Values["Controller"].ToString()))');
         });
+
+        CreateFile();
     });
+
+    function CreateFile() {
+        SetUpFile.sID = "dvFile";
+            SetUpFile.Extensions = null;
+            SetUpFile.ModeMulti = false;
+            SetUpFile.ArrFile = ArrFileTemp;
+            SetUpFile.HasURL = false;
+            SetUpFile.Url = '@Url.Action("SaveToServer", "UploadFile")';
+            SetUploadFileAjax(SetUpFile);
+        }
 </script>
 
 
