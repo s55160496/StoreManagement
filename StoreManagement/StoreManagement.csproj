@@ -13,6 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Images\IconSystem.zip" />
+    <Content Remove="wwwroot\Images\man-with-map-smartphone-renting-car-driver-using-car-sharing-app-phone-searching-vehicle-vector-illustration-transport-transportation-urban-traffic-location-app-con.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
