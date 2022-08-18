@@ -29,12 +29,14 @@ namespace StoreManagement
             services.AddControllers().AddJsonOptions(options =>
            options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-            services.AddSession();
+            //services.AddSession();
 
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);//You can set Time   
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
             services.AddMvc();
 
@@ -56,12 +58,9 @@ namespace StoreManagement
             }
 
            // app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseSession();
-
+            app.UseStaticFiles();          
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
