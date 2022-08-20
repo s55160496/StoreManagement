@@ -29,15 +29,15 @@ namespace StoreManagement
             services.AddControllers().AddJsonOptions(options =>
            options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-            //services.AddSession();
+            services.AddSession();
 
             services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);//You can set Time   
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+            //services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromMinutes(30);//You can set Time   
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.IsEssential = true;
+            //});
             services.AddMvc();
 
 
@@ -56,13 +56,12 @@ namespace StoreManagement
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-           // app.UseHttpsRedirection();
-            app.UseStaticFiles();          
-            app.UseRouting();
             app.UseSession();
+            // app.UseHttpsRedirection();
+            app.UseStaticFiles();          
+            app.UseRouting();       
             app.UseAuthorization();
-
+          
             app.UseEndpoints(endpoints =>
             {
                 //endpoints.MapControllerRoute(

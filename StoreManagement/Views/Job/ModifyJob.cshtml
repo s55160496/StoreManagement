@@ -457,7 +457,7 @@
                                                                             <tr>
                                                                                 <th colspan="3">@CHECKLIST[i].CHECK_GROUP_NAME</th>
                                                                             </tr>
-                                                                            for (int j = 0; j < CHECKLIST[i].CHECK_LIST.Count(); j++)
+                                                                            for (int j = 0; j < CHECKLIST[i]?.CHECK_LIST?.Count(); j++)
                                                                             {
                                                                                 string checked_ = string.Empty;
                                                                                 string Desc = string.Empty;
@@ -505,7 +505,7 @@
                                                                             <tr>
                                                                                 <th colspan="3">@CHECKLIST[i].CHECK_GROUP_NAME</th>
                                                                             </tr>
-                                                                            for (int j = 0; j < CHECKLIST[i].CHECK_LIST.Count(); j++)
+                                                                            for (int j = 0; j < CHECKLIST[i]?.CHECK_LIST?.Count(); j++)
                                                                             {
                                                                                 string checked_ = string.Empty;
                                                                                 string Desc = string.Empty;
