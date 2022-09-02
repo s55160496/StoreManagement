@@ -34,6 +34,9 @@ namespace StoreManagement.Models
         public string UNIT_CODE { get; set; }
         public string UNIT_NAME { get; set; }
         public string PART_VALUE { get; set; }
+        public string PART_WEIGHT { get; set; }
+        public string STOCK_IN { get; set; }
+        public string STOCK_OUT { get; set; }
         public string MINIMUM_VALUE { get; set; }
         public string MAXIMUM_VALUE { get; set; }
         public string LOCATION_ID { get; set; }

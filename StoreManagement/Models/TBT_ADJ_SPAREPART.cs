@@ -24,5 +24,8 @@ namespace StoreManagement.Models
         public string PART_NAME { get; set; }
         public string PART_DESC { get; set; }
         public string PART_VALUE { get; set; }
+        public string TOTAL { get; set; }
+        public string REMARK { get; set; }
+        public string ADJ_TYPE { get; set; }
     }
 }

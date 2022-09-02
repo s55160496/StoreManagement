@@ -97,8 +97,11 @@
                                             <th class="text-center">location</th>
                                             <th class="text-center">cost-price</th>
                                             <th class="text-center">sale-price</th>
-                                            <th class="text-center">unit</th>
-                                            <th class="text-center">adj unit</th>
+                                            <th class="text-center">parts quantity</th>
+                                            <th class="text-center">stock in</th>
+                                            <th class="text-center">stock out</th>
+                                            <th class="text-center">part weight</th>
+                                            <th class="text-center">adj parts</th>
                                             <th class="text-center">min</th>
                                             <th class="text-center">max</th>
                                             <th class="text-center">part-create</th>
@@ -202,6 +205,9 @@
             td += '<td class="text-right">' + (el.COST_PRICE || '') + '</td>';
             td += '<td class="text-right">' + (el.SALE_PRICE || '') + '</td>';
             td += '<td class="text-right">' + (el.PART_VALUE || '') + '</td>';
+            td += '<td class="text-right">' + (el.STOCK_IN || '') + '</td>';
+            td += '<td class="text-right">' + (el.STOCK_OUT || '') + '</td>';
+            td += '<td class="text-right">' + (el.PART_WEIGHT || '') + '</td>';
             td += '<td class="text-right">' + (el.ADJ_PART_VALUE || '') + '</td>';
             td += '<td class="text-right">' + (el.MINIMUM_VALUE || '') + '</td>';
             td += '<td class="text-right">' + (el.MAXIMUM_VALUE || '') + '</td>';

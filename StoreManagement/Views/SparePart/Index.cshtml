@@ -2,10 +2,11 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_MP_Back.cshtml";
+    var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
 }
 
 <div class="card-body">
-    <div>
+    <div>     
         <div id="divForm">
             <div class="container">
                 @if (ViewBag.noadd == "0")
@@ -46,21 +47,28 @@
                         <thead class="thead-HMCPO darkCustom">
                             <tr>
                                 <th>@*<input type="checkbox" name="select_all" value="1" id="select-all">*@</th>
-                                <th class="text-center">part_no</th>
+                                <th style="width: 10%" class="text-center">part  no</th>
                                 <th class="text-center">part_name</th>
-                                <th class="text-center">part_desc</th>
+                                <th style="width: 5%" class="text-center">Bin Location</th>
 
                                 <th class="text-center">part_type_desc</th>
-                                <th class="text-center">cost_price</th>
+                                @if (SessionUserInfo.POSITION != "MN")
+                                {
+                                    <th class="text-center">cost_price</th>
+                                }
                                 <th class="text-center">sale_price</th>
 
                                 <th class="text-center">unit_code</th>
                                 <th class="text-center">unit_name</th>
                                 <th class="text-center">part quantity</th>
+                                <th class="text-center">part_weight </th>
 
                                 <th class="text-center">minimum_value</th>
                                 <th class="text-center">maximum_value</th>
                                 <th class="text-center">location_name</th>
+                                <th class="text-center">Remark</th>
+                                <th class="text-center">Ref Group</th>
+                                <th class="text-center">Ref Other</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -78,7 +86,9 @@
 
 
 <script>
+let position ='@SessionUserInfo.POSITION';
 var urlSearchData = "@Url.Action("GetData", "SparePart")";
+let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
     var noedit = '@ViewBag.noadd';
     $(document).ready(function () {
         SearchData();
@@ -153,22 +163,28 @@ var urlSearchData = "@Url.Action("GetData", "SparePart")";
             let html = '';
             $.each(arrData_, function (i, el) {
                 let td = '';
-                td = '<td class="text-center">' + (i+1)+ '</td>';
-                td += '<td class="text-center">' + (el.PART_NO || '') + ' ('+(el.PART_ID || '')+')' + '</td>';
-                td += '<td class="text-center">' + (el.PART_NAME || '') + '</td>';
-                td += '<td class="text-left">' + (el.PART_DESC || '') + '</td>';
+                td = '<td  class="text-center">' + (i + 1) + '</td>';
+                td += `<td  style="width: 15%"><a style="color:#007bff; text-decoration: underline;" href='#' onclick="getdetail('${el.PART_ID}','${el.PART_NO}')">   ${el.PART_NO ?? ''}   </a></td>`;
+                td += '<td  class="text-center">' + (el.PART_NAME || '') + '</td>';
+                td += '<td style="width: 5%" class="text-left">' + (el.PART_DESC || '') + '</td>';
 
-                td += '<td class="text-center">' + (el.PART_TYPE_DESC || '') + '</td>';
-                td += '<td class="text-right">' + (el.COST_PRICE || '') + '</td>';
-                td += '<td class="text-right">' + (el.SALE_PRICE || '') + '</td>';
+                td += '<td  class="text-center">' + (el.PART_TYPE_DESC || '') + '</td>';
+                if (position != 'MN') {
+                    td += '<td  class="text-right">' + (el.COST_PRICE || '') + '</td>';
+                }
+                td += '<td  class="text-right">' + (el.SALE_PRICE || '') + '</td>';
 
-                td += '<td class="text-right">' + (el.UNIT_CODE || '') + '</td>';
-                td += '<td class="text-center">' + (el.UNIT_NAME || '') + '</td>';
-                td += '<td class="text-right">' + (el.PART_VALUE || '') + '</td>';
+                td += '<td  class="text-right">' + (el.UNIT_CODE || '') + '</td>';
+                td += '<td  class="text-center">' + (el.UNIT_NAME || '') + '</td>';
+                td += '<td  class="text-right">' + (el.PART_VALUE || '') + '</td>';
+                td += '<td  class="text-right" style="width:5%">' + (el.PART_WEIGHT  || '') + '</td>';
 
-                td += '<td class="text-right">' + (el.MINIMUM_VALUE || '') + '</td>';
-                td += '<td class="text-right">' + (el.MAXIMUM_VALUE || '') + '</td>';
-                td += '<td class="text-center">' + (el.LOCATION_NAME || '') + '</td>';
+                td += '<td  class="text-right">' + (el.MINIMUM_VALUE || '') + '</td>';
+                td += '<td  class="text-right">' + (el.MAXIMUM_VALUE || '') + '</td>';
+                td += '<td  class="text-center">' + (el.LOCATION_NAME || '') + '</td>';
+                td += '<td  class="text-center">' + (el.REMARK || '') + '</td>';
+                td += '<td  class="text-center">' + (el.REF_GROUP || '') + '</td>';
+                td += '<td  class="text-center">' + (el.REF_OTHER || '') + '</td>';
                 if (noedit=="0")
                     td += '<td class="text-center">' + '<a href="@Url.Action("CreateSparePart", "SparePart")' + '?str=' + el.PART_ID_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
                 else
@@ -179,22 +195,178 @@ var urlSearchData = "@Url.Action("GetData", "SparePart")";
 
         $("table[id$=tbSearchData] tbody").html(html);
 
-        var table = $('#tbSearchData').removeAttr('width').DataTable({
+        var table = $('#tbSearchData')/*.removeAttr('width')*/.DataTable({
             //scrollY: "300px",
             scrollX: true,
             scrollCollapse: true,
             paging: false,
             columnDefs: [
-                {
-                    orderable: false,
-                    className: 'select-checkbox',
-                    targets: 0
-                }
-                //, { width: 35, targets: 0 }
+                { "width": "70px", "targets": 1 }
+                //{
+                //    orderable: false,
+                //    className: 'select-checkbox',
+                //    targets: 0
+                //}
+
+                 //, { width: 10%, targets: 1 }
                 //, { width: 100, targets: 1 }
                 //, { width: 450, targets: 3 }
             ],
+            fixedColumns: true
         });
+        //table.columns.adjust().draw();
+        //var table = $('#tbSearchData').DataTable({
+        //   // scrollY: "300px",
+        //    scrollX: true,
+        //    scrollCollapse: true,
+        //    paging: false,
+        //    columnDefs: [
+        //        { width: '70px', targets: 1 }
+        //    ],
+        //    fixedColumns: true
+        //});
+    }
+
+    const getdetail = async (partid,partno) => {
+
+        var obj = {
+            "PART_ID": partid,
+            "PART_NO": "",
+            "PART_NAME": "",
+            "PART_DESC": "",
+            "PART_TYPE": "",
+            "PART_TYPE_DESC": "",
+            "COST_PRICE": "",
+            "SALE_PRICE": "",
+            "UNIT_CODE": "",
+            "UNIT_NAME": "",
+            "PART_VALUE": "",
+            "MINIMUM_VALUE": "",
+            "MAXIMUM_VALUE": "",
+            "LOCATION_ID": "",
+            "LOCATION_LOCATION_NAME": "",
+            "CREATE_DATE": "",
+            "CREATE_BY": "",
+            "CANCAL_DATE": "",
+            "CANCEL_BY": "",
+            "CANCEL_REASON": "",
+            "UPDATE_DATE": "",
+            "UPDATE_BY": "",
+            "PAGE": "STOCK"
+        }
+        BlockUI();
+         $.ajax({
+             url: urlSPAREPARTDETAIL,
+            type: 'POST',
+            dataType: 'json',
+             data: { 'data': obj },
+             success: async function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    let html = `
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >Description</strong>
+                         </div>
+                        <div class="col-sm-8 col-md-8 col-lg-8">
+                            <input type="text" style="min-width:90%;"  disabled value="${response.data[0].PART_NAME}" />
+                        </div>                       
+                    </div>
+                    <div class="row pt-1">
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >Part Number</strong>
+                         </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text"  disabled value="${response.data[0].PART_NO}" />
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >Cost Price</strong>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text"  disabled value="${numberWithCommas(response.data[0].COST_PRICE)}" />
+                        </div>
+                    </div>
+                    <div class="row pt-1">                     
+                       <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >Bin Location</strong>
+                         </div>
+                         <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text"  disabled value="${response.data[0].LOCATION_ID}" />
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >Sale Price</strong>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text"   disabled value="${numberWithCommas(response.data[0].SALE_PRICE)}" />
+                        </div>
+                    </div>
+                    <div class="row pt-1">
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >StockQTY</strong>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text"  disabled value="${numberWithCommas(response.data[0].PART_VALUE)}" />
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >Unit Code</strong>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text"  disabled value="${response.data[0].UNIT_CODE}" />
+                        </div>
+                    </div>
+                    <div class="row pt-1">
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >MIN</strong>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text" disabled value="${numberWithCommas(response.data[0].MINIMUM_VALUE)}" />
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >Weight(Kg)</strong>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text" disabled value="${response.data[0].PART_WEIGHT}" />
+                        </div>
+                    </div>
+
+                    <div class="row pt-1">
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <strong >MAX</strong>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <input type="text"  disabled value="${numberWithCommas(response.data[0].MAXIMUM_VALUE)}" />
+                        </div>                       
+                    </div>
+`
+                    showdeatil(html,partno);
+
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    const numberWithCommas = (x) =>
+    {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    const showdeatil = async (data,partno) => {
+        Swal.fire({
+            title: `<strong>I.SEE SPARE PARTS</strong>`,
+        /*    icon: 'info',*/
+            html: `${data}`,
+            width:"78em",
+            showCloseButton: true,
+            /*showCancelButton: true,*/
+            focusConfirm: false,
+            confirmButtonText:
+                '<i class="fa fa fa-times"></i> Close',
+            confirmButtonAriaLabel: 'Close',
+        })
     }
 </script>
 

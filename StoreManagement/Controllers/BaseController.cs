@@ -664,7 +664,47 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
+        public List<TBM_SPAREPART> SPARE_PART_DETAIL(out HttpStatusCode code, TBM_SPAREPART req)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest($"SPARE_PART_DETAIL/{req.PART_ID}", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+              
+                var response = client.Execute<List<TBM_SPAREPART>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+        }
         public List<TBM_BRAND> GET_TBM_BRAND(out HttpStatusCode code)
         {
             try

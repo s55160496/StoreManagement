@@ -12,13 +12,12 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
-    public class AdjustPartController : BaseController
+    public class StockOutController : BaseController
     {
-        public AdjustPartController(IConfiguration config) : base(config)
+        public StockOutController(IConfiguration config) : base(config)
         {
 
         }
-
         public IActionResult Index()
         {
             HttpStatusCode code = HttpStatusCode.OK;
@@ -45,7 +44,6 @@ namespace StoreManagement.Controllers
                     return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
                 }
             }
-
         }
 
         public IActionResult ViewDetailAdjustPart(string str)
@@ -91,12 +89,13 @@ namespace StoreManagement.Controllers
                 }
 
                 data.CREATE_BY = SessionUserInfo().USER_ID;
-                if (!string.IsNullOrWhiteSpace(data.ADJ_PART_VALUE))
+                if(!string.IsNullOrWhiteSpace(data.ADJ_PART_VALUE))
                 {
-                    data.ADJ_PART_VALUE = data.ADJ_PART_VALUE.Trim().Replace(",","");
-                    data.ADJ_PART_VALUE = (Math.Abs(Convert.ToInt64(data.ADJ_PART_VALUE)) * -1).ToString();
+                    data.ADJ_PART_VALUE = data.ADJ_PART_VALUE.Trim().Replace(",", "");
+                    data.ADJ_PART_VALUE = Math.Abs(Convert.ToInt64(data.ADJ_PART_VALUE)).ToString();
                 }
-                data.ADJ_TYPE = "1";
+                data.ADJ_TYPE = "-1";
+
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBT_ADJ_SPAREPART", Method.POST);
 

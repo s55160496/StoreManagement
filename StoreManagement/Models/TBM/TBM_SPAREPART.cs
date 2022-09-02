@@ -19,6 +19,7 @@ namespace StoreManagement.Models
         public string UNIT_CODE { get; set; }
         public string UNIT_NAME { get; set; }
         public string PART_VALUE { get; set; }
+        public string PART_WEIGHT { get; set; }
         public string MINIMUM_VALUE { get; set; }
         public string MAXIMUM_VALUE { get; set; }
 
@@ -33,5 +34,7 @@ namespace StoreManagement.Models
         public string UPDATE_BY { get; set; }
         public string PAGE { get; set; }
         public string JOBID { get; set; }
+        public string REF_OTHER { get; set; }
+        public string REF_GROUP { get; set; }
     }
 }

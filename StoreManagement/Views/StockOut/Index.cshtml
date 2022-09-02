@@ -166,12 +166,7 @@
 
             $('#btnSubmit').on('click', function () {
                 if (GetValDropdown('ddlSparePart') == "" || GetValTextBox('txtAdj_Part') == "") {
-                    if (GetValDropdown('ddlSparePart') == "") {
-                        DialogWarning("กรุณาเลือก Type Job");
-                    }
-                    if (GetValTextBox('txtAdj_Part') == "") {
-                        DialogWarning("Adjust value is null");
-                    }
+                    DialogWarning("Adjust value is null");
                 } else {
                     DialogConfirmSubmit(function () {
                         swal.disableButtons();
@@ -184,7 +179,7 @@
 
                     BlockUI();
                     $.ajax({
-                        url: '@Url.Action("SaveData", "AdjustPart")',
+                        url: '@Url.Action("SaveData", "StockOut")',
                         type: 'POST',
                         dataType: 'json',
                         data: { 'data': obj},
@@ -197,7 +192,7 @@
                             } else if (response.Status == SysProcess.Failed) {
                                 DialogWarning(response.Msg);
                             } else {
-                                DialogSucessRedirect('@Url.Action("Index", "AdjustPart")');
+                                DialogSucessRedirect('@Url.Action("Index", "StockOut")');
                             }
                         },
                         error: function () {
@@ -221,7 +216,12 @@
             console.log(txt);
            // alert(val);
             if (GetValTextBox(txt) == "" || GetValTextBox(txt) == undefined) {
-                DialogWarning("Adjust value is null");
+                if (GetValDropdown('ddlSparePart') == "") {
+                    DialogWarning("กรุณาเลือก Type Job");
+                }
+                if (GetValTextBox('txtAdj_Part') == "") {
+                    DialogWarning("Adjust value is null");
+                }
             } else {
                 DialogConfirmSubmit(function () {
                     swal.disableButtons();
@@ -234,7 +234,7 @@
 
                     BlockUI();
                     $.ajax({
-                        url: '@Url.Action("SaveData", "AdjustPart")',
+                        url: '@Url.Action("SaveData", "StockOut")',
                         type: 'POST',
                         dataType: 'json',
                         data: { 'data': obj},
@@ -247,7 +247,7 @@
                             } else if (response.Status == SysProcess.Failed) {
                                 DialogWarning(response.Msg);
                             } else {
-                                DialogSucessRedirect('@Url.Action("Index", "AdjustPart")');
+                                DialogSucessRedirect('@Url.Action("Index", "StockOut")');
                             }
                         },
                         error: function () {
@@ -262,7 +262,7 @@
         }
 
         function ViewDetail(str) {
-            var url = '@Url.Action("ViewDetailAdjustPart", "AdjustPart")' + '?str=' + str;
+            var url = '@Url.Action("ViewDetailAdjustPart", "StockOut")' + '?str=' + str;
             FancyBox_OpenIframe_Url(url,'80%','100%')
         }
 

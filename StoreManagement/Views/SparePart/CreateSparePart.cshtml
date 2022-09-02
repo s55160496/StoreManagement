@@ -34,8 +34,8 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="txtPart_Desc">Part Desc</label>
-                            <textarea type="text" rows="3" class="form-control" id="txtPart_Desc" name="txtPart_Desc" placeholder="Part Desc"></textarea>
+                            <label for="txtPart_Desc">Bin Location</label>
+                            <textarea type="text" rows="3" class="form-control" id="txtPart_Desc" name="txtPart_Desc" placeholder="Bin Location"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
@@ -66,6 +66,10 @@
                         <div class="form-group col-md-3">
                             <label for="txtPart_Value">Stock Value</label>
                             <input type="text" class="form-control" id="txtPart_Value" name="txtPart_Value" placeholder="Stock Value" value="@Model.PART_VALUE" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtPart_weight">part_weight</label>
+                            <input type="text" class="form-control" id="txtPart_weight" name="txtPart_weight" placeholder="Part_weight" value="@Model.PART_WEIGHT" />
                         </div>
                     </div>
 
@@ -109,6 +113,18 @@
                                 }
                             </select>
                         </div>
+
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtRef_group">Ref Group</label>
+                            <input type="text" class="form-control" id="txtRef_group" name="txtRef_group" placeholder="Ref Group" value="@Model.REF_GROUP" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtRef_Other">Ref Other</label>
+                            <input type="text" class="form-control" id="txtRef_Other" name="txtRef_Other" placeholder="Ref Other" value="@Model.REF_OTHER" />
+                        </div>
                     </div>
                 </form>
             </div>
@@ -134,6 +150,10 @@
 
         $('#btnSubmit').on('click', function () {
             DialogConfirmSubmit(function () {
+                if (!GetValTextArea('txtPart_Desc')) {
+                    DialogWarning('กรุณาระบุข้อมูล Bin Location');
+                    return
+                }
                 swal.disableButtons();
                 BlockUI();
 
@@ -149,9 +169,12 @@
                     "UNIT_CODE": GetValDropdown('ddlUnit_Code'),
                     "UNIT_NAME": "",
                     "PART_VALUE": GetValTextBox('txtPart_Value'),
+                    "PART_WEIGHT": GetValTextBox('txtPart_weight'),
                     "MINIMUM_VALUE": GetValTextBox('txtMinimum_Value'),
                     "MAXIMUM_VALUE": GetValTextBox('txtMaximum_Value'),
                     "LOCATION_ID": GetValDropdown('ddlLocation_ID'),
+                    "REF_GROUP": GetValTextBox('txtRef_group'),
+                    "REF_OTHER": GetValTextBox('txtRef_Other'),
                 }
                 BlockUI();
                 $.ajax({

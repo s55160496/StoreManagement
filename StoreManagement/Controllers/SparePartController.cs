@@ -169,5 +169,38 @@ namespace StoreManagement.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public IActionResult SPARE_PART_DETAIL(TBM_SPAREPART data)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {               
+                var lstData = SPARE_PART_DETAIL(out code, data);
+                if (lstData != null && lstData.Any())
+                {
+                    foreach (var item in lstData)
+                    {
+                        item.PART_ID_ENCRYPT = Encrypt_UrlEncrypt(item.PART_ID);
+                    }
+                }
+                result.data = lstData;
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
     }
 }
