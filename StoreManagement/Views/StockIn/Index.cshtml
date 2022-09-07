@@ -184,7 +184,7 @@
 
                     BlockUI();
                     $.ajax({
-                        url: '@Url.Action("SaveData", "StockOut")',
+                        url: '@Url.Action("SaveData", "StockIn")',
                         type: 'POST',
                         dataType: 'json',
                         data: { 'data': obj},
@@ -197,7 +197,7 @@
                             } else if (response.Status == SysProcess.Failed) {
                                 DialogWarning(response.Msg);
                             } else {
-                                DialogSucessRedirect('@Url.Action("Index", "StockOut")');
+                                DialogSucessRedirect('@Url.Action("Index", "StockIn")');
                             }
                         },
                         error: function () {
@@ -239,7 +239,7 @@
 
                     BlockUI();
                     $.ajax({
-                        url: '@Url.Action("SaveData", "StockOut")',
+                        url: '@Url.Action("SaveData", "StockIn")',
                         type: 'POST',
                         dataType: 'json',
                         data: { 'data': obj},
@@ -252,7 +252,7 @@
                             } else if (response.Status == SysProcess.Failed) {
                                 DialogWarning(response.Msg);
                             } else {
-                                DialogSucessRedirect('@Url.Action("Index", "StockOut")');
+                                DialogSucessRedirect('@Url.Action("Index", "StockIn")');
                             }
                         },
                         error: function () {
@@ -267,7 +267,7 @@
         }
 
         function ViewDetail(str) {
-            var url = '@Url.Action("ViewDetailStockOut", "StockOut")' + '?str=' + str;
+            var url = '@Url.Action("ViewDetailStockIn", "StockIn")' + '?str=' + str;
             FancyBox_OpenIframe_Url(url,'80%','100%')
         }
 

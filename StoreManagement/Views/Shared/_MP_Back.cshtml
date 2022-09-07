@@ -171,7 +171,7 @@
             @* @Url.Action("Index","Stock") *@
 
             @{
-                var listMenuHead = new List<string>() { "SparePart", "AdjustPart" ,"StockOut"};
+                var listMenuHead = new List<string>() { "SparePart", "AdjustPart" ,"StockOut","StockIn"};
                 if (!SessionUserInfoIsExpired)
                 {
                     if (SessionUserInfo.MENU != null && SessionUserInfo.MENU.Any())

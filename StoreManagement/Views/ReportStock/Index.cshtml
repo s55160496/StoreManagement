@@ -105,6 +105,7 @@
                                             <th class="text-center">min</th>
                                             <th class="text-center">max</th>
                                             <th class="text-center">part-create</th>
+                                            <th class="text-center">ADJ_STOCKINOUT_DATE</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -212,6 +213,7 @@
             td += '<td class="text-right">' + (el.MINIMUM_VALUE || '') + '</td>';
             td += '<td class="text-right">' + (el.MAXIMUM_VALUE || '') + '</td>';
             td += '<td class="text-center">' + (el.CREATE_DATE || '') + '</td>';
+            td += '<td class="text-center">' + (el.ADJ_STOCKINOUT_DATE || '') + '</td>';
                 html += "<tr>" + td + "</tr>";
             });
 
@@ -222,6 +224,19 @@
             scrollX: true,
             scrollCollapse: true,
             paging: false,
+            columnDefs: [
+                { width:"90px" , "targets": 0 }
+                //{
+                //    orderable: false,
+                //    className: 'select-checkbox',
+                //    targets: 0
+                //}
+
+                //, { width: 10%, targets: 1 }
+                //, { width: 100, targets: 1 }
+                //, { width: 450, targets: 3 }
+            ],
+            fixedColumns: true
             //columnDefs: [
             //    {
             //        orderable: false,

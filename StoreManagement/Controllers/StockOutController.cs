@@ -18,6 +18,7 @@ namespace StoreManagement.Controllers
         {
 
         }
+        private readonly string ADJ_TYPE = "-1";
         public IActionResult Index()
         {
             HttpStatusCode code = HttpStatusCode.OK;
@@ -26,7 +27,7 @@ namespace StoreManagement.Controllers
 
                 List<TBT_ADJ_SPAREPART> Model = new List<TBT_ADJ_SPAREPART>();
 
-                Model = GET_TBT_ADJ_SPAREPART(out code);
+                Model = GET_TBT_ADJ_SPAREPART(ADJ_TYPE, out code);
 
                 var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { });
                 ViewData["SPAREPART"] = SPAREPART?.ToArray();
@@ -46,7 +47,7 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public IActionResult ViewDetailAdjustPart(string str)
+        public IActionResult ViewDetailStockOut(string str)
         {
             HttpStatusCode code = HttpStatusCode.OK;
             try
@@ -89,12 +90,13 @@ namespace StoreManagement.Controllers
                 }
 
                 data.CREATE_BY = SessionUserInfo().USER_ID;
-                if(!string.IsNullOrWhiteSpace(data.ADJ_PART_VALUE))
+                if (!string.IsNullOrWhiteSpace(data.ADJ_PART_VALUE))
                 {
                     data.ADJ_PART_VALUE = data.ADJ_PART_VALUE.Trim().Replace(",", "");
-                    data.ADJ_PART_VALUE = Math.Abs(Convert.ToInt64(data.ADJ_PART_VALUE)).ToString();
+                    data.ADJ_PART_VALUE = (Math.Abs(Convert.ToInt64(data.ADJ_PART_VALUE)) * -1).ToString();
                 }
-                data.ADJ_TYPE = "-1";
+                data.ADJ_TYPE = ADJ_TYPE;
+               
 
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBT_ADJ_SPAREPART", Method.POST);

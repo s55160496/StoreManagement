@@ -993,13 +993,13 @@ namespace StoreManagement.Controllers
             }
         }
 
-        public List<TBT_ADJ_SPAREPART> GET_TBT_ADJ_SPAREPART(out HttpStatusCode code)
+        public List<TBT_ADJ_SPAREPART> GET_TBT_ADJ_SPAREPART(string adj_type, out HttpStatusCode code)
         {
             try
             {
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
-                var request = new RestRequest("GET_TBT_ADJ_SPAREPART", Method.GET);
+                var request = new RestRequest($"GET_TBT_ADJ_SPAREPART/{adj_type}", Method.GET);
                 if (SessionUserInfoIsExpired())
                 {
                     RedirectToAction("Index", "Login");

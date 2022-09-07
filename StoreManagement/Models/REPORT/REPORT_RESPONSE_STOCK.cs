@@ -51,6 +51,9 @@ namespace StoreManagement.Models
         public string STATUS { get; set; }
 
          public string ADJ_PART_VALUE { get; set; }
+        public string REF_GROUP { get; set; }
+        public string REF_OTHER { get; set; }
+        public string ADJ_STOCKINOUT_DATE { get; set; }
     }
 
 }

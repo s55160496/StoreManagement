@@ -12,14 +12,13 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
-    public class AdjustPartController : BaseController
+    public class StockInController : BaseController
     {
-        private readonly string ADJ_TYPE = "0";
-
-        public AdjustPartController(IConfiguration config) : base(config)
+        public StockInController(IConfiguration config) : base(config)
         {
 
         }
+        private readonly string ADJ_TYPE = "1";
 
         public IActionResult Index()
         {
@@ -29,7 +28,7 @@ namespace StoreManagement.Controllers
 
                 List<TBT_ADJ_SPAREPART> Model = new List<TBT_ADJ_SPAREPART>();
 
-                Model = GET_TBT_ADJ_SPAREPART(ADJ_TYPE, out code);
+                Model = GET_TBT_ADJ_SPAREPART(ADJ_TYPE,out code);
 
                 var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { });
                 ViewData["SPAREPART"] = SPAREPART?.ToArray();
@@ -47,10 +46,9 @@ namespace StoreManagement.Controllers
                     return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
                 }
             }
-
         }
 
-        public IActionResult ViewDetailAdjustPart(string str)
+        public IActionResult ViewDetailStockIn(string str)
         {
             HttpStatusCode code = HttpStatusCode.OK;
             try
@@ -93,7 +91,13 @@ namespace StoreManagement.Controllers
                 }
 
                 data.CREATE_BY = SessionUserInfo().USER_ID;
+                if (!string.IsNullOrWhiteSpace(data.ADJ_PART_VALUE))
+                {
+                    data.ADJ_PART_VALUE = data.ADJ_PART_VALUE.Trim().Replace(",", "");
+                    data.ADJ_PART_VALUE = Math.Abs(Convert.ToInt64(data.ADJ_PART_VALUE)).ToString();
+                }
                 data.ADJ_TYPE = ADJ_TYPE;
+
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("INSERT_TBT_ADJ_SPAREPART", Method.POST);
 
