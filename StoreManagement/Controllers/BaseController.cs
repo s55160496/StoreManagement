@@ -1248,6 +1248,49 @@ namespace StoreManagement.Controllers
             }
         }
 
+        public job_file sp_get_movement_sparepart(out HttpStatusCode code, REPORT_STOCK req)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("sp_get_movement_sparepart", Method.POST);
+                request.AddJsonBody(req);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                var response = client.Execute<job_file>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public REPORT_RESPONSE_JOB GET_SUMMARY_JOB_LIST(out HttpStatusCode code, REPORT_JOB req)
         {
 

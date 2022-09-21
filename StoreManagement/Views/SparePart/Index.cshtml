@@ -4,7 +4,20 @@
     Layout = "~/Views/Shared/_MP_Back.cshtml";
     var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
 }
+<style>
+    .leftcolumn {
+        float: left;
+        width: 75%;
+    }
 
+    /* Right column */
+    .rightcolumn {
+        float: left;
+        width: 25%;
+        background-color: #f1f1f1;
+        padding-left: 20px;
+    }
+</style>
 <div class="card-body">
     <div>     
         <div id="divForm">
@@ -268,7 +281,8 @@ let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
                     DialogWarning(response.Msg);
                 } else {
                     let html = `
-                    <div class="row">
+                    <div class="leftcolumn">
+                     <div class="row">
                         <div class="col-sm-2 col-md-2 col-lg-2">
                             <strong >Description</strong>
                          </div>
@@ -339,8 +353,15 @@ let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
                         </div>
                         <div class="col-sm-3 col-md-3 col-lg-3">
                             <input type="text"  disabled value="${numberWithCommas(response.data[0].MAXIMUM_VALUE)}" />
-                        </div>                       
+                        </div>
                     </div>
+                    </div>
+                    
+                      <div class="rightcolumn">
+                        <div class="card">          
+                          <img src="${response.data[0].PATH_IMAGE}" />
+                        </div>                                      
+                      </div>
 `
                     showdeatil(html,partno);
 

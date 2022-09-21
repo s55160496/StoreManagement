@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using StoreManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public class ReportPPMController : BaseController
     {
         private readonly IWebHostEnvironment _hostingEnvironment;

@@ -12,6 +12,8 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public class ReportStockController : BaseController
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -103,6 +105,33 @@ namespace StoreManagement.Controllers
             }
 
             return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult sp_get_movement_sparepart(REPORT_STOCK data)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                data.USERNAME = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
+                var Data = sp_get_movement_sparepart(out code, data);
+                string tempLeter = $"{DateTime.Now.ToString("yyyyMMddHHmm")}.xls";           
+                
+                return File(Convert.FromBase64String(Data.FileData),Data.ContentType ,tempLeter);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View("Error");
+            }
+
+           
         }
     }
 }

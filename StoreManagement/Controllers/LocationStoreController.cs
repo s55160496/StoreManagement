@@ -12,6 +12,8 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public class LocationStoreController : BaseController
     {
         public LocationStoreController(IConfiguration config) : base(config)

@@ -86,6 +86,7 @@
                     <div class="col-sm-12 text-left">
                         <button id="btnPDF" type="button" class="btn btn-success" title="PDF" data-toggle="tooltip"><i class="fa fa-file-pdf"></i>&nbsp;Print</button>
                         <button id="btnExcel" type="button" class="btn btn-warning" title="Excel" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
+                        <button id="btnExcelMov" type="button" class="btn btn-info" onclick="btnExcelMov()" title="Excel" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export Movement Part</button>
                     </div>
                         <div id="divData" class="col-sm-12">
                             <div class="table-responsive">
@@ -119,6 +120,14 @@
         </div>
     </div>
 </div>
+<form id="sp_get_movement_sparepart" asp-action="sp_get_movement_sparepart" asp-controller="ReportStock" method="post" target="_blank" hidden>
+    <input name="PARTNO" />
+    <input name="PARTID" />
+    <input name="LOCATIONID" />
+    <input name="PART_CREATE_FROM"/>
+    <input name="PART_CREATE_TO"/>
+    <input name="REPORT_TYPE" value="EXCEL"/>
+</form>
 <script type="text/javascript">
     var urlSearchData = "@Url.Action("GetData", "ReportStock")";
 
@@ -248,5 +257,14 @@
             //    , { width: 350, targets: 3 }
             //],
         });
+    }
+
+    const btnExcelMov = () => {
+        document.getElementsByName('PARTNO').value = GetValTextBox('txtPartNo')
+        document.getElementsByName('PARTID').value = GetValDropdown('ddlEmployee')
+        document.getElementsByName('LOCATIONID').value = GetValDropdown('ddlLocation')
+        document.getElementsByName('PART_CREATE_FROM').value = GetValTextBox('txtPartCreateFrom')
+        document.getElementsByName('PART_CREATE_TO').value = GetValTextBox('txtPartCreateTo')
+        document.getElementById("sp_get_movement_sparepart").submit();
     }
 </script>

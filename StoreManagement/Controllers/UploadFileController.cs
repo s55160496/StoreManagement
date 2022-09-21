@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace StoreManagement.Controllers
 {
+
     public class UploadFileController : Controller
     {
         private readonly IWebHostEnvironment _hostingEnvironment;

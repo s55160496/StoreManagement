@@ -12,6 +12,8 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public class StockOutController : BaseController
     {
         public StockOutController(IConfiguration config) : base(config)

@@ -15,6 +15,7 @@ using static StoreManagement.Controllers.UploadFileController;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
     public class JobController : BaseController
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -22,7 +23,6 @@ namespace StoreManagement.Controllers
         {
             this._hostingEnvironment = hostingEnvironment;
         }
-
         public IActionResult Index()
         {
             return View();
@@ -192,7 +192,7 @@ namespace StoreManagement.Controllers
                         }
                     }
 
-                    if (Ispass && data.JOB_STATUS == "F")
+                    if (Ispass /*&& data.JOB_STATUS == "F"*/ && !string.IsNullOrEmpty(SIGNNATURE))
                     {
                         if (data.JOB_IMAGES == null)
                         {

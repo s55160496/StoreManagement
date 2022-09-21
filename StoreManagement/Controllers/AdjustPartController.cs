@@ -12,6 +12,8 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public class AdjustPartController : BaseController
     {
         private readonly string ADJ_TYPE = "0";

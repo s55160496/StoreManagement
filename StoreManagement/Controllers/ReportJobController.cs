@@ -12,6 +12,8 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public static class REPORT_TYPE
     {
         public const string SEARCH = "SEARCH";

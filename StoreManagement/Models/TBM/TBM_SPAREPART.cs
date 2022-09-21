@@ -36,5 +36,7 @@ namespace StoreManagement.Models
         public string JOBID { get; set; }
         public string REF_OTHER { get; set; }
         public string REF_GROUP { get; set; }
+        public string PATH_IMAGE { get; set; }
+
     }
 }

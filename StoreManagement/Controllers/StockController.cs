@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public class StockController : BaseController
     {
         public StockController(IConfiguration config) : base(config)

@@ -15,6 +15,8 @@ using static StoreManagement.App_Extension.SysFunctions;
 
 namespace StoreManagement.Controllers
 {
+    [ValidateSession]
+
     public class EmployeeController : BaseController
     {
         public EmployeeController(IConfiguration config) : base(config)
