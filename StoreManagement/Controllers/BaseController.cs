@@ -664,6 +664,47 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
+        public SP_CHECK_ONHAND SPAREPART_ONHAND(out HttpStatusCode code, string partid,string jobid)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest($"SPAREPART_ONHAND/{partid}/{jobid}", Method.GET);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+
+                var response = client.Execute<SP_CHECK_ONHAND>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         public List<TBM_SPAREPART> SPARE_PART_DETAIL(out HttpStatusCode code, TBM_SPAREPART req)
         {
             try

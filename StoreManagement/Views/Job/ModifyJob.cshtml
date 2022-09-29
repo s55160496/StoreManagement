@@ -488,7 +488,7 @@
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         @{
-                                                            if (CHECKLIST != null && Model.TYPE_JOB !="DA")
+                                                            if (CHECKLIST != null && Model.TYPE_JOB != "DA")
                                                             {
                                                                 <table style="width:100%" class="table table-bordered">
                                                                     <thead class="thead">
@@ -633,11 +633,12 @@
             if (SessionUserInfo.POSITION == "CK" || SessionUserInfo.POSITION == "MG")
             {
                 <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
-                if (Model.JOB_STATUS == "C"&& Model?.IMAGE_DETAIL != null && Model.IMAGE_DETAIL.Where(a => a.IMAGE_TYPE == "rpt").Any())
+                if (Model.JOB_STATUS == "C" && Model?.IMAGE_DETAIL != null && Model.IMAGE_DETAIL.Where(a => a.IMAGE_TYPE == "rpt").Any())
                 {
                     var img = (tbt_job_image)Model.IMAGE_DETAIL.Where(a => a.IMAGE_TYPE == "rpt").FirstOrDefault();
-                <a id="btnPDF" href="@Url.Action("ViewImage", "Job",new { IJOB_ID=img.IJOB_ID_ENCRYPT,SEQ=img.SEQ_ENCRYPT })" target="_blank" class="btn btn-info" title="PDF" data-toggle="tooltip">
-                                <i class="fa fa-file-pdf-o"></i>&nbsp;Download PDF</a>
+                    <a id="btnPDF" href="@Url.Action("ViewImage", "Job",new { IJOB_ID=img.IJOB_ID_ENCRYPT,SEQ=img.SEQ_ENCRYPT })" target="_blank" class="btn btn-info" title="PDF" data-toggle="tooltip">
+                        <i class="fa fa-file-pdf-o"></i>&nbsp;Download PDF
+                    </a>
                 }
             }
             else if ((SessionUserInfo.POSITION == "MN" || SessionUserInfo.POSITION == "OS") && Model != null && (Model.JOB_STATUS == "D" || string.IsNullOrEmpty(Model.JOB_STATUS)))
@@ -739,7 +740,7 @@
     </script>
 
     @* TAB JOB DETAIL *@
-<script type="text/javascript">
+    <script type="text/javascript">
     var arrJobParts = @Html.Raw(Json.Serialize(Model.JOB_PARTS)) == null ? [] : @Html.Raw(Json.Serialize(Model.JOB_PARTS));
     var arrImage_Detail = @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL)) == null ? [] : @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL));
 
@@ -811,6 +812,7 @@
                 $('#' + id_desc).val(Data.PART_DESC);
                 console.log(Data.PART_VALUE)
                 $('#txtJobParts_QTY_' + seq).attr('max', Data.PART_VALUE);
+                $('#txtJobParts_QTY_' + seq).attr('partid', Data.PART_ID);
                 Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_DESC = Data.PART_DESC;
                 Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_ID = val;
                 Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().PART_NO = part_no;
@@ -819,22 +821,45 @@
     }
 
         function JobParts_QTY_Change(seq) {
-        if (+$('#txtJobParts_QTY_' + seq).val() > +$('#txtJobParts_QTY_' + seq).attr('max')) {
-            SwAlert.Confirm(
-                AlertTitle.Warning,
-                "Max Value : " + $('#txtJobParts_QTY_' + seq).attr('max'),
-                function () {
-                    $('#txtJobParts_QTY_' + seq).val($('#txtJobParts_QTY_' + seq).attr('max'));
-                    swal.close();
-                }, function () {
-                    $('#txtJobParts_QTY_' + seq).val("");
+        //if (+$('#txtJobParts_QTY_' + seq).val() > +$('#txtJobParts_QTY_' + seq).attr('max')) {
+        //    SwAlert.Confirm(
+        //        AlertTitle.Warning,
+        //        "Max Value : " + $('#txtJobParts_QTY_' + seq).attr('max'),
+        //        function () {
+        //            $('#txtJobParts_QTY_' + seq).val($('#txtJobParts_QTY_' + seq).attr('max'));
+        //            swal.close();
+        //        }, function () {
+        //            $('#txtJobParts_QTY_' + seq).val("");
+        //    });
+              $.ajax({
+                url: '@Url.Action("SPAREPART_ONHAND", "Job")',
+                type: 'POST',
+                dataType: 'json',
+                  data: { 'partid': $('#txtJobParts_QTY_' + seq).attr('partid'), 'jobid': $('#hddID').val() },
+                success: function (response) {
+                    UnblockUI();
+                    {
+                        // console.log(response)
+                        if (+$(`#txtJobParts_QTY_${seq}`).val() > +response.PART_VALUE) {
+                                SwAlert.Confirm(
+                                    AlertTitle.Warning,
+                                    `Max Value :${ response.PART_VALUE}`,
+                                    function () {
+                                        $(`#txtJobParts_QTY_${seq}`).val(response.PART_VALUE);
+                                        swal.close();
+                                    }, function () {
+                                        $(`#txtJobParts_QTY_${seq}`).val("");
+                                });
+                        }
+                        let id_txt = `txtJobParts_QTY_${seq}`;
+                        let val = GetValTextBox(id_txt);
+                        Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().TOTAL = val;
+                    }
+                },
+                error: function () {
+                }
             });
         }
-
-        let id_txt = 'txtJobParts_QTY_' + seq;
-        let val = GetValTextBox(id_txt);
-        Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().TOTAL = val;
-    }
 
     function BindTBJobParts() {
         if ($.fn.DataTable.isDataTable('#tbJobParts')) {
@@ -941,7 +966,7 @@
         });
     }
 
-</script>
+    </script>
 
     @* TAB CHECK LIST *@
     <script type="text/javascript">
@@ -1113,7 +1138,7 @@
             closejb(JOB_STATUS, FLG_CLOSE)
         }
 
-        
+
         @*DialogConfirmCloseJob(function () {
             swal.disableButtons();
 

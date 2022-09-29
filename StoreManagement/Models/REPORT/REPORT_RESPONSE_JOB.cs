@@ -21,6 +21,9 @@ namespace StoreManagement.Models
         public string TYPE_JOB { get; set; }
         public string TEACHNICIAL { get; set; }
         public string REPORT_TYPE { get; set; }
+        public string DOWNTIME_DAY { get; set; }
+        public string DOWNTIME_HOUR { get; set; }
+
         public List<JOB_LIST> SUMMARY_JOB_LIST { get; set; }
     }
 

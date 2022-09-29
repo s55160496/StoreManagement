@@ -356,7 +356,23 @@ namespace StoreManagement.Controllers
 
             return Json(result);
         }
+        [HttpPost]
 
+        public async ValueTask<IActionResult> SPAREPART_ONHAND(string partid, string jobid)
+        {
+            try
+            {
+                HttpStatusCode code = HttpStatusCode.OK;
+                //partid = Decrypt_UrlDecode(partid);
+                // jobid = Decrypt_UrlDecode(jobid);
+                var dataObjects = SPAREPART_ONHAND(out code ,partid, jobid);
+                return Json(dataObjects);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         public IActionResult ModifyJob(string str)
         {
             HttpStatusCode code = HttpStatusCode.OK;
