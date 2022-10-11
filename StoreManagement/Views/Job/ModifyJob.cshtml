@@ -89,6 +89,20 @@
                             <div class="wrapper center-block">
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                     <div class="panel panel-default">
+                                        <div class="d-flex flex-row-reverse">
+                                            <div class="p-1">
+                                                @if (Model != null &&string.IsNullOrEmpty(Model.RECEIVE_DATE))
+                                                {
+                                                    <button id="btnrj" onclick="sp_update_receive_job()" type="button" class="btn btn-primary" title="Receive Job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Receive Job</button>
+                                                }
+                                            </div>
+                                            <div class="p-1">
+                                                @if (Model != null && string.IsNullOrEmpty(Model.JOB_DATE))
+                                                {
+                                                    <button id="btnsj" onclick="sp_update_start_job()" type="button" class="btn btn-info" title="Start job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Start job</button>
+                                                }
+                                            </div>
+                                        </div>
                                         <div class="panel-heading active" role="tab" id="heading_1">
                                             <h4 class="panel-title">
                                                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_1" aria-expanded="true" aria-controls="collapse_1">
@@ -427,190 +441,195 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="heading_3">
-                                            <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_3" aria-expanded="true" aria-controls="collapse_3">
-                                                    CHECK LIST
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse_3" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_3">
-                                            <div class="panel-body">
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-6">
-                                                        @{
-                                                            if (CHECKLIST != null)
-                                                            {
-                                                                <table style="width:100%" class="table table-bordered">
-                                                                    <thead class="thead">
-                                                                        <tr>
-                                                                            <th style="text-align:center">DESCRIPTION</th>
-                                                                            <th style="text-align:center">INISP</th>
-                                                                            <th style="text-align:center">ACT</th>
-                                                                            <th style="text-align:center">DESC</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @for (int i = 0; i < 7; i++)
-                                                                        {
-                                                                            <tr>
-                                                                                <th colspan="3">@CHECKLIST[i].CHECK_GROUP_NAME</th>
-                                                                            </tr>
-                                                                            for (int j = 0; j < CHECKLIST[i]?.CHECK_LIST?.Count(); j++)
-                                                                            {
-                                                                                string checked_ = string.Empty;
-                                                                                string Desc = string.Empty;
-                                                                                string disabled_ = "disabled";
-
-                                                                                if (Model.JOB_CHECKLISTS != null && Model.JOB_CHECKLISTS.Any())
-                                                                                {
-                                                                                    var Data_Edit = Model.JOB_CHECKLISTS.FirstOrDefault(w => w.CK_ID == CHECKLIST[i].CHECK_LIST[j].CH_ID && w.CHECK_LIST == "Y");
-                                                                                    if (Data_Edit != null)
-                                                                                    {
-                                                                                        checked_ = "checked";
-                                                                                        Desc = Data_Edit.DESCRIPTION;
-                                                                                        disabled_ = string.Empty;
-                                                                                    }
-                                                                                }
-                                                                                <tr>
-                                                                                    <td>@CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" @(string.IsNullOrEmpty(checked_) ? "checked" : "")></td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1" @checked_></td>
-                                                                                    <td style="text-align:center"><input type="text" @disabled_ class="form-control" id="chk_list_desc_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="@Desc" /></td>
-                                                                                </tr>
-                                                                            }
-                                                                        }
-                                                                    </tbody>
-                                                                </table>
-                                                            }
-                                                        }
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        @{
-                                                            if (CHECKLIST != null && Model.TYPE_JOB != "DA")
-                                                            {
-                                                                <table style="width:100%" class="table table-bordered">
-                                                                    <thead class="thead">
-                                                                        <tr>
-                                                                            <th style="text-align:center">DESCRIPTION</th>
-                                                                            <th style="text-align:center">INISP</th>
-                                                                            <th style="text-align:center">ACT</th>
-                                                                            <th style="text-align:center">DESC</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @for (int i = 7; i < CHECKLIST.Count(); i++)
-                                                                        {
-                                                                            <tr>
-                                                                                <th colspan="3">@CHECKLIST[i].CHECK_GROUP_NAME</th>
-                                                                            </tr>
-                                                                            for (int j = 0; j < CHECKLIST[i]?.CHECK_LIST?.Count(); j++)
-                                                                            {
-                                                                                string checked_ = string.Empty;
-                                                                                string Desc = string.Empty;
-                                                                                string disabled_ = "disabled";
-
-                                                                                if (Model.JOB_CHECKLISTS != null && Model.JOB_CHECKLISTS.Any())
-                                                                                {
-                                                                                    var Data_Edit = Model.JOB_CHECKLISTS.FirstOrDefault(w => w.CK_ID == CHECKLIST[i].CHECK_LIST[j].CH_ID && w.CHECK_LIST == "Y");
-                                                                                    if (Data_Edit != null)
-                                                                                    {
-                                                                                        checked_ = "checked";
-                                                                                        Desc = Data_Edit.DESCRIPTION;
-                                                                                        disabled_ = string.Empty;
-                                                                                    }
-                                                                                }
-                                                                                <tr>
-                                                                                    <td>@CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" @(string.IsNullOrEmpty(checked_) ? "checked" : "")></td>
-                                                                                    <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1" @checked_></td>
-                                                                                    <td style="text-align:center"><input type="text" @disabled_ class="form-control" id="chk_list_desc_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="@Desc" /></td>
-                                                                                </tr>
-                                                                            }
-                                                                        }
-                                                                    </tbody>
-                                                                </table>
-                                                            }
+                                    @if (Model.TYPE_JOB != "DF")
+                                    {
 
 
-                                                        }
-                                                    </div>
-                                                </div>
-
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="heading_3">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_3" aria-expanded="true" aria-controls="collapse_3">
+                                                        CHECK LIST
+                                                    </a>
+                                                </h4>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="heading_4">
-                                            <h4 class="panel-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_4" aria-expanded="true" aria-controls="collapse_4">
-                                                    COMFIRM
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse_4" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_4">
-                                            <div class="panel-body">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label" for="dvFile" id="lbProductCompany">
-                                                        แนบไฟล์ต่างๆ&nbsp;<span class="text-red dvDomesticCorporate dvNoneShortform">*</span>
-                                                        @* <br />(แนบได้ 5 ไฟล์) *@
-                                                    </label>
-                                                    <div class="col-sm-10">
-                                                        <div id="dvFile"></div>
-                                                    </div>
-                                                </div>
-                                                <hr class="lineBlue" />
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-10" style="text-align:center">
-                                                        <div id="signatureparent">
-                                                            <div id="signature"></div>
-                                                        </div>
-                                                        <div id="PreviewSignature">
-                                                            <img id="ItemPreviewSignature" src="" width="500">
-                                                        </div>
-                                                    </div>
-                                                    @*<div class="form-group col-md-2">
-                                                            <button id="btnConfirmSignature" type="button" class="btn-md btn-outline-info" title="Confirm" data-toggle="tooltip"><i class="fa fa-check"></i>&nbsp;Confrim Signature</button>
-                                                            <button id="btnClearSignature" type="button" class="btn-md btn-outline-dark" title="Confirm" data-toggle="tooltip"><i class="fas fa-undo"></i>&nbsp;Clear</button>
-
-                                                        </div>*@
-                                                </div>
-
-                                                <div class="form-group col-md-12">
-                                                    <table id="tbImage_Detail" style="width:100%" class="table tableData">
-                                                        <thead class="thead-HMCPO darkCustom">
-                                                            <tr>
-                                                                <th style="text-align:center">#</th>
-                                                                <th style="text-align:center">IMAGE_DESCRIPTION</th>
-                                                                <th style="text-align:center">IMAGE_NAME</th>
-                                                                <th style="text-align:center"></th>
-                                                                <th style="text-align:center"></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @*@{
-                                                                    if (Model.IMAGE_DETAIL != null && Model.IMAGE_DETAIL.Any())
-                                                                    {
-                                                                        int i = 1;
-                                                                        foreach (var item in Model.IMAGE_DETAIL)
-                                                                        {
+                                            <div id="collapse_3" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_3">
+                                                <div class="panel-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            @{
+                                                                if (CHECKLIST != null)
+                                                                {
+                                                                    <table style="width:100%" class="table table-bordered">
+                                                                        <thead class="thead">
                                                                             <tr>
-                                                                                <td style="text-align:center">@i</td>
-                                                                                <td style="text-align:left">@item.IMAGE_DESCRIPTION</td>
-                                                                                <td style="text-align: left">@item.IMG_NAME</td>
-                                                                                <td style="text-align:center"><a href="" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a></td>
+                                                                                <th style="text-align:center">DESCRIPTION</th>
+                                                                                <th style="text-align:center">INISP</th>
+                                                                                <th style="text-align:center">ACT</th>
+                                                                                <th style="text-align:center">DESC</th>
                                                                             </tr>
-                                                                            i++;
-                                                                        }
-                                                                    }
-                                                                }*@
-                                                        </tbody>
-                                                    </table>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @for (int i = 0; i < 7; i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <th colspan="3">@CHECKLIST[i].CHECK_GROUP_NAME</th>
+                                                                                </tr>
+                                                                                for (int j = 0; j < CHECKLIST[i]?.CHECK_LIST?.Count(); j++)
+                                                                                {
+                                                                                    string checked_ = string.Empty;
+                                                                                    string Desc = string.Empty;
+                                                                                    string disabled_ = "disabled";
+
+                                                                                    if (Model.JOB_CHECKLISTS != null && Model.JOB_CHECKLISTS.Any())
+                                                                                    {
+                                                                                        var Data_Edit = Model.JOB_CHECKLISTS.FirstOrDefault(w => w.CK_ID == CHECKLIST[i].CHECK_LIST[j].CH_ID && w.CHECK_LIST == "Y");
+                                                                                        if (Data_Edit != null)
+                                                                                        {
+                                                                                            checked_ = "checked";
+                                                                                            Desc = Data_Edit.DESCRIPTION;
+                                                                                            disabled_ = string.Empty;
+                                                                                        }
+                                                                                    }
+                                                                                    <tr>
+                                                                                        <td>@CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
+                                                                                        <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" @(string.IsNullOrEmpty(checked_) ? "checked" : "")></td>
+                                                                                        <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1" @checked_></td>
+                                                                                        <td style="text-align:center"><input type="text" @disabled_ class="form-control" id="chk_list_desc_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="@Desc" /></td>
+                                                                                    </tr>
+                                                                                }
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            @{
+                                                                if (CHECKLIST != null && Model.TYPE_JOB != "DA")
+                                                                {
+                                                                    <table style="width:100%" class="table table-bordered">
+                                                                        <thead class="thead">
+                                                                            <tr>
+                                                                                <th style="text-align:center">DESCRIPTION</th>
+                                                                                <th style="text-align:center">INISP</th>
+                                                                                <th style="text-align:center">ACT</th>
+                                                                                <th style="text-align:center">DESC</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @for (int i = 7; i < CHECKLIST.Count(); i++)
+                                                                            {
+                                                                                <tr>
+                                                                                    <th colspan="3">@CHECKLIST[i].CHECK_GROUP_NAME</th>
+                                                                                </tr>
+                                                                                for (int j = 0; j < CHECKLIST[i]?.CHECK_LIST?.Count(); j++)
+                                                                                {
+                                                                                    string checked_ = string.Empty;
+                                                                                    string Desc = string.Empty;
+                                                                                    string disabled_ = "disabled";
+
+                                                                                    if (Model.JOB_CHECKLISTS != null && Model.JOB_CHECKLISTS.Any())
+                                                                                    {
+                                                                                        var Data_Edit = Model.JOB_CHECKLISTS.FirstOrDefault(w => w.CK_ID == CHECKLIST[i].CHECK_LIST[j].CH_ID && w.CHECK_LIST == "Y");
+                                                                                        if (Data_Edit != null)
+                                                                                        {
+                                                                                            checked_ = "checked";
+                                                                                            Desc = Data_Edit.DESCRIPTION;
+                                                                                            disabled_ = string.Empty;
+                                                                                        }
+                                                                                    }
+                                                                                    <tr>
+                                                                                        <td>@CHECKLIST[i].CHECK_LIST[j].CHECK_NAME</td>
+                                                                                        <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_0")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="0" @(string.IsNullOrEmpty(checked_) ? "checked" : "")></td>
+                                                                                        <td style="text-align:center"><input type="radio" id="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}_1")" name="chk_list_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="1" @checked_></td>
+                                                                                        <td style="text-align:center"><input type="text" @disabled_ class="form-control" id="chk_list_desc_@($"{CHECKLIST[i].CH_GROUP_ID}_{CHECKLIST[i].CHECK_LIST[j].CH_ID}")" value="@Desc" /></td>
+                                                                                    </tr>
+                                                                                }
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                }
+
+
+                                                            }
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="heading_4">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_4" aria-expanded="true" aria-controls="collapse_4">
+                                                        COMFIRM
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_4" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="heading_4">
+                                                <div class="panel-body">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label" for="dvFile" id="lbProductCompany">
+                                                            แนบไฟล์ต่างๆ&nbsp;<span class="text-red dvDomesticCorporate dvNoneShortform">*</span>
+                                                            @* <br />(แนบได้ 5 ไฟล์) *@
+                                                        </label>
+                                                        <div class="col-sm-10">
+                                                            <div id="dvFile"></div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="lineBlue" />
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-10" style="text-align:center">
+                                                            <div id="signatureparent">
+                                                                <div id="signature"></div>
+                                                            </div>
+                                                            <div id="PreviewSignature">
+                                                                <img id="ItemPreviewSignature" src="" width="500">
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group col-md-2">
+                                                                <button id="btnConfirmSignature" type="button" class="btn-md btn-outline-info" title="Confirm" data-toggle="tooltip"><i class="fa fa-check"></i>&nbsp;Confrim Signature</button>
+                                                                <button id="btnClearSignature" type="button" class="btn-md btn-outline-dark" title="Confirm" data-toggle="tooltip"><i class="fas fa-undo"></i>&nbsp;Clear</button>
+
+                                                            </div>*@
+                                                    </div>
+
+                                                    <div class="form-group col-md-12">
+                                                        <table id="tbImage_Detail" style="width:100%" class="table tableData">
+                                                            <thead class="thead-HMCPO darkCustom">
+                                                                <tr>
+                                                                    <th style="text-align:center">#</th>
+                                                                    <th style="text-align:center">IMAGE_DESCRIPTION</th>
+                                                                    <th style="text-align:center">IMAGE_NAME</th>
+                                                                    <th style="text-align:center"></th>
+                                                                    <th style="text-align:center"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @*@{
+                                                                        if (Model.IMAGE_DETAIL != null && Model.IMAGE_DETAIL.Any())
+                                                                        {
+                                                                            int i = 1;
+                                                                            foreach (var item in Model.IMAGE_DETAIL)
+                                                                            {
+                                                                                <tr>
+                                                                                    <td style="text-align:center">@i</td>
+                                                                                    <td style="text-align:left">@item.IMAGE_DESCRIPTION</td>
+                                                                                    <td style="text-align: left">@item.IMG_NAME</td>
+                                                                                    <td style="text-align:center"><a href="" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a></td>
+                                                                                </tr>
+                                                                                i++;
+                                                                            }
+                                                                        }
+                                                                    }*@
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -740,7 +759,7 @@
     </script>
 
     @* TAB JOB DETAIL *@
-    <script type="text/javascript">
+<script type="text/javascript">
     var arrJobParts = @Html.Raw(Json.Serialize(Model.JOB_PARTS)) == null ? [] : @Html.Raw(Json.Serialize(Model.JOB_PARTS));
     var arrImage_Detail = @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL)) == null ? [] : @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL));
 
@@ -964,9 +983,67 @@
                 }
             });
         });
-    }
+        }
+    const sp_update_receive_job = () => {
+        let obj = {
+            'JOB_ID': GetValTextBox('hddID')
+        }
+        DialogConfirmReceive(function () {
+            swal.disableButtons();
+            BlockUI();
+            $.ajax({
+                url: '@Url.Action("sp_update_receive_job", "Job")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'data': obj },
+                success: function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut('@Url.Action("Index","Login")');
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.Failed) {
+                        DialogWarning(response.Msg);
+                    } else {
+                        DialogSucessCallBack(function () { window.location.reload()});
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+        }
+    const sp_update_start_job = () => {
+        let obj = {
+            'JOB_ID': GetValTextBox('hddID')
+        }
+        DialogConfirmStart(function () {
+            swal.disableButtons();
+            BlockUI();
+            $.ajax({
+                url: '@Url.Action("sp_update_start_job", "Job")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'data': obj } ,
+                success: function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut('@Url.Action("Index","Login")');
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.Failed) {
+                        DialogWarning(response.Msg);
+                    } else {
+                        DialogSucessCallBack(function () { window.location.reload()});
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+        }
 
-    </script>
+</script>
 
     @* TAB CHECK LIST *@
     <script type="text/javascript">

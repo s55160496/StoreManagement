@@ -584,5 +584,62 @@ namespace StoreManagement.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public IActionResult sp_update_receive_job(CLOSEJOB data)
+        {
+            HttpStatusCode code = HttpStatusCode.OK;
+            CResutlWebMethod result = new CResutlWebMethod();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(data.JOB_ID) )
+                {
+                    throw new Exception("JOB_ID  is null");
+                }                          
+                result.Msg = sp_update_receive_job(out code, data);
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
+        [HttpPost]
+        public IActionResult sp_update_start_job(CLOSEJOB data)
+        {
+            HttpStatusCode code = HttpStatusCode.OK;
+            CResutlWebMethod result = new CResutlWebMethod();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(data.JOB_ID)) 
+                {
+                    throw new Exception("JOB_ID is null");
+                }
+                result.Msg = sp_update_start_job(out code, data);
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
     }
 }

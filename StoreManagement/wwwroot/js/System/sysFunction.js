@@ -29,6 +29,8 @@ var AlertMsg = {
     DeleteFail: 'Please select <i class="far fa-check-square"></i>',
     Desc_Warning_Duplicate: 'Data can not be duplicated. </br> Please re-enter the information.',
     ConfirmLogout: "Do you want to log out?",
+    ConfirmStartJob: "Do you want to Start Job?",
+    ConfirmReceiveJob: "Do you want to Receive Job?"
 };
 
 function PopupNoPermission(sPathRedirect) {
@@ -96,6 +98,13 @@ function DialogDuplicate() {
 
 function DialogConfirmDel(funcDel) {
     SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmDelete, funcDel);
+}
+
+function DialogConfirmStart(funcSt) {
+    SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmStartJob, funcSt);
+}
+function DialogConfirmReceive(funcRe) {
+    SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmReceiveJob, funcRe);
 }
 
 function DialogConfirmApprove(funcDel) {

@@ -30,6 +30,8 @@ namespace StoreManagement.Models
         public List<tbt_job_part> JOB_PARTS { get; set; }
         public string FLG_CLOSE { get; set; } // Y : comfirm , N : no comfirm
         public string JOB_STATUS { get; set; } // F : Fix , D : draft , C : Close
+        public string RECEIVE_DATE { get; set; }
+        public string JOB_DATE { get; set; }
     }
     public class job_file /*: DataFile*/
     {

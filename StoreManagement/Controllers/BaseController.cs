@@ -994,6 +994,90 @@ namespace StoreManagement.Controllers
             }
         }
 
+        public string sp_update_start_job(out HttpStatusCode code, CLOSEJOB data)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                string r = string.Empty;
+                var client = new RestClient(URL_API);
+              
+                var request = new RestRequest("sp_update_start_job", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                } 
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                request.AddJsonBody(data);         
+                var response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Content;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public string sp_update_receive_job(out HttpStatusCode code, CLOSEJOB data)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                string r = string.Empty;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("sp_update_receive_job", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                request.AddJsonBody(data);
+                var response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Content;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public job_file GET_FILE(out HttpStatusCode code, string ijob_id, string seq)
         {
             try
