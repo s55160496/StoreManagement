@@ -99,7 +99,8 @@
 
 
 <script>
-let position ='@SessionUserInfo.POSITION';
+    let position = '@SessionUserInfo.POSITION';
+    let showcost = '@SessionUserInfo.SECURITY_LEVEL' > 2 ? true : false;
 var urlSearchData = "@Url.Action("GetData", "SparePart")";
 let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
     var noedit = '@ViewBag.noadd';
@@ -280,6 +281,10 @@ let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
                 } else if (response.Status == SysProcess.Failed) {
                     DialogWarning(response.Msg);
                 } else {
+                    let hiddencost = `style='display: none;'`
+                    if (showcost)
+                        hiddencost = ''
+
                     let html = `
                     <div class="leftcolumn">
                      <div class="row">
@@ -288,7 +293,7 @@ let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
                          </div>
                         <div class="col-sm-8 col-md-8 col-lg-8">
                             <input type="text" style="min-width:90%;"  disabled value="${response.data[0].PART_NAME}" />
-                        </div>                       
+                        </div>
                     </div>
                     <div class="row pt-1">
                         <div class="col-sm-2 col-md-2 col-lg-2">
@@ -297,14 +302,14 @@ let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
                         <div class="col-sm-3 col-md-3 col-lg-3">
                             <input type="text"  disabled value="${response.data[0].PART_NO}" />
                         </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2">
+                        <div class="col-sm-2 col-md-2 col-lg-2" ${hiddencost}>
                             <strong >Cost Price</strong>
                         </div>
-                        <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="col-sm-3 col-md-3 col-lg-3" ${hiddencost}>
                             <input type="text"  disabled value="${numberWithCommas(response.data[0].COST_PRICE)}" />
                         </div>
                     </div>
-                    <div class="row pt-1">                     
+                    <div class="row pt-1">
                        <div class="col-sm-2 col-md-2 col-lg-2">
                             <strong >Bin Location</strong>
                          </div>
@@ -356,11 +361,11 @@ let urlSPAREPARTDETAIL = "@Url.Action("SPARE_PART_DETAIL", "SparePart")";
                         </div>
                     </div>
                     </div>
-                    
+
                       <div class="rightcolumn">
-                        <div class="card">          
+                        <div class="card">
                           <img src="${response.data[0].PATH_IMAGE}" />
-                        </div>                                      
+                        </div>
                       </div>
 `
                     showdeatil(html,partno);

@@ -115,6 +115,40 @@ namespace StoreManagement.Controllers
             return Json(result);
         }
 
+        [HttpPost]
+        public IActionResult sp_getReportDownTime(REPORT_JOB data)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                data.USER_PRINT = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
+                var Data = sp_getReportDownTime(out code, data);
+                string tempLeter = "Report" + Guid.NewGuid().ToString();
+                SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
+                result.data = tempLeter;
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
+
         public IActionResult PreviewFile(string SessionRpt)
         {
             try

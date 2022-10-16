@@ -16,6 +16,7 @@ namespace StoreManagement.Models
         public string LASTNAME { get; set; }
         public string POSITION { get; set; }
         public string POSITION_DESCRIPTION { get; set; }
+        public string SECURITY_LEVEL { get; set; }
         public List<tbm_menu> MENU { get; set; }
     }
     public class tbm_menu

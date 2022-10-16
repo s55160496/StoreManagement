@@ -90,16 +90,22 @@
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                     <div class="panel panel-default">
                                         <div class="d-flex flex-row-reverse">
-                                            <div class="p-1">
-                                                @if (Model != null &&string.IsNullOrEmpty(Model.RECEIVE_DATE))
-                                                {
-                                                    <button id="btnrj" onclick="sp_update_receive_job()" type="button" class="btn btn-primary" title="Receive Job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Receive Job</button>
-                                                }
-                                            </div>
+
                                             <div class="p-1">
                                                 @if (Model != null && string.IsNullOrEmpty(Model.JOB_DATE))
                                                 {
                                                     <button id="btnsj" onclick="sp_update_start_job()" type="button" class="btn btn-info" title="Start job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Start job</button>
+                                                }
+                                            </div>
+                                            <div class="p-1">
+                                           
+                                                <button id="btnsj" onclick="sp_update_travel_job()" type="button" class="btn btn-success" title="Start job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Travel Job</button>
+                                            
+                                            </div>
+                                            <div class="p-1">
+                                                @if (Model != null && string.IsNullOrEmpty(Model.RECEIVE_DATE))
+                                                {
+                                                    <button id="btnrj" onclick="sp_update_receive_job()" type="button" class="btn btn-primary" title="Receive Job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Receive Job</button>
                                                 }
                                             </div>
                                         </div>
@@ -441,7 +447,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if (Model.TYPE_JOB != "DF")
+                                    @if (Model.TYPE_JOB != "DA")
                                     {
 
 
@@ -1022,6 +1028,35 @@
             BlockUI();
             $.ajax({
                 url: '@Url.Action("sp_update_start_job", "Job")',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'data': obj } ,
+                success: function (response) {
+                    UnblockUI();
+                    if (response.Status == SysProcess.SessionExpired) {
+                        PopupSessionTimeOut('@Url.Action("Index","Login")');
+                    } else if (response.Status == SysProcess.Duplicate) {
+                        DialogDuplicate();
+                    } else if (response.Status == SysProcess.Failed) {
+                        DialogWarning(response.Msg);
+                    } else {
+                        DialogSucessCallBack(function () { window.location.reload()});
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+    }
+    const sp_update_travel_job = () => {
+        let obj = {
+            'JOB_ID': GetValTextBox('hddID')
+        }
+        DialogConfirmStart(function () {
+            swal.disableButtons();
+            BlockUI();
+            $.ajax({
+                url: '@Url.Action("sp_update_travel_job", "Job")',
                 type: 'POST',
                 dataType: 'json',
                 data: { 'data': obj } ,

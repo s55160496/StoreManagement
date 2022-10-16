@@ -1036,6 +1036,48 @@ namespace StoreManagement.Controllers
                 throw ex;
             }
         }
+        public string sp_update_travel_job(out HttpStatusCode code, CLOSEJOB data)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                string r = string.Empty;
+                var client = new RestClient(URL_API);
+
+                var request = new RestRequest("sp_update_travel_job", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                request.AddJsonBody(data);
+                var response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Content;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public string sp_update_receive_job(out HttpStatusCode code, CLOSEJOB data)
         {
             try
@@ -1468,6 +1510,50 @@ namespace StoreManagement.Controllers
                 code = HttpStatusCode.OK;
                 var client = new RestClient(URL_API);
                 var request = new RestRequest("GET_Summary_job_list", Method.POST);
+                request.AddJsonBody(req);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+
+                var response = client.Execute<job_file>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public job_file sp_getReportDownTime(out HttpStatusCode code, REPORT_JOB req)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("sp_getReportDownTime", Method.POST);
                 request.AddJsonBody(req);
                 if (SessionUserInfoIsExpired())
                 {

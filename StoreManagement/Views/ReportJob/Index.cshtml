@@ -128,6 +128,7 @@
                     <div class="col-sm-12 text-left">
                         <button id="btnPDF" type="button" class="btn btn-success" title="PDF" data-toggle="tooltip"><i class="fa fa-file-pdf"></i>&nbsp;Print</button>
                         <button id="btnExcel" type="button" class="btn btn-warning" title="Excel" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
+                        <button id="btnExcelDT" type="button" class="btn btn-info" title="Excel downtime" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export DownTime</button>
                     </div>
                     <div id="divData" class="col-sm-12">
                         <div class="table-responsive">
@@ -160,6 +161,7 @@
 
 <script type="text/javascript">
     var urlSearchData = "@Url.Action("GetData", "ReportJob")";
+    let urlRptDowntime = "@Url.Action("sp_getReportDownTime", "ReportJob")";
 
     $(document).ready(function () {
         $('#ddlJobType').select2();
@@ -179,6 +181,9 @@
         });
         $('#btnExcel').on('click', function () {
             SearchData('EXCEL');
+        });
+        $('#btnExcelDT').on('click', function () {
+            rptdowntime();
         });
         $('#btnClear').on('click', function () {
             $('#txtJobDateFrom').val('');
@@ -282,6 +287,43 @@
             //    , { width: 70, targets: 1 }
             //    , { width: 350, targets: 3 }
             //],
+        });
+    }
+
+    const rptdowntime = () => {
+        let obj = {
+            JOB_DATE_FROM: GetValTextBox('txtJobDateFrom'),
+            JOB_DATE_TO: GetValTextBox('txtJobDateTo'),
+            CUSTOMER_NAME: GetValTextBox('txtCustomer'),
+            FIX_DATE_FROM: GetValTextBox('txtFixDateFrom'),
+            FIX_DATE_TO: GetValTextBox('txtFixDateTo'),
+            CLOSE_DT_FROM: GetValTextBox('txtCloseJobDateFrom'),
+            CLOSE_DT_TO: GetValTextBox('txtCloseJobDateTo'),
+            LICENSE_NO: GetValTextBox('txtLicenseNo'),
+            USER_PRINT: "",
+            TYPE_JOB: GetValDropdown('ddlJobType'),
+            TEACHNICIAL: GetValDropdown('ddlTeachnicial')         
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlRptDowntime,
+            type: 'POST',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                        let url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                                window.open(url, '_blank');
+                }
+            },
+            error: function () {
+            }
         });
     }
 </script>
