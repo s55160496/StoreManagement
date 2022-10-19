@@ -121,9 +121,9 @@ namespace StoreManagement.Controllers
                 }
                 data.USERNAME = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
                 var Data = sp_get_movement_sparepart(out code, data);
-                string tempLeter = $"{DateTime.Now.ToString("yyyyMMddHHmm")}.xls";           
+                //string tempLeter = $"{DateTime.Now.ToString("yyyyMMddHHmm")}.xls";           
                 
-                return File(Convert.FromBase64String(Data.FileData),Data.ContentType ,tempLeter);
+                return File(Convert.FromBase64String(Data.FileData),Data.ContentType , Data.FileName);
             }
             catch (Exception ex)
             {

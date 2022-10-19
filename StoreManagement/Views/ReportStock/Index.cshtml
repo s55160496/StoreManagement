@@ -190,7 +190,7 @@
                         var url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
                                 window.open(url, '_blank');
                     } else if (TypeReport.PDF == type) {
-                        var url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                        var url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" ,})'.replace("ID", response.data);
                                 window.open(url, '_blank');
                     }
                 }

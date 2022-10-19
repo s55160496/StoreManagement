@@ -30,7 +30,8 @@ var AlertMsg = {
     Desc_Warning_Duplicate: 'Data can not be duplicated. </br> Please re-enter the information.',
     ConfirmLogout: "Do you want to log out?",
     ConfirmStartJob: "Do you want to Start Job?",
-    ConfirmReceiveJob: "Do you want to Receive Job?"
+    ConfirmReceiveJob: "Do you want to Receive Job?",
+    ConfirmTravelJob: "Do you want to Travel Job?"
 };
 
 function PopupNoPermission(sPathRedirect) {
@@ -105,6 +106,9 @@ function DialogConfirmStart(funcSt) {
 }
 function DialogConfirmReceive(funcRe) {
     SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmReceiveJob, funcRe);
+}
+function DialogConfirmTravel(funcRe) {
+    SwAlert.Confirm(AlertTitle.Confirm, AlertMsg.ConfirmTravelJob, funcRe);
 }
 
 function DialogConfirmApprove(funcDel) {

@@ -98,9 +98,9 @@
                                                 }
                                             </div>
                                             <div class="p-1">
-                                           
-                                                <button id="btnsj" onclick="sp_update_travel_job()" type="button" class="btn btn-success" title="Start job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Travel Job</button>
-                                            
+
+                                                <button id="btntj" onclick="sp_update_travel_job()" type="button" class="btn btn-success" title="Travel job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Travel Job</button>
+
                                             </div>
                                             <div class="p-1">
                                                 @if (Model != null && string.IsNullOrEmpty(Model.RECEIVE_DATE))
@@ -367,7 +367,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="2">
-                                                                        <input type="text" class="form-control" id="txtCDHour_Meter" name="txtCDHour_Meter" placeholder="" value="@Model.JOB_DETAIL.H_METER">
+                                                                        <input type="text" class="form-control" id="txtCDHour_Meter" name="txtCDHour_Meter" placeholder="กรุณาระบุ HOUR METER" value="@Model.JOB_DETAIL.H_METER">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -384,13 +384,13 @@
                                                                     <th style="text-align:center">TRAVEL</th>
                                                                     <th style="text-align:center">TOTAL</th>
                                                                     <th style="text-align:center">FAILURE CODE</th>
-                                                                    <th style="text-align:center">FAIR WEAR</th>
+                                                                    <th style="text-align:center">FAIR WEAR (Y/N)</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
                                                                     <th>
-                                                                        <input type="text" class="form-control" id="txtServiceman" name="txtServiceman" placeholder="" value="@Model.JOB_DETAIL.V_SERVICE_MANE">
+                                                                        <input type="text" class="form-control" id="txtServiceman" name="txtServiceman" placeholder="กรุณาระบุ SERVICE MAN" value="@Model.JOB_DETAIL.V_SERVICE_MANE">
                                                                     </th>
                                                                     <th>
                                                                         <input type="text" class="form-control" id="txtLabour" name="txtLabour" placeholder="" value="@Model.JOB_DETAIL.V_LABOUR">
@@ -405,7 +405,7 @@
                                                                         <input type="text" class="form-control" id="txtFailure_code" name="txtFailure_code" maxlength="20" placeholder="" value="@Model.JOB_DETAIL.FAILURE_CODE">
                                                                     </th>
                                                                     <th>
-                                                                        <input type="text" class="form-control" id="txtFair_wear" name="txtFair_wear" maxlength="1" placeholder="" value="@Model.JOB_DETAIL.FAIR_WEAR">
+                                                                        <input type="text" class="form-control" id="txtFair_wear" name="txtFair_wear" maxlength="1" placeholder="กรุณาระบุ (Y/N) เท่านั้น" value="@Model.JOB_DETAIL.FAIR_WEAR" oninput="checkregex(this)">
                                                                     </th>
                                                                 </tr>
                                                             </tbody>
@@ -657,7 +657,10 @@
         @{
             if (SessionUserInfo.POSITION == "CK" || SessionUserInfo.POSITION == "MG")
             {
-                <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
+                if (Model != null && !string.IsNullOrEmpty(Model.RECEIVE_DATE) && !string.IsNullOrEmpty(Model.TRAVEL_DATE) && !string.IsNullOrEmpty(Model.JOB_DATE))
+                {
+                    <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
+                }
                 if (Model.JOB_STATUS == "C" && Model?.IMAGE_DETAIL != null && Model.IMAGE_DETAIL.Where(a => a.IMAGE_TYPE == "rpt").Any())
                 {
                     var img = (tbt_job_image)Model.IMAGE_DETAIL.Where(a => a.IMAGE_TYPE == "rpt").FirstOrDefault();
@@ -668,7 +671,10 @@
             }
             else if ((SessionUserInfo.POSITION == "MN" || SessionUserInfo.POSITION == "OS") && Model != null && (Model.JOB_STATUS == "D" || string.IsNullOrEmpty(Model.JOB_STATUS)))
             {
-                <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
+                if (Model != null && !string.IsNullOrEmpty(Model.RECEIVE_DATE) && !string.IsNullOrEmpty(Model.TRAVEL_DATE) && !string.IsNullOrEmpty(Model.JOB_DATE))
+                {
+                    <button id="btnSubmit" type="button" class="btn btn-primary" title="Submit" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Close Job</button>
+                }
             }
         }
         <button id="btnBack" type="button" class="btn btn-dark" title="Back" data-toggle="tooltip"><i class="fa fa-arrow-left"></i>&nbsp;Back</button>
@@ -729,8 +735,10 @@
 
         SetTxtNumber_INT($('#txtHour_Meter'));
 
+        SetTxtNumber_INT($('#txtCDHour_Meter'));
+
         @* V *@
-        SetTxtNumber_INT($('#txtServiceman'));
+      /*  SetTxtNumber_INT($('#txtServiceman'));*/
         InputMaskDecimal('#txtLabour', 12, 2, false, false);
         InputMaskDecimal('#txtTravel', 12, 2, false, false);
         InputMaskDecimal('#txtTotal', 12, 2, false, false);
@@ -765,7 +773,7 @@
     </script>
 
     @* TAB JOB DETAIL *@
-<script type="text/javascript">
+    <script type="text/javascript">
     var arrJobParts = @Html.Raw(Json.Serialize(Model.JOB_PARTS)) == null ? [] : @Html.Raw(Json.Serialize(Model.JOB_PARTS));
     var arrImage_Detail = @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL)) == null ? [] : @Html.Raw(Json.Serialize(Model.IMAGE_DETAIL));
 
@@ -1052,7 +1060,7 @@
         let obj = {
             'JOB_ID': GetValTextBox('hddID')
         }
-        DialogConfirmStart(function () {
+        DialogConfirmTravel(function () {
             swal.disableButtons();
             BlockUI();
             $.ajax({
@@ -1078,7 +1086,7 @@
         });
         }
 
-</script>
+    </script>
 
     @* TAB CHECK LIST *@
     <script type="text/javascript">
@@ -1207,6 +1215,20 @@
                 'JOB_STATUS': JOB_STATUS,
                 'FLG_CLOSE': FLG_CLOSE,
             };
+
+            if (!GetValTextBox('txtCDHour_Meter')) {
+                $('#txtCDHour_Meter').focus()
+                return
+            }
+            if (!GetValTextBox('txtServiceman')) {
+                $('#txtServiceman').focus()
+                return
+            }
+            if (!GetValTextBox('txtFair_wear')) {
+              //  DialogWarning("กรุณาระบุ txtFair_wear (Y/N) เท่านั้น");
+                $('#txtFair_wear').focus()
+                return
+            }
             BlockUI();
             $.ajax({
                 url: '@Url.Action("CloseJob", "Job")',
@@ -1341,6 +1363,14 @@
             });
         });*@
     }
+
+        const checkregex = (action) => {
+            if (!(/Y|N/gmi).test(action.value)) {
+                action.value = ''
+            } else {
+                action.value = action.value.toUpperCase()
+            }
+        }
 
 
     </script>

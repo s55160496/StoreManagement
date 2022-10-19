@@ -158,7 +158,8 @@ namespace StoreManagement.Controllers
                 {
                     throw new Exception("ไม่พบข้อมูล ทำการค้นหาข้อมูลอีกครั้ง");
                 }
-
+                if(data_file.ContentType== "application/vnd.ms-excel")
+                    return File(data_file.FileData, data_file.ContentType,data_file.FileName);
                 return File(data_file.FileData, data_file.ContentType);
 
 
