@@ -7,6 +7,8 @@
     var SERVICES = (TBM_SERVICES[])ViewData["SERVICES"];
     var BRAND = (TBM_BRAND[])ViewData["BRAND"];
 
+    var EMPLOYEE = (TBM_EMPLOYEE[])ViewData["EMPLOYEE"];
+    var CONTRACT = (TBM_CONTRACT_TYPE[])ViewData["CONTRACT"];
     var EDIT_FLG = (string)ViewData["EDIT_FLG"];
 }
 
@@ -43,9 +45,9 @@
                             </select>
                         </div>
                         @*<div class="form-group col-md-6">
-                            <label for="txtBrand_no">Brand No</label>
-                            <input type="text" class="form-control" id="txtBrand_No" name="txtBrand_No" placeholder="Brand No" maxlength="3" value="@Model.BRAND_NO">
-                        </div>*@
+                                <label for="txtBrand_no">Brand No</label>
+                                <input type="text" class="form-control" id="txtBrand_No" name="txtBrand_No" placeholder="Brand No" maxlength="3" value="@Model.BRAND_NO">
+                            </div>*@
                     </div>
 
                     <div class="form-row">
@@ -54,8 +56,8 @@
                             <textarea rows="3" type="text" class="form-control" id="txtModel_No" name="txtModel_No" placeholder="Model No"></textarea>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="txtChassis_no">Chassis No</label>
-                            <textarea rows="3" type="text" class="form-control" id="txtChassis_No" name="txtChassis_No" placeholder="Chassis No"></textarea>
+                            <label for="txtChassis_no">Fleet No</label>
+                            <textarea rows="3" type="text" class="form-control" id="txtChassis_No" name="txtChassis_No" placeholder="Fleet No"></textarea>
                         </div>
                     </div>
 
@@ -64,13 +66,28 @@
                             <label for="txtColor">Color</label>
                             <input type="text" class="form-control" id="txtColor" name="txtColor" placeholder="Color" maxlength="50" value="@Model.COLOR">
                         </div>
+                        <div class="form-group col-md-6">
+                            <label for="ddlContractType">Contract Type</label>
+                            <select id="ddlContractType" name="ddlContractType" class="form-control">
+                                <option value="" selected>Choose...</option>
+                                @if (CONTRACT != null && CONTRACT.Any())
+                                {
+                                    foreach (var item in CONTRACT)
+                                    {
+                                        <option value="@item.CONTRACT_TYPE_ID">@item.CONTRACT_TYPE_NAME</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="txtEffective_Date">Effective Date</label>
                             <div class="input-group mb-3">
-                                <input ID="txtEffective_Date" name="txtEffective_Date" type="text" autocomplete="off" class="form-control" MaxLength="10"  placeholder="--/--/----" value="@(string.IsNullOrEmpty(Model.EFFECTIVE_DATE) ? "" : Model.EFFECTIVE_DATE.Substring(0, 10))" />
+                                <input ID="txtEffective_Date" name="txtEffective_Date" type="text" autocomplete="off" class="form-control" MaxLength="10" placeholder="--/--/----" value="@(string.IsNullOrEmpty(Model.EFFECTIVE_DATE) ? "" : Model.EFFECTIVE_DATE.Substring(0, 10))" />
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
@@ -79,10 +96,16 @@
                         <div class="form-group col-md-4">
                             <label for="txtEffective_Date">Expire Date</label>
                             <div class="input-group mb-3">
-                                <input ID="txtExpire_Date" name="txtExpire_Date" type="text" autocomplete="off"  class="form-control" MaxLength="10" placeholder="--/--/----" value="@(string.IsNullOrEmpty(Model.EXPIRE_DATE) ? "" : Model.EXPIRE_DATE.Substring(0, 10))" />
+                                <input ID="txtExpire_Date" name="txtExpire_Date" type="text" autocomplete="off" class="form-control" MaxLength="10" placeholder="--/--/----" value="@(string.IsNullOrEmpty(Model.EXPIRE_DATE) ? "" : Model.EXPIRE_DATE.Substring(0, 10))" />
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtStd">Std PMP</label>
+                            <div class="input-group mb-3">
+                                <input ID="txtStd" name="txtStd" type="text" autocomplete="off" class="form-control" placeholder="Std PMP" />
                             </div>
                         </div>
                     </div>
@@ -127,30 +150,30 @@
                                 <option value="" selected>Choose...</option>
                                 @{
                                     @*if (CUSTOMER != null && CUSTOMER.Any())
-            {
-                foreach (var item in CUSTOMER)
-                {
-                    if (item.CUSTOMER_ID == Model.CUSTOMER_ID)
-                    {
-                        <option value="@item.CUSTOMER_ID" selected>@item.DISTRICT_CODE</option>
-                    }
-                    else
-                    {
-                        <option value="@item.CUSTOMER_ID">@item.DISTRICT_CODE</option>
-                    }
-                }
-            }*@
+                                        {
+                                            foreach (var item in CUSTOMER)
+                                            {
+                                                if (item.CUSTOMER_ID == Model.CUSTOMER_ID)
+                                                {
+                                                    <option value="@item.CUSTOMER_ID" selected>@item.DISTRICT_CODE</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.CUSTOMER_ID">@item.DISTRICT_CODE</option>
+                                                }
+                                            }
+                                        }*@
                                     if (CUSTOMER != null && CUSTOMER.Any())
                                     {
                                         foreach (var item in CUSTOMER)
                                         {
                                             if (item.CUSTOMER_ID == Model.CUSTOMER_ID)
                                             {
-                            <option value="@item.CUSTOMER_ID" selected>@item.FNAME  @item.LNAME</option>
+                                                <option value="@item.CUSTOMER_ID" selected>@item.FNAME  @item.LNAME</option>
                                             }
                                             else
                                             {
-                            <option value="@item.CUSTOMER_ID">@item.FNAME   @item.LNAME</option>
+                                                <option value="@item.CUSTOMER_ID">@item.FNAME   @item.LNAME</option>
                                             }
                                         }
                                     }
@@ -159,6 +182,25 @@
                         </div>
                     </div>
 
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ddlEmployee">Employee</label>
+                            <select id="ddlEmployee" name="ddlEmployee" class="form-control">
+                                <option value="" selected>Choose...</option>
+                                @if (EMPLOYEE != null && EMPLOYEE.Any())
+                                {
+                                    foreach (var item in EMPLOYEE)
+                                    {
+                                        if (item.POSITION == "MN")
+                                        {
+                                            <option value="@item.USER_ID">@item.FULLNAME  @item.LASTNAME</option>
+
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -200,7 +242,10 @@
                     'SERVICE_PRICE': GetValTextBox('txtService_Price'),
                     'SERVICE_NO': GetValDropdown('ddlService_No'),
                     'CONTRACT_NO': GetValTextBox('txtContract_No'),
-                    'CUSTOMER_ID': GetValDropdown('ddlCustomer_ID')
+                    'CUSTOMER_ID': GetValDropdown('ddlCustomer_ID'),
+                    'CONTRACT_TYPE': GetValDropdown('ddlContractType'),
+                    'EMPLOYEE_ID': GetValDropdown('ddlEmployee'),
+                    'STD_PMP': GetValTextBox('txtStd')
                 }
                 BlockUI();
                 $.ajax({

@@ -98,9 +98,10 @@
                                                 }
                                             </div>
                                             <div class="p-1">
-
-                                                <button id="btntj" onclick="sp_update_travel_job()" type="button" class="btn btn-success" title="Travel job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Travel Job</button>
-
+                                                @if (Model != null && string.IsNullOrEmpty(Model.TRAVEL_DATE))
+                                                {
+                                                    <button id="btntj" onclick="sp_update_travel_job()" type="button" class="btn btn-success" title="Travel job" data-toggle="tooltip"><i class="fa fa-save"></i>&nbsp;Travel Job</button>
+                                                }
                                             </div>
                                             <div class="p-1">
                                                 @if (Model != null && string.IsNullOrEmpty(Model.RECEIVE_DATE))

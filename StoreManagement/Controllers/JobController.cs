@@ -365,6 +365,10 @@ namespace StoreManagement.Controllers
                 HttpStatusCode code = HttpStatusCode.OK;
                 //partid = Decrypt_UrlDecode(partid);
                 // jobid = Decrypt_UrlDecode(jobid);
+                if (string.IsNullOrWhiteSpace(jobid))
+                {
+                    jobid = "none";
+                }
                 var dataObjects = SPAREPART_ONHAND(out code ,partid, jobid);
                 return Json(dataObjects);
             }

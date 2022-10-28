@@ -173,7 +173,17 @@
                         DialogWarning("Adjust value is null");
                     }
                 } else {
-                    DialogConfirmSubmit(function () {
+
+                    $.ajax({
+                url: '@Url.Action("SPAREPART_ONHAND", "Job")',
+                type: 'POST',
+                 dataType: 'json',
+                 data: { 'partid': GetValDropdown('ddlSparePart'), 'jobid': null },
+                 success:  function (response) {
+                    UnblockUI();
+                            {
+                   if (Number( response.PART_VALUE) >=Number( GetValTextBox('txtAdj_Part'))) {
+                             DialogConfirmSubmit(function () {
                         swal.disableButtons();
                     var obj = {
                         "PART_ID": GetValDropdown('ddlSparePart'),
@@ -203,7 +213,21 @@
                         error: function () {
                         }
                     });
-                });
+                          });
+                        } else {
+                            DialogWarning(`Values In Stock ${response.PART_VALUE}`);
+
+                        }
+                    }
+
+                },
+                 error: function (error) {
+                     DialogWarning(error);
+
+                }
+            });
+
+
                 }
             });
 

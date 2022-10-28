@@ -57,6 +57,12 @@ namespace StoreManagement.Controllers
                 var BRAND = GET_TBM_BRAND(out code);
                 ViewData["BRAND"] = BRAND == null ? null : BRAND.ToArray();
 
+                var CONTRACT = GET_CONTRACT_TYPE(out code);
+                ViewData["CONTRACT"] = CONTRACT == null ? null : CONTRACT.ToArray();
+
+                var EMPLOYEE = GET_EMPLOYEE(out code);
+                ViewData["EMPLOYEE"] = EMPLOYEE == null ? null : EMPLOYEE.ToArray();
+
                 return View(model);
             }
             catch (Exception ex)

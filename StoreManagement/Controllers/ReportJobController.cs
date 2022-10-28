@@ -94,7 +94,7 @@ namespace StoreManagement.Controllers
                 else
                 {
                     var Data = GET_SUMMARY_JOB_LIST_FILE(out code, data);
-                    string tempLeter = "Report" + Guid.NewGuid().ToString();
+                    string tempLeter = "Report" + Guid.NewGuid().ToString("n");
                     SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
                     result.data = tempLeter;
                 }
@@ -129,7 +129,7 @@ namespace StoreManagement.Controllers
                 }
                 data.USER_PRINT = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
                 var Data = sp_getReportDownTime(out code, data);
-                string tempLeter = "Report" + Guid.NewGuid().ToString();
+                string tempLeter = "Report" + Guid.NewGuid().ToString("n");
                 SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
                 result.data = tempLeter;
             }
@@ -148,6 +148,41 @@ namespace StoreManagement.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public IActionResult sp_getReportRunningCost(REPORT_JOB data)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                data.USER_PRINT = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
+                var Data = sp_getReportRunningCost(out code, data);
+                string tempLeter = "Report" + Guid.NewGuid().ToString("n");
+                SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
+                result.data = tempLeter;
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
+
 
         public IActionResult PreviewFile(string SessionRpt)
         {
