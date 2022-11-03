@@ -38,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\REPORT\" />
     <Folder Include="wwwroot\UploadFile\Temp\" />
   </ItemGroup>
 

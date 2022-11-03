@@ -74,7 +74,15 @@
                                 {
                                     foreach (var item in CONTRACT)
                                     {
-                                        <option value="@item.CONTRACT_TYPE_ID">@item.CONTRACT_TYPE_NAME</option>
+                                        if (item.CONTRACT_TYPE_ID == Model.CONTRACT_TYPE)
+                                        {
+                                            <option value="@item.CONTRACT_TYPE_ID" selected>@item.CONTRACT_TYPE_NAME</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.CONTRACT_TYPE_ID">@item.CONTRACT_TYPE_NAME</option>
+                                        }
+
                                     }
                                 }
                             </select>
@@ -105,7 +113,7 @@
                         <div class="form-group col-md-4">
                             <label for="txtStd">Std PMP</label>
                             <div class="input-group mb-3">
-                                <input ID="txtStd" name="txtStd" type="text" autocomplete="off" class="form-control" placeholder="Std PMP" />
+                                <input ID="txtStd" name="txtStd" type="text" autocomplete="off" class="form-control" placeholder="Std PMP" value="@Model.STD_PMP" />
                             </div>
                         </div>
                     </div>
@@ -193,7 +201,15 @@
                                     {
                                         if (item.POSITION == "MN")
                                         {
-                                            <option value="@item.USER_ID">@item.FULLNAME  @item.LASTNAME</option>
+                                            if (item.USER_ID == Model.EMPLOYEE_ID)
+                                            {
+                                                <option value="@item.USER_ID" selected>@item.FULLNAME  @item.LASTNAME</option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.USER_ID">@item.FULLNAME  @item.LASTNAME</option>
+                                            }
 
                                         }
                                     }

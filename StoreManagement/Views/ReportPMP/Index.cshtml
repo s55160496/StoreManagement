@@ -1,0 +1,162 @@
+﻿@model  List<StoreManagement.Models.REPORT_PPM>
+@{
+    ViewData["Title"] = "ISEE: ReportPMP";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+
+}
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+                @*<div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtModel_no">Part Create from</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="txtFrom" name="txtFrom">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtChassis_no">To</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="txtTo" name="txtTo">
+                        </div>
+                    </div>
+                </div>*@
+
+                @*<div class="col-sm-12 text-center">
+                    <button id="btnSearch" type="button" style="margin:0!important" class="btn btn-info" title="Search" data-toggle="tooltip"><i class="fa fa-search"></i>&nbsp;Search</button>
+                    <button id="btnClear" type="button" class="btn btn-dark" title="Clear" data-toggle="tooltip"><i class="fa fa-undo"></i>&nbsp;Clear</button>
+                </div>*@
+
+
+                <div class="row">
+                    <div class="col-sm-12 text-left p-1">
+                        <button id="btnPDF" type="button" class="btn btn-success" title="PDF" onclick="exportpdf()" data-toggle="tooltip"><i class="fa fa-file-pdf"></i>&nbsp;Print</button>
+                        <button id="btnExcel" type="button" class="btn btn-warning" title="Excel" onclick="exportexcel()" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
+                    </div>
+                    <div id="divData" class="col-sm-12">
+                        <div class="table-responsive">
+                            <table id="tbSearchData" class="table tableData" style="min-width:1500px">
+                                <thead class="thead-HMCPO darkCustom">
+                                    <tr>
+                                        <th class="text-center">Serial Number </th>
+                                        <th class="text-center">Fleet Number</th>
+                                        <th class="text-center">Model code</th>
+                                        <th class="text-center">contract type</th>
+                                        <th class="text-center">PMP</th>
+                                        <th class="text-center">STD PMP TIME</th>
+                                        <th class="text-center">Customer Name</th>
+                                        <th class="text-center">Site Address Line1</th>
+                                        <th class="text-center">PREF.FSR1#</th>
+                                        <th class="text-center">PREF.FSR1 NAME</th>
+                                        <th class="text-center">LAST CONTACT</th>
+                                        <th class="text-center">Contact Phone Number</th>
+                                        <th class="text-center">JANUARY</th>
+                                        <th class="text-center">FEBRUARY</th>
+                                        <th class="text-center">MARCH</th>
+                                        <th class="text-center">APRIL</th>
+                                        <th class="text-center">MAY</th>
+                                        <th class="text-center">JUNE</th>
+                                        <th class="text-center">JULY</th>
+                                        <th class="text-center">AUGUST</th>
+                                        <th class="text-center">SEPTEMBER</th>
+                                        <th class="text-center">OCTOBER</th>
+                                        <th class="text-center">NOVEMBER</th>
+                                        <th class="text-center">DECEMBER</th>
+                                        <th class="text-center">MONTH TOTAL</th>
+                                        <th class="text-center">JANUARY INVOICE</th>
+                                        <th class="text-center">FEBRUARY INVOICE</th>
+                                        <th class="text-center">MARCH INVOICE</th>
+                                        <th class="text-center">APRIL INVOICE</th>
+                                        <th class="text-center">MAY INVOICE</th>
+                                        <th class="text-center">JUNE INVOICE</th>
+                                        <th class="text-center">JULY INVOICE</th>
+                                        <th class="text-center">AUGUST INVOICE</th>
+                                        <th class="text-center">SEPTEMBER INVOICE</th>
+                                        <th class="text-center">OCTOBER INVOICE</th>
+                                        <th class="text-center">NOVEMBER INVOICE</th>
+                                        <th class="text-center">DECEMBER INVOICE</th>
+                                        <th class="text-center">MONTH TOTAL INVOICE</th>
+                                        <th class="text-center">AGREE START DATE</th>
+                                        <th class="text-center">EXPIRY DATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Count > 0)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                    <tr>
+                                        <td>@item.SERIAL_NUMBER</td>
+                                        <td>@item.FLEET_NUMBER</td>
+                                        <td>@item.MODEL_CODE</td>
+                                        <td>@item.CONTRACT_TYPE</td>
+                                        <td>@item.PMP</td>
+                                        <td>@item.STD_PMP_TIME</td>
+                                        <td>@item.CUSTOMER_NAME</td>
+                                        <td>@item.SITE_ADDRESS_LINE1</td>
+                                        <td>@item.PREF_FSR1</td>
+                                        <td>@item.PREF_FSR1_NAME</td>
+                                        <td>@item.LAST_CONTACT</td>
+                                        <td>@item.CONTACT_PHONE_NUMBER</td>
+                                        <td>@item.JANUARY</td>
+                                        <td>@item.FEBRUARY</td>
+                                        <td>@item.MARCH</td>
+                                        <td>@item.APRIL</td>
+                                        <td>@item.MAY</td>
+                                        <td>@item.JUNE</td>
+                                        <td>@item.JULY</td>
+                                        <td>@item.AUGUST</td>
+                                        <td>@item.SEPTEMBER</td>
+                                        <td>@item.OCTOBER</td>
+                                        <td>@item.NOVEMBER</td>
+                                        <td>@item.DECEMBER</td>
+                                        <td>@item.MONTH_TOTAL</td>
+                                        <td>@item.JANUARY_INVOICE</td>
+                                        <td>@item.FEBRUARY_INVOICE</td>
+                                        <td>@item.MARCH_INVOICE</td>
+                                        <td>@item.APRIL_INVOICE</td>
+                                        <td>@item.MAY_INVOICE</td>
+                                        <td>@item.JUNE_INVOICE</td>
+                                        <td>@item.JULY_INVOICE</td>
+                                        <td>@item.AUGUST_INVOICE</td>
+                                        <td>@item.SEPTEMBER_INVOICE</td>
+                                        <td>@item.OCTOBER_INVOICE</td>
+                                        <td>@item.NOVEMBER_INVOICE</td>
+                                        <td>@item.DECEMBER_INVOICE</td>
+                                        <td>@item.AGREE_START_DATE</td>
+                                        <td>@item.EXPIRY_DATE</td>
+                                    </tr>
+                                        }
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    const exportpdf = () => {
+        window.open('@Url.Action("ExportPdf", "ReportPMP")', "_bank")
+
+    }
+    const exportexcel = () => {
+              window.open('@Url.Action("ExportExcel", "ReportPMP")', "_bank")
+    }
+</script>
