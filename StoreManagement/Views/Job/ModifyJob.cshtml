@@ -868,8 +868,8 @@
               $.ajax({
                 url: '@Url.Action("SPAREPART_ONHAND", "Job")',
                 type: 'POST',
-                dataType: 'json',
-                  data: { 'partid': $('#txtJobParts_QTY_' + seq).attr('partid'), 'jobid': $('#hddID').val() },
+                  dataType: 'json',
+                  data: { 'partid': $(`#ddlJobpart_Sparepart_${seq}`).val(), 'jobid': $('#hddID').val() },
                 success: function (response) {
                     UnblockUI();
                     {
@@ -883,6 +883,10 @@
                                         swal.close();
                                     }, function () {
                                         $(`#txtJobParts_QTY_${seq}`).val("");
+                                        let index = arrJobParts.findIndex(a => a.SEQ == seq)
+                                        if (index) {
+                                            arrJobParts[index].TOTAL = ""
+                                        }
                                 });
                         }
                         let id_txt = `txtJobParts_QTY_${seq}`;
@@ -890,7 +894,8 @@
                         Enumerable.From(arrJobParts).Where(function (w) { return w.SEQ == seq }).FirstOrDefault().TOTAL = val;
                     }
                 },
-                error: function () {
+                  error: function (error) {
+                      console.log(error)
                 }
             });
         }
