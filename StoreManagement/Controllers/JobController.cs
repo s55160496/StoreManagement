@@ -176,7 +176,7 @@ namespace StoreManagement.Controllers
                     bool Ispass = true;
                     var position = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).POSITION;
 
-                    if (/*data.JOB_STATUS == "C" ||*/ data.JOB_STATUS == "F")
+                    if (data.JOB_STATUS == "C" || data.JOB_STATUS == "F")
                     {
                         if (imageBytes.Length == 3416 && mechanic.Contains(position))
                         {

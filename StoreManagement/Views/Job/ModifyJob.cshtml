@@ -594,6 +594,7 @@
                                                             <div id="PreviewSignature">
                                                                 <img id="ItemPreviewSignature" src="" width="500">
                                                             </div>
+                                                            <input type="button" class="btn btn-danger" value="Clear" onclick="clearsign()"/>
                                                         </div>
                                                         @*<div class="form-group col-md-2">
                                                                 <button id="btnConfirmSignature" type="button" class="btn-md btn-outline-info" title="Confirm" data-toggle="tooltip"><i class="fa fa-check"></i>&nbsp;Confrim Signature</button>
@@ -755,8 +756,10 @@
 
         CreateFileProductCompany();
 
-    });
-
+        });
+        const clearsign = () => {
+            $("#signature").jSignature("reset")
+        }
     function CreateFileProductCompany() {
         SetUpFile.sID = "dvFile";
             SetUpFile.Extensions = null;
