@@ -171,7 +171,7 @@
             @* @Url.Action("Index","Stock") *@
 
             @{
-                var listMenuHead = new List<string>() { "SparePart", "AdjustPart" ,"StockOut","StockIn"};
+                var listMenuHead = new List<string>() { "SparePart", "AdjustPart", "StockOut", "StockIn" };
                 if (!SessionUserInfoIsExpired)
                 {
                     if (SessionUserInfo.MENU != null && SessionUserInfo.MENU.Any())
@@ -211,6 +211,20 @@
                                         <li><a href="@Url.Action("Index",item.MENU_CONTROLLER+"PMP")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ReportPMP" ? "active" : "")"><div class="menu-icon"><i class="fa-file-alt"></i></div><div class="menu-label">Report PMP</div></a></li>
                                     </ul>
                                 </li>
+                            }
+                            else if (item.MENU_CONTROLLER == "Job")
+                            {
+                                <li class="treeview">
+                                    <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "Job") ? "active" : "")">
+                                        <div class="menu-icon"><i class="@item.ICON"></i></div>
+                                        <div class="menu-label">Job <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
+                                    </a>
+                                    <ul class="treeview-menu" style="display: none;">
+                                        <li><a href="@Url.Action("Index","Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Job" ? "active" : "")"><div class="menu-icon"><i class="fa fa-lock-open"></i></div><div class="menu-label">Job Active</div></a></li>
+                                        <li><a href="@Url.Action("Index","JobClose")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "JobClose" ? "active" : "")"><div class="menu-icon"><i class="fa fa-lock"></i></div><div class="menu-label">Job Close</div></a></li>
+                                    </ul>
+                                </li>
+
                             }
                             else
                             {
@@ -306,8 +320,8 @@
                         </a>
                         <div class="userinfo">
                             @*<div class="user-pic">
-                                <img src="~/Images/user-img.png" width="100px" />
-                            </div>*@
+                                    <img src="~/Images/user-img.png" width="100px" />
+                                </div>*@
                             <div class="user-detail">
                                 <div class="name">
                                     @if (SessionUserInfoIsExpired == false)
@@ -335,7 +349,14 @@
                 <div class="container">
                     <div class="card">
                         <div id="divPageTitle" class="card-header bg-secondary text-white" style="font-weight: bold;font-size: 19px;line-height: 19px;">
-                            @ViewContext.RouteData.Values["Controller"].ToString()
+                            @if (ViewContext.RouteData.Values["Controller"].ToString() == "Job")
+                            {
+                                @Html.Raw("Job Active")
+                            }
+                            else
+                            {
+                                @ViewContext.RouteData.Values["Controller"].ToString()
+                            }
                         </div>
                         @RenderBody()
                         @*<div class="card-body">

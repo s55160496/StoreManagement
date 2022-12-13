@@ -1,0 +1,121 @@
+﻿@using StoreManagement.Models;
+@using StoreManagement.Controllers;
+@{
+    bool SessionUserInfoIsExpired = Context.Session.GetObjectFromJson<TM_User>("UserAccount") == null;
+    var SessionUserInfo = Context.Session.GetObjectFromJson<TM_User>("UserAccount");
+}
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MP_Back.cshtml";
+}
+
+<div class="card-body">
+    <div>
+        <div id="divForm">
+            <div class="container">
+                <div id="divSearch">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div id="divData" class="col-sm-12">
+                <div class="table-responsive">
+                    <table id="tbSearchData" class="table tableData" style="min-width:1500px">
+                        <thead class="thead-HMCPO darkCustom">
+                            <tr>
+                                <th style="width: 11%"></th>
+                                <th class="text-center">JOB_ID</th>
+                                <th class="text-center">LICENSE_NO</th>
+                                <th class="text-center">CUS_FULLNAME</th>
+                                <th class="text-center">EMAIL_CUSTOMER</th>
+                                <th class="text-center">INVOICE_NO</th>
+                                <th class="text-center">EMP_FULLNAME</th>
+                                <th class="text-center">CREATE_DATE</th>
+                                <th class="text-center">FIX_DATE</th>
+                                <th class="text-center">CLOSE_DATE</th>
+                                <th class="text-center">MODIFY / DETAIL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="card-footer bg-light">
+</div>
+
+@section Scripts{
+
+    <script>
+    let urlSearchData = "@Url.Action("GetData", "JobClose")";
+
+    $(document).ready(function () {
+        SearchData();
+    });
+
+    function SearchData() {
+        BlockUI();
+        $.ajax({
+            url: urlSearchData,
+            type: 'POST',
+            dataType: 'json',
+            success: function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    BindDataTable(response.data);
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    function BindDataTable(arrData_) {
+        $("#tbSearchData tbody").html("");
+            let html = '';
+            $.each(arrData_, function (i, el) {
+                let td = '';
+                td = '<td class="text-center">' + (i + 1) + '</td>';
+                td += '<td class="text-center">' + (el.JOB_ID || '') + '</td>';
+                td += '<td class="text-center">' + (el.LICENSE_NO || '') + '</td>';
+                td += '<td class="text-left">' + (el.CUS_FULLNAME || '') + '</td>';
+                td += '<td class="text-left">' + (el.EMAIL_CUSTOMER || '') + '</td>';
+                td += '<td class="text-center">' + (el.INVOICE_NO || '') + '</td>';
+                td += '<td class="text-left">' + (el.EMP_FULLNAME || '') + '</td>';
+                td += '<td class="text-left">' + (el.CREATE_DATE || '') + '</td>';
+                td += '<td class="text-left">' + (el.FIX_DATE || '') + '</td>';
+                td += '<td class="text-left">' + (el.CLOSE_DATE || '') + '</td>';
+                td += '<td class="text-center">' + '<a href="@Url.Action("ModifyJob", "Job")' + '?str=' + el.JOB_ID_ENCRYPT + '" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>' + '</td>';
+                html += "<tr>" + td + "</tr>";
+            });
+
+        $("table[id$=tbSearchData] tbody").html(html);
+
+        var table = $('#tbSearchData').removeAttr('width').DataTable({
+            scrollY: "300px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            columnDefs: [
+                { width: 35, targets: 0 }
+                , { width: 70, targets: 1 }
+                , { width: 200, targets: 3 }
+                , { width: 200, targets: 4 }
+                , { width: 150, targets: 7 }
+                , { width: 150, targets: 8 }
+                , { width: 150, targets: 9 }
+            ],
+        });
+    }
+    </script>
+}
+

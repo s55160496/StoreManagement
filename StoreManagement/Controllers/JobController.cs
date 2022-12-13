@@ -480,7 +480,7 @@ namespace StoreManagement.Controllers
 
                     byte[] imageBytes = Convert.FromBase64String(arr[1]);
                     var position = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).POSITION;
-                    if (imageBytes.Length == 3416 && mechanic.Contains(position))
+                    if (imageBytes.Length < 5000 && mechanic.Contains(position))
                     {
                         throw new Exception("ระบุ ลายเช็นต์");
                     }
