@@ -148,6 +148,38 @@ namespace StoreManagement.Controllers
 
             return Json(result);
         }
+        [HttpPost]
+        public IActionResult sp_getReportProductive_time()
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }               
+                var Data = sp_getReportProductive_time(out code);
+                string tempLeter = "Report" + Guid.NewGuid().ToString("n");
+                SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
+                result.data = tempLeter;
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
 
         [HttpPost]
         public IActionResult sp_getReportRunningCost(REPORT_JOB data)

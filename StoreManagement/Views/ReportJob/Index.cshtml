@@ -130,6 +130,7 @@
                         <button id="btnExcel" type="button" class="btn btn-warning" title="Excel" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
                         <button id="btnExcelDT" type="button" class="btn btn-info" title="Excel downtime" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Export DownTime</button>
                         <button id="btnExcelRC" type="button" class="btn btn-primary" title="Excel RunningCost" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;RunningCost</button>
+                        <button id="btnExcelRPT" type="button" class="btn btn-secondary" title="Excel ReportProductivetime" data-toggle="tooltip"><i class="fa fa-file-excel"></i>&nbsp;Productivetime</button>
                     </div>
                     <div id="divData" class="col-sm-12">
                         <div class="table-responsive">
@@ -164,7 +165,7 @@
     var urlSearchData = "@Url.Action("GetData", "ReportJob")";
     let urlRptDowntime = "@Url.Action("sp_getReportDownTime", "ReportJob")";
     let urlRptRunningCost = "@Url.Action("sp_getReportRunningCost", "ReportJob")";
-
+    let urlReportProductivetime = "@Url.Action("sp_getReportProductive_time", "ReportJob")";
     $(document).ready(function () {
         $('#ddlJobType').select2();
         $('#ddlTeachnicial').select2();
@@ -189,6 +190,9 @@
         });
         $('#btnExcelRC').on('click', function () {
             rptRunningCost();
+        });
+        $('#btnExcelRPT').on('click', function () {
+            rptReportProductivetime();
         });
         $('#btnClear').on('click', function () {
             $('#txtJobDateFrom').val('');
@@ -361,6 +365,42 @@
                 } else {
                         let url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
                                 window.open(url, '_blank');
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    const rptReportProductivetime = () => {
+        let obj = {
+            JOB_DATE_FROM: GetValTextBox('txtJobDateFrom'),
+            JOB_DATE_TO: GetValTextBox('txtJobDateTo'),
+            CUSTOMER_NAME: GetValTextBox('txtCustomer'),
+            FIX_DATE_FROM: GetValTextBox('txtFixDateFrom'),
+            FIX_DATE_TO: GetValTextBox('txtFixDateTo'),
+            CLOSE_DT_FROM: GetValTextBox('txtCloseJobDateFrom'),
+            CLOSE_DT_TO: GetValTextBox('txtCloseJobDateTo'),
+            LICENSE_NO: GetValTextBox('txtLicenseNo'),
+            USER_PRINT: "",
+            TYPE_JOB: GetValDropdown('ddlJobType'),
+            TEACHNICIAL: GetValDropdown('ddlTeachnicial')
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlReportProductivetime,
+            type: 'POST',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                    let url = '@Url.Action("PreviewFile", "ReportJob", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                    window.open(url, '_blank');
                 }
             },
             error: function () {
