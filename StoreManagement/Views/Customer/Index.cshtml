@@ -12,6 +12,7 @@
                     <div class="form-group">
                         <a id="btnDel" onclick="DeleteData()" class="btn btn-danger" title="Delete" data-toggle="tooltip"><i class="fa fa-trash-alt" aria-hidden="true"></i>&nbsp;</a>
                         <a id="btnAdd" style="float:right" class="btn btn-success" href="@Url.Action("CreateCustomer","Customer")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
+                        <a id="btnExport" style="float:right" class="btn btn-primary" href="#" title="Export" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Export</a>
                     </div>
                     <table id="tbSearchData" class="table tableData">
                         <thead class="thead-HMCPO darkCustom">
@@ -46,10 +47,53 @@
 
 <script>
 var urlSearchData = "@Url.Action("GetData", "Customer")";
-
+let urlRptCustomer = "@Url.Action("RPTData", "Customer")";
     $(document).ready(function () {
         SearchData();
+          $('#btnExport').on('click', function () {
+            rptRptCustomer();
+        });
+        
     });
+
+    const rptRptCustomer= () => {
+       var obj = {
+            'LICENSE_NO': "",
+            'CUSTOMER_ID': "",
+            'ID_CARD': "",
+            'CUST_TYPE': "",
+            'FNAME': "",
+            'LNAME': "",
+            'ADDRESS': "",
+            'SUB_DISTRICT_NO': "",
+            'DISTRICT_CODE': "",
+            'PROVINCE_CODE': "",
+            'ZIP_CODE': "",
+            'PHONE_NO': "",
+            'EMAIL': ""
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlRptCustomer,
+            type: 'POST',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                        let url = '@Url.Action("Export", "Customer", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                                window.open(url, '_blank');
+                }
+            },
+            error: function () {
+            }
+        });
+    }
 
     function SearchData() {
         var obj = {

@@ -7,6 +7,7 @@
     <div>
         <div class="form-group">
             <a id="btnAdd" class="btn btn-success" href="@Url.Action("CreateVehicle","Vehicle")" title="Add" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add</a>
+            <a id="btnExport" class="btn btn-primary" href="#" title="Export" data-toggle="tooltip"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Export</a>
         </div>
         <div class="row">
             <div id="divData" class="col-sm-12">
@@ -18,9 +19,11 @@
                                 <th class="text-center">License No</th>
                                 <th class="text-center">Brand No</th>
                                 <th class="text-center">Model No</th>
+                                <th class="text-center">Contract Type</th>
                                 <th class="text-center">Fleet No</th>
                                 <th class="text-center">Color</th>
                                 <th class="text-center">Effective Date</th>
+                                <th class="text-center">Expire Date</th>
                                 <th class="text-center">Service Price</th>
                                 <th class="text-center">Service No</th>
                                 <th class="text-center">Contract No</th>
@@ -42,10 +45,54 @@
 
 <script>
 var urlSearchData = "@Url.Action("GetData", "Vehicle")";
+let urlRptVehicle = "@Url.Action("RPTData", "Vehicle")";
 
     $(document).ready(function () {
         SearchData();
+          $('#btnExport').on('click', function () {
+            rptRptVehicle();
+        });
     });
+
+    const rptRptVehicle = () => {
+       var obj = {
+            "LICENSE_NO": "",
+            "SEQ": "",
+            "BRAND_NO": "",
+            "MODEL_NO": "",
+            "CONTRACT_TYPE": "",
+            "CHASSIS_NO": "",
+            "COLOR": "",
+            "EFFECTIVE_DATE": "",
+            "EXPIRE_DATE": "",
+            "SERVICE_PRICE": "",
+            "SERVICE_NO": "",
+            "SERVICES_NAME": "",
+            "CONTRACT_NO": "",
+            "CUSTOMER_ID": ""
+        }
+
+        BlockUI();
+        $.ajax({
+            url: urlRptVehicle,
+            type: 'POST',
+            dataType: 'json',
+            data: { 'data': obj },
+            success: function (response) {
+                UnblockUI();
+                if (response.Status == SysProcess.SessionExpired) {
+                    PopupSessionTimeOut('@Url.Action("Index","Login")');
+                } else if (response.Status == SysProcess.Failed) {
+                    DialogWarning(response.Msg);
+                } else {
+                        let url = '@Url.Action("Export", "Vehicle", new { SessionRpt = "ID" })'.replace("ID", response.data);
+                                window.open(url, '_blank');
+                }
+            },
+            error: function () {
+            }
+        });
+    }
 
     function SearchData() {
         var obj = {
@@ -53,6 +100,7 @@ var urlSearchData = "@Url.Action("GetData", "Vehicle")";
             "SEQ": "",
             "BRAND_NO": "",
             "MODEL_NO": "",
+            "CONTRACT_TYPE": "",
             "CHASSIS_NO": "",
             "COLOR": "",
             "EFFECTIVE_DATE": "",
@@ -96,9 +144,11 @@ var urlSearchData = "@Url.Action("GetData", "Vehicle")";
                 td += '<td>' + (el.LICENSE_NO || '') + '</td>';
                 td += '<td>' + (el.BRAND_NAME_THA|| '') + '</td>';
                 td += '<td>' + (el.MODEL_NO || '') + '</td>';
+                td += '<td>' + (el.CONTRACT_TYPE_NAME || '') + '</td>';
                 td += '<td>' + (el.CHASSIS_NO || '') + '</td>';
                 td += '<td>' + (el.COLOR || '') + '</td>';
                 td += '<td>' + (el.EFFECTIVE_DATE || '') + '</td>';
+                td += '<td>' + (el.EXPIRE_DATE || '') + '</td>';
                 td += '<td>' + (el.SERVICE_PRICE || '') + '</td>';
                 td += '<td>' + (el.SERVICE_NO || '') + '</td>';
                 td += '<td>' + (el.CONTRACT_NO || '') + '</td>';
@@ -121,6 +171,9 @@ var urlSearchData = "@Url.Action("GetData", "Vehicle")";
             },
             order: [
                 [0, 'asc']
+            ],
+            buttons: [
+              'excel'
             ]
         });
     }

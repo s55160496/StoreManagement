@@ -289,5 +289,61 @@ namespace StoreManagement.Controllers
 
             return Json(result);
         }
+
+
+        [HttpPost]
+        public IActionResult RPTData(TBM_CUSTOMER data)
+        {
+            CResutlWebMethod result = new CResutlWebMethod();
+            HttpStatusCode code = HttpStatusCode.OK;
+            try
+            {
+                if (SessionUserInfoIsExpired())
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    throw new Exception("Session time out");
+                }
+                // data.USER_PRINT = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
+                var Data = RPT_TBM_CUSTOMER(out code, data);
+                string tempLeter = "Report" + Guid.NewGuid().ToString("n");
+                SessionExtensions.Put(HttpContext.Session, tempLeter, Data);
+                result.data = tempLeter;
+            }
+            catch (Exception ex)
+            {
+                result.Msg = ex.Message;
+                if (code == HttpStatusCode.Unauthorized)
+                {
+                    result.Status = SysFunctions.process_SessionExpired;
+                }
+                else
+                {
+                    result.Status = SysFunctions.process_Failed;
+                }
+            }
+
+            return Json(result);
+        }
+
+        public IActionResult Export(string SessionRpt)
+        {
+            try
+            {
+                DataFile data_file = SessionExtensions.Get<DataFile>(HttpContext.Session, SessionRpt);
+                if (data_file == null)
+                {
+                    throw new Exception("ไม่พบข้อมูล ทำการค้นหาข้อมูลอีกครั้ง");
+                }
+                if (data_file.ContentType == "application/vnd.ms-excel")
+                    return File(data_file.FileData, data_file.ContentType, data_file.FileName);
+                return File(data_file.FileData, data_file.ContentType);
+
+
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
+            }
+        }
     }
 }

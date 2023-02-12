@@ -416,6 +416,48 @@ namespace StoreManagement.Controllers
 
         }
 
+        public job_file RPT_TBM_EMPLOYEE(out HttpStatusCode code, TBM_EMPLOYEE req)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("RPT_TBM_EMPLOYEE", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                request.AddJsonBody(req);
+                var response = client.Execute<job_file>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         public List<TBM_VEHICLE> GET_TBM_VEHICLE(out HttpStatusCode code, TBM_VEHICLE req)
         {
             try
@@ -458,6 +500,50 @@ namespace StoreManagement.Controllers
             }
         }
 
+        public job_file RPT_TBM_VEHICLE(out HttpStatusCode code, TBM_VEHICLE req)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("RPT_TBM_VEHICLE", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                request.AddJsonBody(req);
+                var response = client.Execute<job_file>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+
         public List<TBM_CUSTOMER> GET_TBM_CUSTOMER(out HttpStatusCode code, TBM_CUSTOMER req)
         {
             try
@@ -472,6 +558,49 @@ namespace StoreManagement.Controllers
                 request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
                 request.AddJsonBody(req);
                 var response = client.Execute<List<TBM_CUSTOMER>>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public job_file RPT_TBM_CUSTOMER(out HttpStatusCode code, TBM_CUSTOMER req)
+        {
+
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("RPT_TBM_CUSTOMER", Method.POST);
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                request.AddJsonBody(req);
+                var response = client.Execute<job_file>(request);
                 if (response.IsSuccessful)
                 {
                     return response.Data;
