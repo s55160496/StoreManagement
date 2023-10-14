@@ -33,6 +33,8 @@ namespace StoreManagement.Models
         public string RECEIVE_DATE { get; set; }
         public string TRAVEL_DATE { get; set; }
         public string JOB_DATE { get; set; }
+        public string substatus { get; set; }
+        public string substatus_remark { get; set; }
     }
     public class job_file /*: DataFile*/
     {

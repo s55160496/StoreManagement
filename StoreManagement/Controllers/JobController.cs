@@ -424,6 +424,9 @@ namespace StoreManagement.Controllers
                 var SPAREPART = GET_TBM_SPAREPART(out code, new TBM_SPAREPART() { PAGE = "JOB", JOBID = str });
                 ViewData["SPAREPART"] = SPAREPART?.ToArray();
 
+                var substatus = GET_TBM_SUBSTATUS(out code);
+                ViewData["TBM_SUBSTATUS"] = substatus?.ToArray();
+
                 ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
 
                 return View(Model);
