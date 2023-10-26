@@ -90,7 +90,7 @@ namespace StoreManagement.Controllers
                 }
             }
 
-            return Json(result);
+            return RedirectToAction("Index", "Job");
         }
 
     }
