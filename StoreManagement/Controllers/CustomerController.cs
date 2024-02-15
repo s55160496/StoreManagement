@@ -345,5 +345,47 @@ namespace StoreManagement.Controllers
                 return RedirectToAction("_Error", "Home", new { msg = "Message :" + ex.Message + "</br>" + "StackTrace" + ex.StackTrace });
             }
         }
+        public IActionResult Import()
+        {
+            try
+            {
+               var code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("sp_update_cut_stock_job");
+                if (SessionUserInfoIsExpired())
+                {
+                    RedirectToAction("Index", "Login");
+                }
+                request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                var response = client.Execute(request);
+                if (response.IsSuccessful)
+                {
+                    ViewBag.Message = "นำเข้าข้อมูลสำเร็จ";
+                    return View();
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.Message = ex.Message;
+                return View();
+            }
+        }
     }
 }

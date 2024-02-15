@@ -127,7 +127,45 @@ namespace StoreManagement.Controllers
             }
         }
 
-         public List<tbm_substatus> GET_TBM_SUBSTATUS(out HttpStatusCode code)
+        public TM_User GetUserLogin(out HttpStatusCode code, string token)
+        {
+            try
+            {
+                code = HttpStatusCode.OK;
+                var client = new RestClient(URL_API);
+                var request = new RestRequest("UserInfo", Method.POST);
+                request.AddHeader("Authorization", "Bearer " + token);
+                var response = client.Execute<TM_User>(request);
+                if (response.IsSuccessful)
+                {
+                    return response.Data;
+                }
+                else
+                {
+                    code = response.StatusCode;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception(response.StatusDescription);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new Exception(response.Content);
+                    }
+                    else
+                    {
+                        throw new Exception(response.ErrorMessage);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public List<tbm_substatus> GET_TBM_SUBSTATUS(out HttpStatusCode code)
         {
             try
             {
