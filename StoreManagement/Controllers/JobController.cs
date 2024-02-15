@@ -19,13 +19,6 @@ namespace StoreManagement.Controllers
     public class JobController : BaseController
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private string[] Substatus = new string[] {
-        "INT",
-"INR",
-"INV",
-"END",
-"INS"
-        };
         public JobController(IConfiguration config, IWebHostEnvironment hostingEnvironment) : base(config)
         {
             this._hostingEnvironment = hostingEnvironment;
@@ -432,7 +425,7 @@ namespace StoreManagement.Controllers
                 ViewData["SPAREPART"] = SPAREPART?.ToArray();
 
                 var substatus = GET_TBM_SUBSTATUS(out code);
-                ViewData["TBM_SUBSTATUS"] = substatus?.Where(a=> !Substatus.Contains( a.STATUS_CODE)).ToArray();
+                ViewData["TBM_SUBSTATUS"] = substatus?.ToArray();
 
                 ViewBag.UserID = HttpContext.Session.GetObjectFromJson<TM_User>(UserAccount).USER_ID;
 
