@@ -357,6 +357,7 @@ namespace StoreManagement.Controllers
                     RedirectToAction("Index", "Login");
                 }
                 request.AddHeader("Authorization", "Bearer " + SessionUserInfo().TOKEN);
+                request.Method = Method.POST;
                 var response = client.Execute(request);
                 if (response.IsSuccessful)
                 {
