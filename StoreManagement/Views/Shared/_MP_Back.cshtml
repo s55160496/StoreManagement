@@ -193,49 +193,60 @@
                                 </ul>
                             </li>
                         }
-                        foreach (var item in SessionUserInfo.MENU.Where(w => !listMenuHead.Contains(w.MENU_CONTROLLER)).ToList())
+                        @foreach (var item in SessionUserInfo.MENU.Where(w => !listMenuHead.Contains(w.MENU_CONTROLLER)).ToList())
                         {
-                            @if (item.MENU_CONTROLLER == null)
-                                continue;
+                            switch (item.MENU_CONTROLLER)
+                            {
+                                case null:
+                                    continue;
 
-                            @if (item.MENU_CONTROLLER == "Report")
-                            {
-                                <li class="treeview">
-                                    <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "ReportJob" || ViewContext.RouteData.Values["Controller"].ToString() == "ReportStock") ? "active" : "")">
-                                        <div class="menu-icon"><i class="@item.ICON"></i></div>
-                                        <div class="menu-label">Report <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
-                                    </a>
-                                    <ul class="treeview-menu" style="display: none;">
-                                        <li><a href="@Url.Action("Index",item.MENU_CONTROLLER+"Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ReportJob" ? "active" : "")"><div class="menu-icon"><i class="fa-file-alt"></i></div><div class="menu-label">Report Job</div></a></li>
-                                        <li><a href="@Url.Action("Index",item.MENU_CONTROLLER+"Stock")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ReportStock" ? "active" : "")"><div class="menu-icon"><i class="fa-file-alt"></i></div><div class="menu-label">Report Stock</div></a></li>
-                                        <li><a href="@Url.Action("Index",item.MENU_CONTROLLER+"PMP")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ReportPMP" ? "active" : "")"><div class="menu-icon"><i class="fa-file-alt"></i></div><div class="menu-label">Report PMP</div></a></li>
-                                    </ul>
-                                </li>
-                            }
-                            else if (item.MENU_CONTROLLER == "Job")
-                            {
-                                <li class="treeview">
-                                    <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "Job") ? "active" : "")">
-                                        <div class="menu-icon"><i class="@item.ICON"></i></div>
-                                        <div class="menu-label">Job <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
-                                    </a>
-                                    <ul class="treeview-menu" style="display: none;">
-                                        <li><a href="@Url.Action("Index","Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Job" ? "active" : "")"><div class="menu-icon"><i class="fa fa-lock-open"></i></div><div class="menu-label">Job Active</div></a></li>
-                                        <li><a href="@Url.Action("Index","JobClose")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "JobClose" ? "active" : "")"><div class="menu-icon"><i class="fa fa-lock"></i></div><div class="menu-label">Job Close</div></a></li>
-                                    </ul>
-                                </li>
+                                case "Report":
+                                    <li class="treeview">
+                                        <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "ReportJob" || ViewContext.RouteData.Values["Controller"].ToString() == "ReportStock") ? "active" : "")">
+                                            <div class="menu-icon"><i class="@item.ICON"></i></div>
+                                            <div class="menu-label">Report <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
+                                        </a>
+                                        <ul class="treeview-menu" style="display: none;">
+                                            <li><a href="@Url.Action("Index",item.MENU_CONTROLLER+"Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ReportJob" ? "active" : "")"><div class="menu-icon"><i class="fa-file-alt"></i></div><div class="menu-label">Report Job</div></a></li>
+                                            <li><a href="@Url.Action("Index",item.MENU_CONTROLLER+"Stock")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ReportStock" ? "active" : "")"><div class="menu-icon"><i class="fa-file-alt"></i></div><div class="menu-label">Report Stock</div></a></li>
+                                            <li><a href="@Url.Action("Index",item.MENU_CONTROLLER+"PMP")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ReportPMP" ? "active" : "")"><div class="menu-icon"><i class="fa-file-alt"></i></div><div class="menu-label">Report PMP</div></a></li>
+                                        </ul>
+                                    </li>
+                                    break;
 
-                            }
-                            else
-                            {
-                                <li class="treeview">
-                                    <a href="@Url.Action("Index",item.MENU_CONTROLLER)" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == item.MENU_CONTROLLER ? "active" : "")">
-                                        <div class="menu-icon"><i class="@item.ICON"></i></div>
-                                        <div class="menu-label">@item.MENU_DESCRIPTION</div>
-                                    </a>
-                                </li>
+                                case "Job":
+                                    <li class="treeview">
+                                        <a href="#" class="treeview-a @((ViewContext.RouteData.Values["Controller"].ToString() == "Job") ? "active" : "")">
+                                            <div class="menu-icon"><i class="@item.ICON"></i></div>
+                                            <div class="menu-label">Job <span class='pull-right-container' style='float: right'><i class='fa fa-angle-left pull-right'></i></span></div>
+                                        </a>
+                                        <ul class="treeview-menu" style="display: none;">
+                                            <li><a href="@Url.Action("Index","Job")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Job" ? "active" : "")"><div class="menu-icon"><i class="fa fa-lock-open"></i></div><div class="menu-label">Job Active</div></a></li>
+                                            <li><a href="@Url.Action("Index","JobClose")" class="@(ViewContext.RouteData.Values["Controller"].ToString() == "JobClose" ? "active" : "")"><div class="menu-icon"><i class="fa fa-lock"></i></div><div class="menu-label">Job Close</div></a></li>
+                                        </ul>
+                                    </li>
+                                    break;
+
+                                case "SaleContractJob":
+                                    <li class="treeview">
+                                        <a href="@Url.Action("Index",item.MENU_CONTROLLER)" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == item.MENU_CONTROLLER ? "active" : "")" target="_blank">
+                                            <div class="menu-icon"><i class="@item.ICON"></i></div>
+                                            <div class="menu-label">@item.MENU_DESCRIPTION</div>
+                                        </a>
+                                    </li>
+                                    break;
+
+                                default:
+                                    <li class="treeview">
+                                        <a href="@Url.Action("Index",item.MENU_CONTROLLER)" class="treeview-a @(ViewContext.RouteData.Values["Controller"].ToString() == item.MENU_CONTROLLER ? "active" : "")">
+                                            <div class="menu-icon"><i class="@item.ICON"></i></div>
+                                            <div class="menu-label">@item.MENU_DESCRIPTION</div>
+                                        </a>
+                                    </li>
+                                    break;
                             }
                         }
+
 
                     }
                 }
